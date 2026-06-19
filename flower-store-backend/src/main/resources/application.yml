@@ -1,0 +1,82 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
+spring:
+  application:
+    name: flower-store-backend
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/bar?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai
+    username: root
+    password: root
+    druid:
+      initial-size: 5
+      min-idle: 5
+      max-active: 20
+      max-wait: 60000
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 50MB
+
+  # Redis配置
+  redis:
+    host: localhost
+    port: 6379
+    password: # 如果有密码，在此填写
+    database: 0
+    timeout: 5000ms
+    lettuce:
+      pool:
+        max-active: 8
+        max-wait: -1ms
+        max-idle: 8
+        min-idle: 0
+
+# MyBatis Plus配置
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/**/*.xml
+  type-aliases-package: com.flowerstore.entity
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      id-type: auto
+      logic-delete-field: deleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+
+# 微信小程序配置
+wechat:
+  appid: wx105c7f4184eb6754
+  secret: 088d0c9a3a536cad7501f197a06d60ef
+
+# JWT配置
+jwt:
+  secret: flowerstore_secret_key_2024
+  expiration: 604800000  # 7天，单位毫秒
+
+
+
+# 文件上传配置
+file:
+  upload:
+    path: E:\projects\flower-store\flower-store-backend\src\main\resources\uploads/  # 上传文件保存路径
+    static-pattern: /uploads/**  # 静态资源访问路径
+    max-size: 10485760  # 最大文件大小，10MB
+    domain: http://localhost:8080/api  # 服务器域名，用于生成完整URL
+
+# 订单通知配置
+order:
+  notification:
+    enabled: true
+    voice-enabled: true
+    voice-text: "您有新的订单，请及时处理"
+

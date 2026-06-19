@@ -1,0 +1,187 @@
+{
+	"pages": [
+		{
+			"path": "pages/index/index",
+			"style": {
+				"navigationStyle": "custom",
+				"navigationBarTitleText": "首页",
+				"usingComponents": {}
+			}
+		},
+		{
+			"path": "pages/category/category",
+			"style": {
+				"navigationBarTitleText": "点单",
+				"navigationBarBackgroundColor": "#000000",
+				"navigationBarTextStyle": "white",
+				"usingComponents": {
+					"spec-modal": "/components/spec-modal/spec-modal"
+				}
+			}
+		},
+		{
+			"path": "pages/rank/rank",
+			"style": {
+				"navigationBarTitleText": "排行榜",
+				"navigationBarBackgroundColor": "#000000",
+				"navigationBarTextStyle": "white",
+				"usingComponents": {}
+			}
+		},
+		{
+			"path": "pages/user/user",
+			"style": {
+				"navigationBarTitleText": "我的",
+				"navigationBarBackgroundColor": "#000000",
+				"navigationBarTextStyle": "white",
+				"usingComponents": {}
+			}
+		},
+		{
+			"path": "pages/cart/cart",
+			"style": {
+				"navigationBarTitleText": "购物车",
+				"navigationBarBackgroundColor": "#000000",
+				"navigationBarTextStyle": "white",
+				"usingComponents": {}
+			}
+		},
+		{
+			"path": "pages/product/detail",
+			"style": {
+				"navigationBarTitleText": "商品详情",
+				"navigationBarBackgroundColor": "#ffffff",
+				"navigationBarTextStyle": "black",
+				"usingComponents": {}
+			}
+		},
+		{
+			"path": "pages/coin-mall/coin-mall",
+			"style": {
+				"navigationBarTitleText": "27币商城",
+				"navigationBarBackgroundColor": "#000000",
+				"navigationBarTextStyle": "white",
+				"usingComponents": {}
+			}
+		},
+		{
+			"path": "pages/address/list",
+			"style": {
+				"navigationBarTitleText": "我的地址",
+				"usingComponents": {}
+			}
+		},
+		{
+			"path": "pages/address/edit",
+			"style": {
+				"navigationBarTitleText": "编辑地址",
+				"usingComponents": {}
+			}
+		},
+		{
+			"path": "pages/order/order",
+			"style": {
+				"navigationBarTitleText": "确认订单",
+				"usingComponents": {}
+			}
+		},
+		{
+			"path": "pages/order/payment",
+			"style": {
+				"navigationBarTitleText": "订单支付",
+				"usingComponents": {}
+			}
+		},
+		{
+			"path": "pages/order/detail",
+			"style": {
+				"navigationBarTitleText": "订单详情",
+				"usingComponents": {}
+			}
+		},
+		{
+			"path": "pages/order/list",
+			"style": {
+				"navigationBarTitleText": "订单中心",
+				"enablePullDownRefresh": true,
+				"backgroundColor": "#000000",
+				"usingComponents": {}
+			}
+		},
+		{
+			"path": "pages/login/login",
+			"style": {
+				"navigationBarTitleText": "登录",
+				"navigationBarBackgroundColor": "#000000",
+				"navigationBarTextStyle": "white",
+				"usingComponents": {}
+			}
+		},
+		{
+			"path": "pages/settings/settings",
+			"style": {
+				"navigationBarTitleText": "设置",
+				"usingComponents": {}
+			}
+		},
+		{
+			"path": "pages/collection/collection",
+			"style": {
+				"navigationBarTitleText": "我的收藏",
+				"enablePullDownRefresh": true,
+				"backgroundColor": "#f5f5f5",
+				"usingComponents": {}
+			}
+		},
+		{
+			"path": "pages/search/search",
+			"style": {
+				"navigationBarTitleText": "搜索",
+				"usingComponents": {}
+			}
+		}
+	],
+	"tabBar": {
+		"color": "#999999",
+		"selectedColor": "#ffffff",
+		"backgroundColor": "#000000",
+		"borderStyle": "black",
+		"list": [
+			{
+				"pagePath": "pages/index/index",
+				"text": "首页",
+				"iconPath": "static/images/home.png",
+				"selectedIconPath": "static/images/home-active.png"
+			},
+			{
+				"pagePath": "pages/category/category",
+				"text": "点单",
+				"iconPath": "static/images/order.png",
+				"selectedIconPath": "static/images/order-active.png"
+			},
+			{
+				"pagePath": "pages/rank/rank",
+				"text": "排行榜",
+				"iconPath": "static/images/rank.png",
+				"selectedIconPath": "static/images/rank-active.png"
+			},
+			{
+				"pagePath": "pages/user/user",
+				"text": "我的",
+				"iconPath": "static/images/user.png",
+				"selectedIconPath": "static/images/user-active.png"
+			}
+		]
+	},
+	"style": "v2",
+	"componentFramework": "glass-easel",
+	"sitemapLocation": "sitemap.json",
+	"lazyCodeLoading": "requiredComponents",
+	"globalStyle": {
+		"navigationBarTextStyle": "white",
+		"navigationBarBackgroundColor": "#000000",
+		"navigationBarTitleText": "27 POKER BAR",
+		"backgroundColor": "#000000"
+	},
+	"subPackages": []
+}

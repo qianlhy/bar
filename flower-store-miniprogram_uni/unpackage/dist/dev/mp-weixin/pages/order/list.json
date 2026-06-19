@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "订单中心",
+  "enablePullDownRefresh": true,
+  "backgroundColor": "#000000",
+  "usingComponents": {}
+}

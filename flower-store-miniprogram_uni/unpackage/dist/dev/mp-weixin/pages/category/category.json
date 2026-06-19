@@ -1,0 +1,8 @@
+{
+  "navigationBarTitleText": "点单",
+  "navigationBarBackgroundColor": "#000000",
+  "navigationBarTextStyle": "white",
+  "usingComponents": {
+    "spec-modal": "/components/spec-modal/spec-modal"
+  }
+}
