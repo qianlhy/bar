@@ -1,0 +1,1 @@
+import{r as s}from"./request-c88bd46a.js";const a=e=>s.get("/admin/user/page",{params:e}),n=(e,r)=>s.put(`/admin/user/assets/${e}`,r),u=e=>s.get("/admin/user/rank",{params:e});export{u as a,a as g,n as u};

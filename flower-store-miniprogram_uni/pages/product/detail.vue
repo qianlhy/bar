@@ -83,7 +83,7 @@ export default {
     },
     onShareAppMessage() {
         return {
-            title: this.product ? this.product.name : '27 POKER BAR',
+            title: this.product ? this.product.name : '梭哈酒馆',
             path: `/pages/product/detail?id=${this.product.id}`,
             imageUrl: this.product ? this.product.image : ''
         };

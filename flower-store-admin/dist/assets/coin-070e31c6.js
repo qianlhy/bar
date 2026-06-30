@@ -1,0 +1,1 @@
+import{r as n}from"./request-c88bd46a.js";const e=t=>n.get("/coin/admin/products/page",{params:t}),r=t=>n.post("/coin/admin/products",t),a=t=>n.put("/coin/admin/products",t),c=t=>n.delete(`/coin/admin/products/${t}`),d=t=>n.get("/coin/admin/exchanges/page",{params:t});export{r as a,d as b,c as d,e as g,a as u};

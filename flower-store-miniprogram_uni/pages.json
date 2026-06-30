@@ -58,7 +58,25 @@
 		{
 			"path": "pages/coin-mall/coin-mall",
 			"style": {
-				"navigationBarTitleText": "27币商城",
+				"navigationBarTitleText": "All In 币商城",
+				"navigationBarBackgroundColor": "#000000",
+				"navigationBarTextStyle": "white",
+				"usingComponents": {}
+			}
+		},
+		{
+			"path": "pages/recharge/recharge",
+			"style": {
+				"navigationBarTitleText": "会员充值",
+				"navigationBarBackgroundColor": "#000000",
+				"navigationBarTextStyle": "white",
+				"usingComponents": {}
+			}
+		},
+		{
+			"path": "pages/coin-records/coin-records",
+			"style": {
+				"navigationBarTitleText": "兑换记录",
 				"navigationBarBackgroundColor": "#000000",
 				"navigationBarTextStyle": "white",
 				"usingComponents": {}
@@ -180,7 +198,7 @@
 	"globalStyle": {
 		"navigationBarTextStyle": "white",
 		"navigationBarBackgroundColor": "#000000",
-		"navigationBarTitleText": "27 POKER BAR",
+		"navigationBarTitleText": "梭哈酒馆",
 		"backgroundColor": "#000000"
 	},
 	"subPackages": []

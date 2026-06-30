@@ -43,7 +43,7 @@ public class User implements Serializable {
     /** 账户余额 */
     private java.math.BigDecimal balance;
 
-    /** 27币 */
+    /** All In币 */
     private Integer coins;
 
     /** 大师分 */

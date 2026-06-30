@@ -3,10 +3,9 @@
     <view class="login-container">
         <view class="login-header">
             <view class="logo-area">
-                <text class="logo-num">27</text>
-                <text class="logo-text">POKER BAR</text>
+                <image class="logo-img" src="/static/allIn.jpg" mode="aspectFit"></image>
             </view>
-            <text class="title">欢迎来到 27 POKER BAR</text>
+            <text class="title">欢迎来到 梭哈酒馆</text>
         </view>
 
         <view class="login-form">
@@ -426,8 +425,7 @@ export default {
     z-index: 1;
 }
 .logo-area { text-align: center; margin-bottom: 30rpx; }
-.logo-num { font-size: 80rpx; font-weight: 900; color: #c41e3a; display: block; }
-.logo-text { font-size: 24rpx; color: #fff; letter-spacing: 6rpx; }
+.logo-img { width: 240rpx; height: 240rpx; border-radius: 24rpx; }
 .title {
     font-size: 32rpx;
     font-weight: bold;

@@ -16,7 +16,11 @@
             <span>{{ getGenderText(row.gender) }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="status" label="状态" width="100">
+        <el-table-column prop="balance" label="余额" width="90" />
+        <el-table-column prop="coins" label="All In币" width="90" />
+        <el-table-column prop="masterScore" label="大师分" width="90" />
+        <el-table-column prop="couponCount" label="优惠券" width="90" />
+        <el-table-column prop="status" label="状态" width="90">
           <template #default="{ row }">
             <el-tag :type="row.status === 1 ? 'success' : 'danger'">
               {{ row.status === 1 ? '正常' : '禁用' }}
@@ -24,6 +28,11 @@
           </template>
         </el-table-column>
         <el-table-column prop="createTime" label="注册时间" width="180" />
+        <el-table-column label="操作" width="120" fixed="right">
+          <template #default="{ row }">
+            <el-button type="primary" text @click="handleEditAssets(row)">调整资产</el-button>
+          </template>
+        </el-table-column>
       </el-table>
 
       <el-pagination
@@ -37,12 +46,36 @@
         style="margin-top: 20px"
       />
     </el-card>
+
+    <el-dialog v-model="dialogVisible" title="调整用户资产" width="420px">
+      <el-form label-width="90px">
+        <el-form-item label="昵称">
+          <span>{{ form.nickname }}</span>
+        </el-form-item>
+        <el-form-item label="余额(元)">
+          <el-input-number v-model="form.balance" :min="0" :precision="2" :step="10" />
+        </el-form-item>
+        <el-form-item label="All In币">
+          <el-input-number v-model="form.coins" :min="0" />
+        </el-form-item>
+        <el-form-item label="大师分">
+          <el-input-number v-model="form.masterScore" :min="0" />
+        </el-form-item>
+        <el-form-item label="优惠券">
+          <el-input-number v-model="form.couponCount" :min="0" />
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <el-button @click="dialogVisible = false">取消</el-button>
+        <el-button type="primary" @click="handleSubmitAssets" :loading="submitLoading">确定</el-button>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { getUserPage, updateUserStatus } from '@/api/user'
+import { getUserPage, updateUserStatus, updateUserAssets } from '@/api/user'
 import { ElMessage } from 'element-plus'
 
 const queryParams = ref({
@@ -52,6 +85,41 @@ const queryParams = ref({
 
 const tableData = ref([])
 const total = ref(0)
+
+const dialogVisible = ref(false)
+const submitLoading = ref(false)
+const form = ref({ id: null, nickname: '', balance: 0, coins: 0, masterScore: 0, couponCount: 0 })
+
+const handleEditAssets = (row) => {
+  form.value = {
+    id: row.id,
+    nickname: row.nickname,
+    balance: Number(row.balance || 0),
+    coins: row.coins || 0,
+    masterScore: row.masterScore || 0,
+    couponCount: row.couponCount || 0
+  }
+  dialogVisible.value = true
+}
+
+const handleSubmitAssets = async () => {
+  try {
+    submitLoading.value = true
+    await updateUserAssets(form.value.id, {
+      balance: form.value.balance,
+      coins: form.value.coins,
+      masterScore: form.value.masterScore,
+      couponCount: form.value.couponCount
+    })
+    ElMessage.success('调整成功')
+    dialogVisible.value = false
+    fetchData()
+  } catch (error) {
+    console.error(error)
+  } finally {
+    submitLoading.value = false
+  }
+}
 
 const fetchData = async () => {
   try {

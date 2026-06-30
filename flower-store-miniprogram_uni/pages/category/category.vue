@@ -3,7 +3,7 @@
         <!-- 门店信息栏 -->
         <view class="store-bar">
             <view class="store-info" @tap="showStorePicker">
-                <text class="store-text">27 POKER BAR-武昌店</text>
+                <text class="store-text">梭哈酒馆-武昌店</text>
                 <text class="store-arrow">›</text>
             </view>
             <view class="store-tag">店内</view>
@@ -238,7 +238,7 @@ export default {
             uni.navigateTo({ url: '/pages/cart/cart' });
         },
         showStorePicker() {
-            uni.showToast({ title: '27 POKER BAR-武昌店', icon: 'none' });
+            uni.showToast({ title: '梭哈酒馆-武昌店', icon: 'none' });
         }
     }
 };

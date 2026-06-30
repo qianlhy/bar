@@ -2,6 +2,35 @@
   <div class="settings">
     <el-card>
       <template #header>
+        <span>门店信息 / WiFi 配置</span>
+      </template>
+      <el-form :model="storeForm" label-width="120px">
+        <el-form-item label="门店名称">
+          <el-input v-model="storeForm.store_name" placeholder="如：梭哈酒馆 - 武昌店" />
+        </el-form-item>
+        <el-form-item label="门店地址">
+          <el-input v-model="storeForm.store_address" type="textarea" :rows="2" placeholder="请输入门店地址" />
+        </el-form-item>
+        <el-form-item label="门店电话">
+          <el-input v-model="storeForm.store_phone" placeholder="请输入门店联系电话" />
+        </el-form-item>
+        <el-form-item label="WiFi名称">
+          <el-input v-model="storeForm.wifi_name" placeholder="请输入WiFi名称" />
+        </el-form-item>
+        <el-form-item label="WiFi密码">
+          <el-input v-model="storeForm.wifi_password" placeholder="请输入WiFi密码" />
+        </el-form-item>
+        <el-form-item label="充值说明">
+          <el-input v-model="storeForm.recharge_tip" placeholder="会员充值页文案" />
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="saveStoreConfig" :loading="storeLoading">保存配置</el-button>
+        </el-form-item>
+      </el-form>
+    </el-card>
+
+    <el-card style="margin-top: 20px">
+      <template #header>
         <span>微信小程序配置</span>
       </template>
       <el-form :model="wechatForm" label-width="120px">
@@ -67,10 +96,49 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
+import { getAllConfig, saveConfig } from '@/api/config'
 
 const loading = ref(false)
+const storeLoading = ref(false)
+
+const storeForm = ref({
+  store_name: '',
+  store_address: '',
+  store_phone: '',
+  wifi_name: '',
+  wifi_password: '',
+  recharge_tip: ''
+})
+
+const loadStoreConfig = async () => {
+  try {
+    const res = await getAllConfig()
+    const data = res.data || {}
+    Object.keys(storeForm.value).forEach((k) => {
+      if (data[k] !== undefined) storeForm.value[k] = data[k]
+    })
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+const saveStoreConfig = async () => {
+  try {
+    storeLoading.value = true
+    await saveConfig(storeForm.value)
+    ElMessage.success('配置保存成功')
+  } catch (error) {
+    console.error(error)
+  } finally {
+    storeLoading.value = false
+  }
+}
+
+onMounted(() => {
+  loadStoreConfig()
+})
 
 const wechatForm = ref({
   appid: '',

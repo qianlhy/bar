@@ -227,7 +227,7 @@ export default {
                 mask: true
             });
             uni.uploadFile({
-                url: 'http://localhost:8080/api/file/upload',
+                url: 'https://bar.twst.work/api/file/upload',
                 filePath: avatarUrl,
                 name: 'file',
                 header: {
@@ -277,7 +277,7 @@ export default {
 
                     // 上传到服务器
                     uni.uploadFile({
-                        url: 'http://localhost:8080/api/file/upload',
+                        url: 'https://bar.twst.work/api/file/upload',
                         filePath: tempFilePath,
                         name: 'file',
                         header: {

@@ -7,6 +7,8 @@
     "pages/cart/cart",
     "pages/product/detail",
     "pages/coin-mall/coin-mall",
+    "pages/recharge/recharge",
+    "pages/coin-records/coin-records",
     "pages/address/list",
     "pages/address/edit",
     "pages/order/order",
@@ -22,7 +24,7 @@
   "window": {
     "navigationBarTextStyle": "white",
     "navigationBarBackgroundColor": "#000000",
-    "navigationBarTitleText": "27 POKER BAR",
+    "navigationBarTitleText": "梭哈酒馆",
     "backgroundColor": "#000000"
   },
   "tabBar": {

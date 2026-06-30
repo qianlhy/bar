@@ -10,8 +10,8 @@ spring:
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/bar?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai
-    username: root
-    password: root
+    username: bar
+    password: i53Xe2zMSKtTH5f7
     druid:
       initial-size: 5
       min-idle: 5
@@ -55,8 +55,8 @@ mybatis-plus:
 
 # 微信小程序配置
 wechat:
-  appid: wx105c7f4184eb6754
-  secret: 088d0c9a3a536cad7501f197a06d60ef
+  appid: wx39c20690901c74e4
+  secret: 2fa7efd4fa6e819943ffe9c0f9e5961c
 
 # JWT配置
 jwt:
@@ -71,7 +71,7 @@ file:
     path: E:\projects\flower-store\flower-store-backend\src\main\resources\uploads/  # 上传文件保存路径
     static-pattern: /uploads/**  # 静态资源访问路径
     max-size: 10485760  # 最大文件大小，10MB
-    domain: http://localhost:8080/api  # 服务器域名，用于生成完整URL
+    domain: https://bar.twst.work/api  # 服务器域名，用于生成完整URL
 
 # 订单通知配置
 order:

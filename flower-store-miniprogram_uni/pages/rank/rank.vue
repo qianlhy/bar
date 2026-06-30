@@ -3,7 +3,7 @@
         <scroll-view scroll-y class="rank-scroll">
             <view class="rank-banner">
                 <text class="banner-title">排行榜</text>
-                <text class="banner-sub">SCORE RANK · 27POKER BAR</text>
+                <text class="banner-sub">SCORE RANK · 梭哈酒馆</text>
             </view>
 
             <view class="tab-bar">

@@ -3,27 +3,16 @@
         <!-- 自定义顶部 -->
         <view class="status-bar" :style="'height:' + statusBarHeight + 'px'"></view>
         <view class="store-selector" @tap="showStorePicker">
-            <text class="store-name">27POKER - 武昌店</text>
+            <text class="store-name">{{ storeName }}</text>
             <text class="store-arrow">▶</text>
         </view>
 
         <scroll-view scroll-y class="home-scroll">
             <!-- 品牌区域 -->
             <view class="brand-section">
-                <text class="brand-title">27POKER Bar</text>
-                <view class="brand-sub">
-                    <text class="wynn-text">2026 Wynn RESIDENCY</text>
-                    <text class="wine-icon">🍷</text>
-                </view>
-                <view class="logo-area">
-                    <view class="cards-bg">
-                        <text class="card-spade">♠</text>
-                        <text class="card-heart">♥</text>
-                    </view>
-                    <text class="logo-num">27</text>
-                    <text class="logo-sub">POKER BAR</text>
-                </view>
-                <text class="texas-bar">TEXAS BAR</text>
+                <image class="brand-logo" src="/static/allIn.jpg" mode="aspectFit"></image>
+                <text class="brand-title">梭哈酒馆</text>
+                <text class="texas-bar">All In Tavern</text>
             </view>
 
             <!-- 会员信息卡 -->
@@ -42,7 +31,7 @@
                     </view>
                     <view class="stat-item">
                         <text class="stat-value">{{ userInfo.coins || 0 }}</text>
-                        <text class="stat-label">我的27币</text>
+                        <text class="stat-label">我的 All In 币</text>
                     </view>
                 </view>
             </view>
@@ -56,7 +45,7 @@
                 </view>
                 <view class="action-card" @tap="goCoinMall">
                     <text class="action-icon">🃏</text>
-                    <text class="action-title">27币商城</text>
+                    <text class="action-title">All In 币商城</text>
                     <text class="action-sub">POINT</text>
                 </view>
             </view>
@@ -95,7 +84,7 @@
             <!-- 位置信息 -->
             <view class="location-bar">
                 <text class="diamond">◆</text>
-                <text class="location-text">位置：星耀·狮子座购物中心（马房山地铁站C口旁）3层3001-1</text>
+                <text class="location-text">位置：{{ storeAddress }}</text>
                 <text class="diamond">◆</text>
             </view>
 
@@ -113,7 +102,7 @@
             <view class="privacy-modal">
                 <text class="privacy-title">用户隐私保护提示</text>
                 <scroll-view scroll-y class="privacy-content">
-                    <text>欢迎使用27 POKER BAR小程序。我们将严格按照相关法律法规要求，采取相应安全保护措施，保护您的个人信息安全。在使用本小程序前，请您仔细阅读并充分理解《用户隐私保护指引》的全部内容。</text>
+                    <text>欢迎使用梭哈酒馆小程序。我们将严格按照相关法律法规要求，采取相应安全保护措施，保护您的个人信息安全。在使用本小程序前，请您仔细阅读并充分理解《用户隐私保护指引》的全部内容。</text>
                     <text class="privacy-p">当您点击"同意"并开始使用本小程序时，即表示您已理解并同意该指引。我们将收集您的位置信息用于查找附近门店，收集您的订单信息用于完成交易服务。</text>
                 </scroll-view>
                 <view class="privacy-btns">
@@ -127,10 +116,9 @@
         <view class="member-mask" v-if="showMemberModal" @tap="showMemberModal = false">
             <view class="member-modal" @tap.stop>
                 <text class="member-modal-title">会员码</text>
-                <view class="qrcode-placeholder">
-                    <text class="qrcode-text">▦▦▦▦▦</text>
-                    <text class="qrcode-text">▦ ▦ ▦ ▦</text>
-                    <text class="qrcode-text">▦▦▦▦▦</text>
+                <image class="qrcode-img" v-if="memberCodeUrl" :src="memberCodeUrl" mode="aspectFit"></image>
+                <view class="qrcode-placeholder" v-else>
+                    <text class="qrcode-text">请先登录</text>
                 </view>
                 <text class="member-modal-tip">请向店员出示此码</text>
             </view>
@@ -140,13 +128,20 @@
 
 <script>
 const userApi = require('../../api/user');
+const configApi = require('../../api/config');
+const { BASE_URL } = require('../../utils/request');
 export default {
     data() {
         return {
             statusBarHeight: 20,
             userInfo: { balance: 20, coins: 0 },
             showPrivacy: false,
-            showMemberModal: false
+            showMemberModal: false,
+            storeName: '梭哈酒馆 - 武昌店',
+            storeAddress: '星耀·狮子座购物中心（马房山地铁站C口旁）3层3001-1',
+            wifiName: 'AllInTavern',
+            wifiPassword: '27272727',
+            memberCodeUrl: ''
         };
     },
     onLoad() {
@@ -157,6 +152,7 @@ export default {
             this.showPrivacy = true;
         }
         this.loadUserInfo();
+        this.loadConfig();
     },
     onShow() {
         this.loadUserInfo();
@@ -171,12 +167,30 @@ export default {
                     balance: data.balance || 20,
                     coins: data.coins || 0
                 };
+                if (data.id) {
+                    this.memberCodeUrl = BASE_URL + '/user/membercode/' + data.id;
+                }
+            }).catch(() => {});
+        },
+        loadConfig() {
+            configApi.getPublicConfig().then((cfg) => {
+                if (!cfg) return;
+                if (cfg.store_name) this.storeName = cfg.store_name;
+                if (cfg.store_address) this.storeAddress = cfg.store_address;
+                if (cfg.wifi_name) this.wifiName = cfg.wifi_name;
+                if (cfg.wifi_password) this.wifiPassword = cfg.wifi_password;
             }).catch(() => {});
         },
         showStorePicker() {
-            uni.showToast({ title: '27POKER - 武昌店', icon: 'none' });
+            uni.showToast({ title: this.storeName, icon: 'none' });
         },
         showMemberCode() {
+            const token = uni.getStorageSync('token');
+            if (!token) {
+                uni.showToast({ title: '请先登录', icon: 'none' });
+                setTimeout(() => uni.navigateTo({ url: '/pages/login/login' }), 1200);
+                return;
+            }
             this.showMemberModal = true;
         },
         goOrder() {
@@ -186,7 +200,7 @@ export default {
             uni.navigateTo({ url: '/pages/coin-mall/coin-mall' });
         },
         goRecharge() {
-            uni.showToast({ title: '充值功能开发中', icon: 'none' });
+            uni.navigateTo({ url: '/pages/recharge/recharge' });
         },
         goReservation() {
             uni.showToast({ title: '房台预定功能开发中', icon: 'none' });
@@ -197,7 +211,7 @@ export default {
         showWifi() {
             uni.showModal({
                 title: 'WIFI信息',
-                content: 'WiFi名称: 27POKER-BAR\n密码: 27272727',
+                content: 'WiFi名称: ' + this.wifiName + '\n密码: ' + this.wifiPassword,
                 showCancel: false
             });
         },
@@ -244,6 +258,13 @@ export default {
     text-align: center;
     padding: 20rpx 30rpx 40rpx;
 }
+.brand-logo {
+    width: 280rpx;
+    height: 280rpx;
+    border-radius: 28rpx;
+    margin: 10rpx auto 20rpx;
+    display: block;
+}
 .brand-title {
     font-size: 52rpx;
     font-weight: bold;
@@ -251,62 +272,13 @@ export default {
     letter-spacing: 4rpx;
     display: block;
 }
-.brand-sub {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 10rpx;
-}
-.wynn-text {
-    font-size: 22rpx;
-    color: #ccc;
-    font-style: italic;
-}
-.wine-icon { font-size: 28rpx; margin-left: 10rpx; }
-.logo-area {
-    position: relative;
-    margin: 40rpx auto 20rpx;
-    width: 280rpx;
-    height: 200rpx;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-.cards-bg {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 20rpx;
-}
-.card-spade { font-size: 100rpx; color: #333; opacity: 0.6; }
-.card-heart { font-size: 100rpx; color: #8b2942; opacity: 0.5; }
-.logo-num {
-    font-size: 120rpx;
-    font-weight: 900;
-    color: #c41e3a;
-    z-index: 2;
-    line-height: 1;
-    text-shadow: 2rpx 2rpx 8rpx rgba(0,0,0,0.5);
-}
-.logo-sub {
-    font-size: 18rpx;
-    color: #fff;
-    z-index: 2;
-    letter-spacing: 4rpx;
-    margin-top: -10rpx;
-}
 .texas-bar {
-    font-size: 48rpx;
-    color: #fff;
+    font-size: 30rpx;
+    color: #ccc;
     font-weight: bold;
-    letter-spacing: 8rpx;
+    letter-spacing: 4rpx;
     display: block;
-    margin-top: 10rpx;
-    text-shadow: 1rpx 1rpx 0 #666;
+    margin-top: 12rpx;
 }
 
 /* 会员卡 */
@@ -543,6 +515,7 @@ export default {
     justify-content: center;
     gap: 10rpx;
 }
-.qrcode-text { font-size: 40rpx; color: #333; letter-spacing: 4rpx; }
+.qrcode-text { font-size: 32rpx; color: #999; letter-spacing: 4rpx; }
+.qrcode-img { width: 360rpx; height: 360rpx; margin: 0 auto 20rpx; display: block; }
 .member-modal-tip { font-size: 24rpx; color: #999; }
 </style>

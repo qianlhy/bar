@@ -5,7 +5,7 @@ import com.flowerstore.entity.CoinExchange;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
- * 27币兑换记录Mapper
+ * All In币兑换记录Mapper
  */
 @Mapper
 public interface CoinExchangeMapper extends BaseMapper<CoinExchange> {

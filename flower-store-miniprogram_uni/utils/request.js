@@ -2,7 +2,7 @@
  * 网络请求工具
  */
 
-const BASE_URL = 'http://localhost:8080/api'; // 后端接口地址，请根据实际情况修改
+const BASE_URL = 'https://bar.twst.work/api'; // 后端接口地址，请根据实际情况修改
 
 /**
  * 发送HTTP请求
@@ -106,6 +106,7 @@ function del(url, params) {
     });
 }
 module.exports = {
+    BASE_URL,
     request,
     get,
     post,

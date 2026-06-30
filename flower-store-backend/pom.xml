@@ -126,6 +126,13 @@
             <version>${hutool.version}</version>
         </dependency>
 
+        <!-- ZXing 二维码生成（会员码） -->
+        <dependency>
+            <groupId>com.google.zxing</groupId>
+            <artifactId>core</artifactId>
+            <version>3.5.1</version>
+        </dependency>
+
         <!-- Lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>

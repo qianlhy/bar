@@ -52,6 +52,36 @@ const router = createRouter({
           meta: { title: '用户管理' }
         },
         {
+          path: '/rank',
+          name: 'Rank',
+          component: () => import('@/views/user/RankList.vue'),
+          meta: { title: '大师分排行榜' }
+        },
+        {
+          path: '/coin/product',
+          name: 'CoinProduct',
+          component: () => import('@/views/coin/CoinProductList.vue'),
+          meta: { title: 'All In币商品' }
+        },
+        {
+          path: '/coin/exchange',
+          name: 'CoinExchange',
+          component: () => import('@/views/coin/CoinExchangeList.vue'),
+          meta: { title: 'All In币兑换记录' }
+        },
+        {
+          path: '/recharge/package',
+          name: 'RechargePackage',
+          component: () => import('@/views/recharge/RechargePackageList.vue'),
+          meta: { title: '充值套餐' }
+        },
+        {
+          path: '/recharge/order',
+          name: 'RechargeOrder',
+          component: () => import('@/views/recharge/RechargeOrderList.vue'),
+          meta: { title: '充值订单' }
+        },
+        {
           path: '/settings',
           name: 'Settings',
           component: () => import('@/views/Settings.vue'),

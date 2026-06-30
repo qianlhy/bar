@@ -95,7 +95,7 @@ const fetchStatistics = async () => {
 
 // 连接WebSocket
 const connectWebSocket = () => {
-  const wsUrl = 'ws://localhost:8080/api/ws/order/notification'
+  const wsUrl = 'wss://bar.twst.work/api/ws/order/notification'
   ws = new WebSocket(wsUrl)
   
   ws.onopen = () => {
@@ -171,19 +171,19 @@ onUnmounted(() => {
 }
 
 .stat-icon.pending {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #e8c547 0%, #b8941f 100%);
 }
 
 .stat-icon.to-ship {
-  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  background: linear-gradient(135deg, #c41e3a 0%, #8a1428 100%);
 }
 
 .stat-icon.shipped {
-  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  background: linear-gradient(135deg, #5a5a5a 0%, #1f1f1f 100%);
 }
 
 .stat-icon.completed {
-  background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+  background: linear-gradient(135deg, #67c23a 0%, #4a9e2a 100%);
 }
 
 .stat-info {

@@ -1,0 +1,1 @@
+import{r as t}from"./request-c88bd46a.js";function a(r){return t({url:"/order/page",method:"get",params:r})}function o(r){return t({url:`/order/${r}`,method:"get"})}function s(r,e){return t({url:`/order/${r}/status`,method:"put",params:{status:e}})}function d(){return t({url:"/order/statistics",method:"get"})}export{a,o as b,d as g,s as u};

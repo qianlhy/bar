@@ -1,7 +1,7 @@
 {
   "name": "flower-store-admin",
   "version": "1.0.0",
-  "description": "27 POKER BAR 后台管理系统",
+  "description": "梭哈酒馆 后台管理系统",
   "scripts": {
     "dev": "vite",
     "build": "vite build",

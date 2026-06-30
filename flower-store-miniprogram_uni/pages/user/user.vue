@@ -28,7 +28,7 @@
             </view>
             <view class="asset-divider"></view>
             <view class="asset-item">
-                <text class="asset-label">27币</text>
+                <text class="asset-label">All In 币</text>
                 <text class="asset-value">{{ userInfo.coins || 0 }}</text>
             </view>
         </view>
@@ -47,7 +47,7 @@
                 </view>
                 <view class="func-item" @tap="goCoinMall">
                     <text class="func-icon">⚡</text>
-                    <text class="func-name">27币商城</text>
+                    <text class="func-name">All In 币商城</text>
                 </view>
                 <view class="func-item" @tap="showCoupon">
                     <text class="func-icon">🎫</text>
@@ -71,8 +71,8 @@
         <!-- 门店信息 -->
         <view class="store-card">
             <view class="store-top">
-                <view class="store-logo">27</view>
-                <text class="store-name">27 POKER BAR</text>
+                <image class="store-logo" src="/static/allIn.jpg" mode="aspectFit"></image>
+                <text class="store-name">梭哈酒馆</text>
                 <view class="store-contact" @tap="contactUs">联系我们</view>
             </view>
             <view class="store-msg">
@@ -141,7 +141,7 @@ export default {
         contactUs() {
             uni.showModal({
                 title: '联系我们',
-                content: '电话: 027-88888888\n微信: 27POKER_BAR',
+                content: '电话: 027-88888888\n微信: AllInTavern',
                 showCancel: false
             });
         }
@@ -227,14 +227,7 @@ export default {
 .store-logo {
     width: 60rpx;
     height: 60rpx;
-    border-radius: 50%;
-    background: #c41e3a;
-    color: #fff;
-    font-size: 24rpx;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    border-radius: 12rpx;
     margin-right: 16rpx;
 }
 .store-name { flex: 1; font-size: 28rpx; color: #fff; font-weight: bold; }

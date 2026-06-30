@@ -324,7 +324,7 @@ CREATE TABLE `t_user` (
   `user_type` tinyint(1) DEFAULT '1' COMMENT '用户类型：1-普通用户，2-管理员',
   `status` tinyint(1) DEFAULT '1' COMMENT '状态：0-禁用，1-正常',
   `balance` decimal(10,2) DEFAULT '0.00' COMMENT '账户余额',
-  `coins` int(11) DEFAULT '0' COMMENT '27币',
+  `coins` int(11) DEFAULT '0' COMMENT 'All In币',
   `master_score` int(11) DEFAULT '0' COMMENT '大师分',
   `coupon_count` int(11) DEFAULT '0' COMMENT '优惠券数量',
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -342,7 +342,7 @@ CREATE TABLE `t_user` (
 
 LOCK TABLES `t_user` WRITE;
 /*!40000 ALTER TABLE `t_user` DISABLE KEYS */;
-INSERT INTO `t_user` VALUES (1,'ol8nk6J5xCFComcE0TLbkkAxhmec','liu','http://localhost:8080/api/uploads/2025/12/22/1766397025827_0rka2b69q14.jpeg',NULL,NULL,NULL,1,1,20.00,0,0,0,'2025-12-22 17:31:26','2025-12-22 17:50:27',0);
+INSERT INTO `t_user` VALUES (1,'ol8nk6J5xCFComcE0TLbkkAxhmec','liu','https://bar.twst.work/api/uploads/2025/12/22/1766397025827_0rka2b69q14.jpeg',NULL,NULL,NULL,1,1,20.00,0,0,0,'2025-12-22 17:31:26','2025-12-22 17:50:27',0);
 /*!40000 ALTER TABLE `t_user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -362,7 +362,7 @@ INSERT INTO `t_user` (`id`,`openid`,`nickname`,`avatar`,`gender`,`user_type`,`st
 (10,'demo_openid_10','z',NULL,1,1,1,0.00,0,10,0,'2025-12-22 17:31:26','2025-12-22 17:31:26',0);
 
 --
--- Table structure for table `t_coin_product`（27币商品表）
+-- Table structure for table `t_coin_product`（All In币商品表）
 --
 
 DROP TABLE IF EXISTS `t_coin_product`;
@@ -370,7 +370,7 @@ CREATE TABLE `t_coin_product` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
   `name` varchar(100) NOT NULL COMMENT '商品名称',
   `image` varchar(4096) DEFAULT NULL COMMENT '商品图片',
-  `coin_price` int(11) NOT NULL COMMENT '兑换所需27币',
+  `coin_price` int(11) NOT NULL COMMENT '兑换所需All In币',
   `stock` int(11) DEFAULT '0' COMMENT '库存',
   `sort` int(11) DEFAULT '0' COMMENT '排序',
   `status` tinyint(1) DEFAULT '1' COMMENT '状态：0-下架，1-上架',
@@ -378,32 +378,106 @@ CREATE TABLE `t_coin_product` (
   `update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   `deleted` tinyint(1) DEFAULT '0' COMMENT '逻辑删除',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='27币商品表';
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='All In币商品表';
 
 LOCK TABLES `t_coin_product` WRITE;
 INSERT INTO `t_coin_product` VALUES
 (1,'精酿啤酒一杯','',50,100,1,1,'2025-12-22 17:14:38','2025-12-22 17:14:38',0),
 (2,'27特调一杯','',80,50,2,1,'2025-12-22 17:14:38','2025-12-22 17:14:38',0),
 (3,'招牌炸食小食','',60,80,3,1,'2025-12-22 17:14:38','2025-12-22 17:14:38',0),
-(4,'27 POKER BAR定制周边','',200,20,4,1,'2025-12-22 17:14:38','2025-12-22 17:14:38',0);
+(4,'梭哈酒馆定制周边','',200,20,4,1,'2025-12-22 17:14:38','2025-12-22 17:14:38',0);
 UNLOCK TABLES;
 
 --
--- Table structure for table `t_coin_exchange`（27币兑换记录表）
+-- Table structure for table `t_coin_exchange`（All In币兑换记录表）
 --
 
 DROP TABLE IF EXISTS `t_coin_exchange`;
 CREATE TABLE `t_coin_exchange` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
   `user_id` bigint(20) NOT NULL COMMENT '用户ID',
-  `coin_product_id` bigint(20) NOT NULL COMMENT '27币商品ID',
+  `coin_product_id` bigint(20) NOT NULL COMMENT 'All In币商品ID',
   `product_name` varchar(100) DEFAULT NULL COMMENT '商品名称（快照）',
-  `coin_price` int(11) NOT NULL COMMENT '消耗27币',
+  `coin_price` int(11) NOT NULL COMMENT '消耗All In币',
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`),
   KEY `idx_user_id` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='27币兑换记录表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='All In币兑换记录表';
+
+--
+-- Table structure for table `t_recharge_package`（会员充值套餐表）
+--
+
+DROP TABLE IF EXISTS `t_recharge_package`;
+CREATE TABLE `t_recharge_package` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `name` varchar(100) NOT NULL COMMENT '套餐名称',
+  `pay_amount` decimal(10,2) NOT NULL COMMENT '实付金额',
+  `balance` decimal(10,2) NOT NULL COMMENT '到账余额',
+  `gift_coins` int(11) DEFAULT '0' COMMENT '赠送All In币',
+  `sort` int(11) DEFAULT '0' COMMENT '排序',
+  `status` tinyint(1) DEFAULT '1' COMMENT '状态：0-下架，1-上架',
+  `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `deleted` tinyint(1) DEFAULT '0' COMMENT '逻辑删除',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='会员充值套餐表';
+
+LOCK TABLES `t_recharge_package` WRITE;
+INSERT INTO `t_recharge_package` VALUES
+(1,'充100送20',100.00,120.00,0,1,1,'2025-12-22 17:14:38','2025-12-22 17:14:38',0),
+(2,'充300送80',300.00,380.00,50,2,1,'2025-12-22 17:14:38','2025-12-22 17:14:38',0),
+(3,'充500送150',500.00,650.00,100,3,1,'2025-12-22 17:14:38','2025-12-22 17:14:38',0);
+UNLOCK TABLES;
+
+--
+-- Table structure for table `t_recharge_order`（会员充值订单表）
+--
+
+DROP TABLE IF EXISTS `t_recharge_order`;
+CREATE TABLE `t_recharge_order` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `order_no` varchar(50) NOT NULL COMMENT '订单号',
+  `user_id` bigint(20) NOT NULL COMMENT '用户ID',
+  `package_id` bigint(20) DEFAULT NULL COMMENT '套餐ID',
+  `pay_amount` decimal(10,2) NOT NULL COMMENT '实付金额',
+  `balance` decimal(10,2) NOT NULL COMMENT '到账余额',
+  `gift_coins` int(11) DEFAULT '0' COMMENT '赠送All In币',
+  `pay_method` varchar(20) DEFAULT 'wechat' COMMENT '支付方式',
+  `status` tinyint(1) DEFAULT '0' COMMENT '状态：0-待支付，1-已到账，2-已取消',
+  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+  `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `deleted` tinyint(1) DEFAULT '0' COMMENT '逻辑删除',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_order_no` (`order_no`),
+  KEY `idx_user_id` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='会员充值订单表';
+
+--
+-- Table structure for table `t_config`（系统配置表：门店信息 / WiFi 等）
+--
+
+DROP TABLE IF EXISTS `t_config`;
+CREATE TABLE `t_config` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `config_key` varchar(100) NOT NULL COMMENT '配置键',
+  `config_value` varchar(1000) DEFAULT NULL COMMENT '配置值',
+  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_config_key` (`config_key`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='系统配置表';
+
+LOCK TABLES `t_config` WRITE;
+INSERT INTO `t_config` VALUES
+(1,'store_name','梭哈酒馆 - 武昌店','门店名称'),
+(2,'store_address','星耀·狮子座购物中心（马房山地铁站C口旁）3层3001-1','门店地址'),
+(3,'store_phone','','门店电话'),
+(4,'wifi_name','AllInTavern','WiFi名称'),
+(5,'wifi_password','27272727','WiFi密码'),
+(6,'recharge_tip','享受更多专属优惠福利','充值说明');
+UNLOCK TABLES;
 
 --
 -- Dumping routines for database 'bar'

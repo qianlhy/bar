@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- * 27币商品实体
+ * All In币商品实体
  */
 @Data
 @TableName("t_coin_product")
@@ -22,7 +22,7 @@ public class CoinProduct implements Serializable {
     /** 商品图片 */
     private String image;
 
-    /** 兑换所需27币 */
+    /** 兑换所需All In币 */
     private Integer coinPrice;
 
     /** 库存 */

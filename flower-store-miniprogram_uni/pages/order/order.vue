@@ -9,7 +9,7 @@
                 <input class="table-input" placeholder="请输入桌台号（选填）" :value="tableNo" @input="inputTableNo" />
             </view>
             <view class="store-tag-row">
-                <text class="store-name">27 POKER BAR-武昌店</text>
+                <text class="store-name">梭哈酒馆-武昌店</text>
                 <view class="instore-tag">店内</view>
             </view>
         </view>
@@ -182,7 +182,7 @@ export default {
                 province: '湖北省',
                 city: '武汉市',
                 district: '武昌区',
-                address: tableNo ? `桌台号: ${tableNo}` : '27 POKER BAR-武昌店 店内',
+                address: tableNo ? `桌台号: ${tableNo}` : '梭哈酒馆-武昌店 店内',
                 paymentMethod: paymentMethod,
                 remark: remark,
                 items: orderItems.map((item) => ({

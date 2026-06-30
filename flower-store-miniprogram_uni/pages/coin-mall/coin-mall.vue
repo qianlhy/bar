@@ -2,13 +2,13 @@
     <view class="coin-page">
         <view class="coin-header">
             <view class="coin-balance">
-                <text class="balance-label">我的27币</text>
+                <text class="balance-label">我的 All In 币</text>
                 <text class="balance-value">{{ coins }}</text>
             </view>
             <view class="coin-records" @tap="goRecords">兑换记录 ›</view>
         </view>
 
-        <view class="coin-tip">27币可用于兑换酒水、小食及专属周边</view>
+        <view class="coin-tip">All In 币可用于兑换酒水、小食及专属周边</view>
 
         <scroll-view scroll-y class="coin-scroll">
             <view class="goods-grid">
@@ -66,7 +66,7 @@ export default {
             }).catch(() => { this.isLoading = false; });
         },
         goRecords() {
-            uni.showToast({ title: '兑换记录开发中', icon: 'none' });
+            uni.navigateTo({ url: '/pages/coin-records/coin-records' });
         },
         onExchange(e) {
             const token = uni.getStorageSync('token');
@@ -82,12 +82,12 @@ export default {
                 return;
             }
             if (this.coins < item.coinPrice) {
-                uni.showToast({ title: '27币不足', icon: 'none' });
+                uni.showToast({ title: 'All In 币不足', icon: 'none' });
                 return;
             }
             uni.showModal({
                 title: '确认兑换',
-                content: `确定花费 ${item.coinPrice} 个27币兑换「${item.name}」吗？`,
+                content: `确定花费 ${item.coinPrice} 个 All In 币兑换「${item.name}」吗？`,
                 success: (res) => {
                     if (res.confirm) this.doExchange(item.id);
                 }

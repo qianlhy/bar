@@ -163,8 +163,9 @@ java -jar target/flower-store-backend-1.0.0.jar
 或者使用IDE直接运行 `FlowerStoreApplication` 主类。
 
 ### 5. 访问接口
-- 接口地址：http://localhost:8080/api
-- WebSocket地址：ws://localhost:8080/api/ws/order/notification
+- 本地接口地址：http://localhost:8080/api
+- 线上接口地址：https://bar.twst.work/api
+- 线上WebSocket地址：wss://bar.twst.work/api/ws/order/notification
 
 ## 默认账号
 

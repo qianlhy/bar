@@ -1,7 +1,8 @@
 <template>
   <div class="login-container">
     <div class="login-box">
-      <h2 class="login-title">27 POKER BAR 管理系统</h2>
+      <h2 class="login-title">梭哈酒馆 管理系统</h2>
+      <p class="login-subtitle">All In Tavern</p>
       <el-form :model="loginForm" :rules="rules" ref="loginFormRef">
         <el-form-item prop="username">
           <el-input
@@ -112,24 +113,34 @@ const handleLogin = () => {
 .login-box {
   width: 400px;
   padding: 40px;
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(20, 20, 20, 0.92);
+  border: 1px solid rgba(232, 197, 71, 0.35);
   border-radius: 10px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
   position: relative;
   z-index: 1;
 }
 
 .login-title {
   text-align: center;
-  margin-bottom: 30px;
-  color: #333;
+  margin-bottom: 4px;
+  color: #e8c547;
   font-size: 24px;
+  letter-spacing: 2px;
+}
+
+.login-subtitle {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #8a7a3a;
+  font-size: 13px;
+  letter-spacing: 4px;
 }
 
 .tips {
   margin-top: 20px;
   text-align: center;
-  color: #999;
+  color: #888;
   font-size: 12px;
 }
 

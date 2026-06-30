@@ -2,14 +2,15 @@
   <el-container class="layout-container">
     <el-aside width="200px">
       <div class="logo">
-        <h3>27 POKER BAR</h3>
+        <h3>梭哈酒馆</h3>
+        <span class="logo-en">All In Tavern</span>
       </div>
       <el-menu
         :default-active="activeMenu"
         router
-        background-color="#304156"
-        text-color="#bfcbd9"
-        active-text-color="#409EFF"
+        background-color="#141414"
+        text-color="#bfbfbf"
+        active-text-color="#e8c547"
       >
         <el-menu-item index="/dashboard">
           <el-icon><House /></el-icon>
@@ -31,6 +32,26 @@
           <el-icon><User /></el-icon>
           <span>用户管理</span>
         </el-menu-item>
+        <el-menu-item index="/rank">
+          <el-icon><Trophy /></el-icon>
+          <span>大师分排行榜</span>
+        </el-menu-item>
+        <el-sub-menu index="coin">
+          <template #title>
+            <el-icon><Coin /></el-icon>
+            <span>All In币商城</span>
+          </template>
+          <el-menu-item index="/coin/product">商品管理</el-menu-item>
+          <el-menu-item index="/coin/exchange">兑换记录</el-menu-item>
+        </el-sub-menu>
+        <el-sub-menu index="recharge">
+          <template #title>
+            <el-icon><Wallet /></el-icon>
+            <span>会员充值</span>
+          </template>
+          <el-menu-item index="/recharge/package">充值套餐</el-menu-item>
+          <el-menu-item index="/recharge/order">充值订单</el-menu-item>
+        </el-sub-menu>
         <el-menu-item index="/settings">
           <el-icon><Setting /></el-icon>
           <span>系统设置</span>
@@ -100,37 +121,60 @@ const handleCommand = (command) => {
 }
 
 .el-aside {
-  background-color: #304156;
+  background-color: #141414;
   height: 100vh;
 }
 
+.el-aside .el-menu {
+  border-right: none;
+}
+
 .logo {
-  height: 60px;
+  height: 70px;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  color: #fff;
-  font-size: 18px;
-  border-bottom: 1px solid #26334a;
+  color: #e8c547;
+  border-bottom: 1px solid #2a2a2a;
+}
+
+.logo h3 {
+  font-size: 20px;
+  letter-spacing: 2px;
+  color: #e8c547;
+}
+
+.logo-en {
+  font-size: 11px;
+  letter-spacing: 3px;
+  color: #8a7a3a;
+  margin-top: 2px;
 }
 
 .el-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #fff;
-  box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
-}
-
-.header-left {
-  display: flex;
-  align-items: center;
+  background-color: #1f1f1f;
+  border-bottom: 2px solid #e8c547;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
 }
 
 .page-title {
   font-size: 18px;
   font-weight: 500;
-  color: #333;
+  color: #f5f5f5 !important;
+}
+
+.username {
+  margin-left: 10px;
+  color: #f5f5f5 !important;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
 }
 
 .header-right {
@@ -142,11 +186,6 @@ const handleCommand = (command) => {
   display: flex;
   align-items: center;
   cursor: pointer;
-}
-
-.username {
-  margin-left: 10px;
-  color: #333;
 }
 
 .el-main {
