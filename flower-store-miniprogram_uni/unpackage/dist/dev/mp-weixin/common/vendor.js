@@ -177,6 +177,71 @@ module.exports = {
 
 /***/ }),
 
+/***/ 117:
+/*!*****************************************************************************************************************************!*\
+  !*** C:/Users/Administrator/Desktop/2026年1月7日/卡歌/酒吧小程序/flower-store-backend-sb_uni/flower-store-miniprogram_uni/api/pay.js ***!
+  \*****************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(uni) {var _require = __webpack_require__(/*! ../utils/request */ 52),
+  get = _require.get,
+  post = _require.post;
+
+/**
+ * 商品订单发起微信支付，返回调起支付所需参数
+ * @param {Number} orderId 订单ID
+ */
+function payOrder(orderId) {
+  return post('/pay/order/' + orderId);
+}
+
+/**
+ * 会员充值发起微信支付，返回调起支付所需参数
+ * @param {Number} rechargeOrderId 充值订单ID
+ */
+function payRecharge(rechargeOrderId) {
+  return post('/pay/recharge/' + rechargeOrderId);
+}
+
+/**
+ * 主动查询支付结果（回调延迟时的兜底）
+ * @param {String} outTradeNo 商户订单号
+ */
+function queryPayResult(outTradeNo) {
+  return get('/pay/query', {
+    outTradeNo: outTradeNo
+  });
+}
+
+/**
+ * 调起微信支付
+ * @param {Object} params 后端返回的支付参数
+ */
+function requestPayment(params) {
+  return new Promise(function (resolve, reject) {
+    uni.requestPayment({
+      provider: 'wxpay',
+      timeStamp: params.timeStamp,
+      nonceStr: params.nonceStr,
+      package: params.package,
+      signType: params.signType || 'RSA',
+      paySign: params.paySign,
+      success: resolve,
+      fail: reject
+    });
+  });
+}
+module.exports = {
+  payOrder: payOrder,
+  payRecharge: payRecharge,
+  queryPayResult: queryPayResult,
+  requestPayment: requestPayment
+};
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
+
+/***/ }),
+
 /***/ 12:
 /*!**************************************************************!*\
   !*** ./node_modules/@babel/runtime/helpers/toPropertyKey.js ***!
@@ -214,7 +279,7 @@ module.exports = _typeof, module.exports.__esModule = true, module.exports["defa
 
 /***/ }),
 
-/***/ 133:
+/***/ 134:
 /*!*********************************************************************************************************************************!*\
   !*** C:/Users/Administrator/Desktop/2026年1月7日/卡歌/酒吧小程序/flower-store-backend-sb_uni/flower-store-miniprogram_uni/api/address.js ***!
   \*********************************************************************************************************************************/
@@ -321,7 +386,7 @@ module.exports = _construct, module.exports.__esModule = true, module.exports["d
 
 /***/ }),
 
-/***/ 150:
+/***/ 151:
 /*!*******************************************************************************************************************************!*\
   !*** C:/Users/Administrator/Desktop/2026年1月7日/卡歌/酒吧小程序/flower-store-backend-sb_uni/flower-store-miniprogram_uni/api/order.js ***!
   \*******************************************************************************************************************************/
@@ -447,7 +512,7 @@ module.exports = _toConsumableArray, module.exports.__esModule = true, module.ex
 
 /***/ }),
 
-/***/ 183:
+/***/ 184:
 /*!******************************************************************************************************************************!*\
   !*** C:/Users/Administrator/Desktop/2026年1月7日/卡歌/酒吧小程序/flower-store-backend-sb_uni/flower-store-miniprogram_uni/api/auth.js ***!
   \******************************************************************************************************************************/
@@ -3052,7 +3117,7 @@ module.exports = _iterableToArray, module.exports.__esModule = true, module.expo
 
 /***/ }),
 
-/***/ 200:
+/***/ 201:
 /*!**********************************************************************************************************************************!*\
   !*** C:/Users/Administrator/Desktop/2026年1月7日/卡歌/酒吧小程序/flower-store-backend-sb_uni/flower-store-miniprogram_uni/api/favorite.js ***!
   \**********************************************************************************************************************************/
@@ -3657,7 +3722,7 @@ function resolveLocaleChain(locale) {
 
 /***/ }),
 
-/***/ 223:
+/***/ 224:
 /*!************************************************************************************************************************************************************!*\
   !*** C:/Users/Administrator/Desktop/2026年1月7日/卡歌/酒吧小程序/flower-store-backend-sb_uni/flower-store-miniprogram_uni/components/region-picker/region-picker.js ***!
   \************************************************************************************************************************************************************/
@@ -25516,7 +25581,7 @@ module.exports = {
  * 网络请求工具
  */
 
-var BASE_URL = 'https://bar.twst.work/api'; // 后端接口地址，请根据实际情况修改
+var BASE_URL = 'https://bar.twst.work/api'; // 后端接口地址
 
 /**
  * 发送HTTP请求

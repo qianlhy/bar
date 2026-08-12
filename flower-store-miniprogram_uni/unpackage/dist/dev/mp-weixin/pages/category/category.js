@@ -101,7 +101,7 @@ var components
 try {
   components = {
     specModal: function () {
-      return __webpack_require__.e(/*! import() | components/spec-modal/spec-modal */ "components/spec-modal/spec-modal").then(__webpack_require__.bind(null, /*! @/components/spec-modal/spec-modal.vue */ 211))
+      return __webpack_require__.e(/*! import() | components/spec-modal/spec-modal */ "components/spec-modal/spec-modal").then(__webpack_require__.bind(null, /*! @/components/spec-modal/spec-modal.vue */ 212))
     },
   }
 } catch (e) {
@@ -286,7 +286,7 @@ var categoryApi = __webpack_require__(/*! ../../api/category */ 63);
 var productApi = __webpack_require__(/*! ../../api/product */ 64);
 var specModal = function specModal() {
   __webpack_require__.e(/*! require.ensure | components/spec-modal/spec-modal */ "components/spec-modal/spec-modal").then((function () {
-    return resolve(__webpack_require__(/*! @/components/spec-modal/spec-modal */ 211));
+    return resolve(__webpack_require__(/*! @/components/spec-modal/spec-modal */ 212));
   }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 var _default = {
@@ -467,7 +467,7 @@ var _default = {
     },
     showStorePicker: function showStorePicker() {
       uni.showToast({
-        title: '梭哈酒馆-武昌店',
+        title: '梭哈酒馆-南京店',
         icon: 'none'
       });
     }

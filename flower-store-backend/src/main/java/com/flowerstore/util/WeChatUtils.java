@@ -37,7 +37,12 @@ public class WeChatUtils {
             HttpGet httpGet = new HttpGet(url);
             CloseableHttpResponse response = httpClient.execute(httpGet);
             String result = EntityUtils.toString(response.getEntity(), "UTF-8");
-            return JSON.parseObject(result);
+            JSONObject json = JSON.parseObject(result);
+            // 微信返回错误时记录详细信息，方便排查
+            if (json != null && json.getInteger("errcode") != null) {
+                System.err.println("[WeChatUtils] code2Session error: errcode=" + json.getInteger("errcode") + ", errmsg=" + json.getString("errmsg"));
+            }
+            return json;
         } catch (Exception e) {
             e.printStackTrace();
             return null;

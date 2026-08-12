@@ -132,16 +132,19 @@ export default {
     padding: 20rpx 30rpx;
 }
 .tab-item {
-    padding: 12rpx 24rpx;
+    padding: 14rpx 28rpx;
     font-size: 24rpx;
     color: #999;
     border-radius: 30rpx;
     background: #1c1c1e;
+    border: 1rpx solid transparent;
+    transition: all 0.2s;
 }
 .tab-item.active {
-    background: #c41e3a;
-    color: #fff;
+    background: linear-gradient(135deg, #f7dc8a, #d4a72c);
+    color: #000;
     font-weight: bold;
+    box-shadow: 0 4rpx 12rpx rgba(232,197,71,0.3);
 }
 .podium {
     display: flex;
@@ -164,6 +167,12 @@ export default {
     border-radius: 50%;
     border: 4rpx solid #c41e3a;
     background: #333;
+}
+.podium-item.first .podium-avatar {
+    width: 128rpx;
+    height: 128rpx;
+    border-color: #e8c547;
+    box-shadow: 0 0 30rpx rgba(232,197,71,0.45);
 }
 .podium-item.second .podium-avatar { border-color: #c0c0c0; }
 .podium-item.third .podium-avatar { border-color: #cd7f32; }
@@ -196,7 +205,8 @@ export default {
 .rank-list {
     margin: 10rpx 30rpx;
     background: #141416;
-    border-radius: 16rpx;
+    border-radius: 20rpx;
+    border: 1rpx solid rgba(255,255,255,0.05);
     overflow: hidden;
 }
 .list-head {

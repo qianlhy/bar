@@ -301,8 +301,8 @@ export default {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    background-color: #f7f7f7;
-    padding-bottom: 100rpx;
+    background-color: var(--bg-dark);
+    padding-bottom: 120rpx;
 }
 
 /* 未登录提示 */
@@ -311,15 +311,16 @@ export default {
     justify-content: space-between;
     align-items: center;
     padding: 20rpx 30rpx;
-    background-color: #fff9f0;
-    color: #ff9500;
+    background-color: rgba(232, 197, 71, 0.12);
+    color: var(--accent-gold);
     font-size: 26rpx;
 }
 
 .login-btn {
-    background-color: #ff9500;
-    color: #fff;
+    background-color: var(--accent-gold);
+    color: #1a1a1a;
     font-size: 24rpx;
+    font-weight: bold;
     padding: 6rpx 20rpx;
     line-height: 1.5;
     border-radius: 30rpx;
@@ -342,29 +343,34 @@ export default {
 }
 
 .empty-text {
-    color: #999;
+    color: var(--text-secondary);
     font-size: 28rpx;
     margin-bottom: 40rpx;
 }
 
 .go-shopping-btn {
-    background-color: var(--primary-color);
-    color: #fff;
+    background: linear-gradient(135deg, #f7dc8a 0%, #c99a3a 100%);
+    color: #1a1a1a;
+    font-weight: bold;
     font-size: 28rpx;
     width: 300rpx;
     border-radius: 40rpx;
+    border: none;
 }
 
 /* 购物车列表 */
 .cart-list {
-    background-color: #fff;
+    background-color: transparent;
+    padding: 20rpx;
 }
 
 .cart-item {
     display: flex;
-    padding: 30rpx 20rpx;
+    padding: 24rpx 20rpx;
     position: relative;
-    border-bottom: 1px solid #f5f5f5;
+    background-color: var(--bg-card);
+    border-radius: 20rpx;
+    margin-bottom: 20rpx;
 }
 
 /* 选择框 */
@@ -378,7 +384,7 @@ export default {
     width: 40rpx;
     height: 40rpx;
     border-radius: 50%;
-    border: 1px solid #ddd;
+    border: 1px solid #555;
     box-sizing: border-box;
 }
 
@@ -396,8 +402,8 @@ export default {
     transform: translate(-50%, -60%) rotate(-45deg);
     width: 16rpx;
     height: 8rpx;
-    border-left: 2px solid #fff;
-    border-bottom: 2px solid #fff;
+    border-left: 2px solid #1a1a1a;
+    border-bottom: 2px solid #1a1a1a;
 }
 
 /* 商品图片 */
@@ -406,6 +412,8 @@ export default {
     height: 160rpx;
     border-radius: 12rpx;
     margin-right: 20rpx;
+    background-color: #2c2c2e;
+    flex-shrink: 0;
 }
 
 /* 商品信息 */
@@ -421,6 +429,7 @@ export default {
     font-weight: bold;
     line-height: 1.4;
     margin-bottom: 10rpx;
+    color: var(--text-color);
 }
 
 .product-price-box {
@@ -428,7 +437,7 @@ export default {
 }
 
 .price {
-    color: var(--price-color);
+    color: var(--accent-gold);
     font-weight: bold;
     font-size: 32rpx;
 }
@@ -448,7 +457,8 @@ export default {
 .counter-btn {
     width: 60rpx;
     height: 60rpx;
-    border: 1px solid #eee;
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -456,14 +466,15 @@ export default {
 }
 
 .counter-btn.disabled {
-    color: #ccc;
+    color: var(--disabled-color);
 }
 
 .counter-num {
     width: 80rpx;
     height: 60rpx;
-    border-top: 1px solid #eee;
-    border-bottom: 1px solid #eee;
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-color);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -486,10 +497,10 @@ export default {
     left: 0;
     right: 0;
     height: 100rpx;
-    background-color: #fff;
+    background-color: var(--bg-card);
+    border-top: 1px solid var(--border-color);
     display: flex;
     align-items: center;
-    box-shadow: 0 -2rpx 6rpx rgba(0, 0, 0, 0.05);
     z-index: 99;
 }
 
@@ -518,23 +529,26 @@ export default {
 
 .price-label {
     font-size: 28rpx;
+    color: var(--text-color);
 }
 
 .price-desc {
     font-size: 22rpx;
-    color: #999;
+    color: var(--text-secondary);
 }
 
 .checkout-btn {
     width: 240rpx;
     height: 100%;
-    background-color: var(--primary-color);
-    color: #fff;
+    background: linear-gradient(135deg, #f7dc8a 0%, #c99a3a 100%);
+    color: #1a1a1a;
+    font-weight: bold;
     font-size: 30rpx;
     display: flex;
     justify-content: center;
     align-items: center;
     border-radius: 0;
     margin: 0;
+    border: none;
 }
 </style>

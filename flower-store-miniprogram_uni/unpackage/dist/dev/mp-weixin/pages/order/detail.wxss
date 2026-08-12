@@ -272,6 +272,23 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* pages/order/detail.wxss */
 .order-detail-container {
     min-height: 100vh;
@@ -337,6 +354,15 @@
     opacity: 0.8;
 }
 /* 收货地址 */
+.status-section {
+    background-color: #c41e3a;
+    padding: 40rpx 30rpx;
+}
+.status-text {
+    color: #fff;
+    font-size: 38rpx;
+    font-weight: bold;
+}
 .address-section {
     background-color: #fff;
     margin-top: 20rpx;

@@ -10,9 +10,16 @@
         <scroll-view scroll-y class="home-scroll">
             <!-- 品牌区域 -->
             <view class="brand-section">
-                <image class="brand-logo" src="/static/allIn.jpg" mode="aspectFit"></image>
+                <view class="brand-glow"></view>
+                <view class="logo-ring">
+                    <image class="brand-logo" src="/static/allIn.jpg" mode="aspectFill"></image>
+                </view>
                 <text class="brand-title">梭哈酒馆</text>
-                <text class="texas-bar">All In Tavern</text>
+                <view class="brand-sub-line">
+                    <view class="sub-line sub-line-left"></view>
+                    <text class="texas-bar">All In Tavern</text>
+                    <view class="sub-line sub-line-right"></view>
+                </view>
             </view>
 
             <!-- 会员信息卡 -->
@@ -137,8 +144,8 @@ export default {
             userInfo: { balance: 20, coins: 0 },
             showPrivacy: false,
             showMemberModal: false,
-            storeName: '梭哈酒馆 - 武昌店',
-            storeAddress: '星耀·狮子座购物中心（马房山地铁站C口旁）3层3001-1',
+            storeName: '梭哈酒馆 - 南京店',
+            storeAddress: '江苏省南京市浦口区江浦街道明发新城中心2栋4单元1007',
             wifiName: 'AllInTavern',
             wifiPassword: '27272727',
             memberCodeUrl: ''
@@ -256,29 +263,71 @@ export default {
 /* 品牌区 */
 .brand-section {
     text-align: center;
-    padding: 20rpx 30rpx 40rpx;
+    padding: 30rpx 30rpx 44rpx;
+    position: relative;
+}
+.brand-glow {
+    position: absolute;
+    top: -30rpx;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 460rpx;
+    height: 460rpx;
+    background: radial-gradient(circle, rgba(232,197,71,0.20) 0%, rgba(232,197,71,0.06) 42%, transparent 70%);
+    pointer-events: none;
+}
+.logo-ring {
+    width: 220rpx;
+    height: 220rpx;
+    margin: 10rpx auto 26rpx;
+    border-radius: 50%;
+    padding: 5rpx;
+    background: linear-gradient(135deg, #f7dc8a 0%, #c99a3a 48%, #f7dc8a 100%);
+    box-shadow: 0 0 44rpx rgba(232,197,71,0.38), 0 10rpx 26rpx rgba(0,0,0,0.55);
+    position: relative;
+    z-index: 1;
 }
 .brand-logo {
-    width: 280rpx;
-    height: 280rpx;
-    border-radius: 28rpx;
-    margin: 10rpx auto 20rpx;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 5rpx solid #141414;
     display: block;
 }
 .brand-title {
-    font-size: 52rpx;
+    font-size: 54rpx;
     font-weight: bold;
-    color: #fff;
-    letter-spacing: 4rpx;
+    color: #f3d780;
+    letter-spacing: 8rpx;
     display: block;
+    text-shadow: 0 2rpx 14rpx rgba(232,197,71,0.45);
+    position: relative;
+    z-index: 1;
+}
+.brand-sub-line {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 18rpx;
+    margin-top: 18rpx;
+    position: relative;
+    z-index: 1;
+}
+.sub-line {
+    width: 70rpx;
+    height: 1px;
+}
+.sub-line-left {
+    background: linear-gradient(90deg, transparent, #c99a3a);
+}
+.sub-line-right {
+    background: linear-gradient(90deg, #c99a3a, transparent);
 }
 .texas-bar {
-    font-size: 30rpx;
-    color: #ccc;
+    font-size: 26rpx;
+    color: #d8b44a;
     font-weight: bold;
-    letter-spacing: 4rpx;
-    display: block;
-    margin-top: 12rpx;
+    letter-spacing: 6rpx;
 }
 
 /* 会员卡 */

@@ -14,18 +14,6 @@
                 <view class="method-name">微信支付</view>
                 <view class="method-check" v-if="paymentMethod === 'wechat'">✓</view>
             </view>
-
-            <view :class="'method-item ' + (paymentMethod === 'alipay' ? 'selected' : '')" data-method="alipay" @tap="switchPaymentMethod">
-                <view class="method-icon alipay-icon"></view>
-                <view class="method-name">支付宝</view>
-                <view class="method-check" v-if="paymentMethod === 'alipay'">✓</view>
-            </view>
-
-            <view :class="'method-item ' + (paymentMethod === 'card' ? 'selected' : '')" data-method="card" @tap="switchPaymentMethod">
-                <view class="method-icon card-icon"></view>
-                <view class="method-name">银行卡支付</view>
-                <view class="method-check" v-if="paymentMethod === 'card'">✓</view>
-            </view>
         </view>
 
         <view class="payment-footer">
@@ -39,6 +27,7 @@
 
 <script>
 const orderApi = require('../../api/order');
+const payApi = require('../../api/pay');
 export default {
     data() {
         return {
@@ -125,40 +114,36 @@ export default {
 
         // 立即支付
         payNow: function () {
-            const { orderId } = this;
+            const { orderId, paymentMethod } = this;
 
-            // 显示加载状态
-            this.setData({
-                isLoading: true
-            });
+            if (paymentMethod !== 'wechat') {
+                uni.showToast({ title: '暂仅支持微信支付', icon: 'none' });
+                return;
+            }
 
-            // 更新订单状态为"待发货"
-            orderApi
-                .updateOrderStatus(orderId, 2)
+            this.setData({ isLoading: true });
+
+            payApi
+                .payOrder(orderId)
+                .then((params) => payApi.requestPayment(params))
                 .then(() => {
-                    // 隐藏加载状态
-                    this.setData({
-                        isLoading: false
-                    });
-
-                    // 显示支付成功提示
-                    uni.showToast({
-                        title: '支付成功',
-                        icon: 'success'
-                    });
-
-                    // 跳转到订单详情页
+                    this.setData({ isLoading: false });
+                    if (this.countdownTimer) {
+                        clearInterval(this.countdownTimer);
+                    }
+                    uni.showToast({ title: '支付成功', icon: 'success' });
                     setTimeout(() => {
-                        uni.redirectTo({
-                            url: `/pages/order/detail?id=${orderId}`
-                        });
+                        uni.redirectTo({ url: `/pages/order/detail?id=${orderId}` });
                     }, 1500);
                 })
                 .catch((err) => {
-                    console.error('支付失败', err);
-                    this.setData({
-                        isLoading: false
-                    });
+                    this.setData({ isLoading: false });
+                    // 用户主动取消支付时不提示错误
+                    const cancelled = err && typeof err.errMsg === 'string' && err.errMsg.indexOf('cancel') > -1;
+                    if (!cancelled) {
+                        console.error('支付失败', err);
+                        uni.showToast({ title: '支付未完成', icon: 'none' });
+                    }
                 });
         },
 

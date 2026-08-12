@@ -278,6 +278,13 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 var userApi = __webpack_require__(/*! ../../api/user */ 51);
 var configApi = __webpack_require__(/*! ../../api/config */ 53);
@@ -293,8 +300,8 @@ var _default = {
       },
       showPrivacy: false,
       showMemberModal: false,
-      storeName: '梭哈酒馆 - 武昌店',
-      storeAddress: '星耀·狮子座购物中心（马房山地铁站C口旁）3层3001-1',
+      storeName: '梭哈酒馆 - 南京店',
+      storeAddress: '江苏省南京市浦口区江浦街道明发新城中心2栋4单元1007',
       wifiName: 'AllInTavern',
       wifiPassword: '27272727',
       memberCodeUrl: ''

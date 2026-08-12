@@ -17,6 +17,10 @@ target/
 application-dev.yml
 application-local.yml
 
+# 微信支付商户证书与私钥，切勿提交
+flower-store-backend/src/main/resources/cert/
+*.p12
+
 # 日志文件
 *.log
 

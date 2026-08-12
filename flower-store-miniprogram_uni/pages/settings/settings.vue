@@ -78,6 +78,11 @@
             <text class="divider">|</text>
             <navigator url="/pages/agreement/user" class="agreement-link">用户协议</navigator>
         </view>
+
+        <!-- 退出登录 -->
+        <view class="logout-wrapper" v-if="isLogin">
+            <view class="logout-btn" @tap="logout">退出登录</view>
+        </view>
     </view>
 </template>
 
@@ -238,7 +243,7 @@ export default {
                     const data = JSON.parse(uploadRes.data);
                     if (data.code === 200) {
                         this.setData({
-                            avatarUrl: data.data.url
+                            avatarUrl: data.data
                         });
                         uni.showToast({
                             title: '上传成功',
@@ -440,6 +445,32 @@ export default {
             uni.navigateTo({
                 url: '/pages/login/login'
             });
+        },
+
+        // 退出登录
+        logout: function () {
+            uni.showModal({
+                title: '退出登录',
+                content: '确定要退出当前账号吗？',
+                success: (res) => {
+                    if (!res.confirm) {
+                        return;
+                    }
+                    uni.removeStorageSync('token');
+                    uni.removeStorageSync('cartSpecs');
+                    if (app && app.globalData && typeof app.globalData.logout === 'function') {
+                        app.globalData.logout();
+                    } else {
+                        uni.removeStorageSync('userInfo');
+                        uni.removeStorageSync('isLoggedIn');
+                    }
+                    this.checkLoginStatus();
+                    uni.showToast({ title: '已退出登录', icon: 'success' });
+                    setTimeout(() => {
+                        uni.switchTab({ url: '/pages/index/index' });
+                    }, 1200);
+                }
+            });
         }
     }
 };
@@ -450,6 +481,20 @@ export default {
     min-height: 100vh;
     background-color: #f5f5f5;
     padding-bottom: 40rpx;
+}
+
+/* 退出登录 */
+.logout-wrapper {
+    padding: 40rpx 30rpx 20rpx;
+}
+
+.logout-btn {
+    background-color: #fff;
+    color: #c41e3a;
+    font-size: 32rpx;
+    text-align: center;
+    padding: 28rpx 0;
+    border-radius: 12rpx;
 }
 
 /* 个人资料样式 */

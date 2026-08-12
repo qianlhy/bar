@@ -194,6 +194,18 @@ export default {
      */
     onShareAppMessage() {},
     methods: {
+        // 订单状态码转文案
+        formatStatus: function (status) {
+            const map = {
+                1: '待付款',
+                2: '待发货',
+                3: '待收货',
+                4: '已完成',
+                5: '已取消'
+            };
+            return map[status] || '';
+        },
+
         // 加载订单列表
         loadOrderList: function () {
             const token = uni.getStorageSync('token');
@@ -217,10 +229,14 @@ export default {
             orderApi
                 .getOrderList(status)
                 .then((data) => {
+                    const list = (data || []).map((item) => ({
+                        ...item,
+                        statusText: this.formatStatus(item.status)
+                    }));
                     this.setData({
-                        orderList: data,
+                        orderList: list,
                         isLoading: false,
-                        isEmpty: data.length === 0
+                        isEmpty: list.length === 0
                     });
                 })
                 .catch((err) => {

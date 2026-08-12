@@ -401,6 +401,90 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* pages/login/login.wxss */
 .login-container {
     min-height: 100vh;
@@ -572,10 +656,101 @@
 .wx-login-btn.loading {
     opacity: 0.8;
 }
+/* 微信登录主入口 */
+.wx-login-btn.primary {
+    background: linear-gradient(135deg, #f7dc8a 0%, #c99a3a 100%);
+    color: #1a1a1a;
+    font-weight: bold;
+    margin-bottom: 30rpx;
+    box-shadow: 0 8rpx 24rpx rgba(232, 197, 71, 0.28);
+}
 .wx-icon {
     width: 48rpx;
     height: 48rpx;
     margin-right: 16rpx;
+}
+.phone-form {
+    margin-top: 24rpx;
+}
+/* 手机号登录入口 */
+.phone-login-entry {
+    text-align: center;
+    font-size: 26rpx;
+    color: #8a8a8e;
+    margin-bottom: 6rpx;
+}
+/* 完善头像昵称 */
+.profile-setup {
+    padding: 50rpx 40rpx 40rpx;
+    background-color: #1c1c1e;
+    border-radius: 30rpx;
+    position: relative;
+    z-index: 1;
+    text-align: center;
+}
+.profile-title {
+    display: block;
+    font-size: 36rpx;
+    font-weight: bold;
+    color: #f3d780;
+    letter-spacing: 2rpx;
+}
+.profile-tip {
+    display: block;
+    font-size: 24rpx;
+    color: #8a8a8e;
+    margin-top: 12rpx;
+}
+.avatar-picker {
+    width: 180rpx;
+    height: auto;
+    margin: 40rpx auto 30rpx;
+    background: transparent;
+    border: none;
+    padding: 0;
+    line-height: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.avatar-picker::after {
+    border: none;
+}
+.avatar-preview {
+    width: 160rpx;
+    height: 160rpx;
+    border-radius: 50%;
+    border: 3rpx solid #c99a3a;
+    background-color: #2c2c2e;
+}
+.avatar-hint {
+    font-size: 24rpx;
+    color: #8a8a8e;
+    margin-top: 16rpx;
+}
+.profile-item {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #333;
+    margin: 20rpx 0 50rpx;
+}
+.profile-label {
+    font-size: 28rpx;
+    color: #999;
+    width: 100rpx;
+    text-align: left;
+}
+.profile-input {
+    flex: 1;
+    height: 90rpx;
+    font-size: 30rpx;
+    color: #fff;
+    text-align: left;
+}
+.profile-skip {
+    font-size: 26rpx;
+    color: #8a8a8e;
+    margin-top: 10rpx;
 }
 /* 注册链接 */
 .register-link {

@@ -40,6 +40,7 @@
 const rechargeApi = require('../../api/recharge');
 const configApi = require('../../api/config');
 const userApi = require('../../api/user');
+const payApi = require('../../api/pay');
 export default {
     data() {
         return {
@@ -99,15 +100,22 @@ export default {
             }
             const pkg = this.packages[this.selectedIndex];
             this.submitting = true;
-            rechargeApi.createRecharge(pkg.id).then(() => {
-                this.submitting = false;
-                // 微信支付能力预留：当前生成待支付订单，到账以门店确认为准
-                uni.showModal({
-                    title: '充值订单已提交',
-                    content: '微信支付功能即将上线，当前订单已生成，请向店员出示订单完成到账。',
-                    showCancel: false
+            rechargeApi.createRecharge(pkg.id)
+                .then((order) => payApi.payRecharge(order.id))
+                .then((params) => payApi.requestPayment(params))
+                .then(() => {
+                    this.submitting = false;
+                    uni.showToast({ title: '充值成功', icon: 'success' });
+                    this.loadUser();
+                })
+                .catch((err) => {
+                    this.submitting = false;
+                    const cancelled = err && typeof err.errMsg === 'string' && err.errMsg.indexOf('cancel') > -1;
+                    if (!cancelled) {
+                        console.error('充值支付失败', err);
+                        uni.showToast({ title: '支付未完成', icon: 'none' });
+                    }
                 });
-            }).catch(() => { this.submitting = false; });
         }
     }
 };

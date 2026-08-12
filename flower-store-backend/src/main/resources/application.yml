@@ -56,7 +56,17 @@ mybatis-plus:
 # 微信小程序配置
 wechat:
   appid: wx39c20690901c74e4
-  secret: 2fa7efd4fa6e819943ffe9c0f9e5961c
+  secret: 01a5cbd9538ec5506e2229bb77805e9c
+  # 微信支付（APIv3，公钥模式）
+  pay:
+    enabled: true
+    mch-id: 1114313337                                              # 商户号
+    api-v3-key: 82749105638201947536209481756302                    # APIv3密钥（32位）
+    merchant-serial-no: 72C7A5E9DCAD0ADA70D24AFB31563D515F882BCC    # 商户证书序列号
+    private-key-path: classpath:cert/apiclient_key.pem              # 商户API私钥
+    public-key-id: PUB_KEY_ID_0111143133372026062600181842000000    # 微信支付公钥ID
+    public-key-path: classpath:cert/pub_key.pem                     # 微信支付公钥
+    notify-url: https://bar.twst.work/api/pay/notify                # 支付结果回调地址（须公网可访问的https）
 
 # JWT配置
 jwt:
@@ -68,10 +78,10 @@ jwt:
 # 文件上传配置
 file:
   upload:
-    path: E:\projects\flower-store\flower-store-backend\src\main\resources\uploads/  # 上传文件保存路径
+    path: ./uploads/  # 上传文件保存路径，相对路径以 jar 所在目录为基准（可用 APP_HOME 覆盖）
     static-pattern: /uploads/**  # 静态资源访问路径
     max-size: 10485760  # 最大文件大小，10MB
-    domain: https://bar.twst.work/api  # 服务器域名，用于生成完整URL
+    domain: https://bar.twst.work  # 服务器域名（不含 /api），用于生成完整URL
 
 # 订单通知配置
 order:

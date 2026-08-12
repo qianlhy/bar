@@ -471,8 +471,8 @@ CREATE TABLE `t_config` (
 
 LOCK TABLES `t_config` WRITE;
 INSERT INTO `t_config` VALUES
-(1,'store_name','梭哈酒馆 - 武昌店','门店名称'),
-(2,'store_address','星耀·狮子座购物中心（马房山地铁站C口旁）3层3001-1','门店地址'),
+(1,'store_name','梭哈酒馆 - 南京店','门店名称'),
+(2,'store_address','江苏省南京市浦口区江浦街道明发新城中心2栋4单元1007','门店地址'),
 (3,'store_phone','','门店电话'),
 (4,'wifi_name','AllInTavern','WiFi名称'),
 (5,'wifi_password','27272727','WiFi密码'),

@@ -1,7 +1,11 @@
 <template>
     <!-- pages/order/detail.wxml -->
     <view class="order-detail-container">
-        <!-- 加载中 -->
+        <!-- 订单状态 -->
+        <view class="status-section" v-if="statusText">
+            <text class="status-text">{{ statusText }}</text>
+        </view>
+
         <!-- 收货地址 -->
         <view class="address-section">
             <view class="section-title">收货地址</view>
@@ -75,24 +79,24 @@
         <!-- 底部操作按钮 -->
         <view class="footer">
             <!-- 待付款 -->
-            <block v-if="orderInfo.status === '待付款'">
+            <block v-if="statusText === '待付款'">
                 <button class="btn cancel" @tap="cancelOrder">取消订单</button>
                 <button class="btn primary" @tap="goToPay">去支付</button>
             </block>
 
             <!-- 待发货 -->
-            <block v-else-if="orderInfo.status === '待发货'">
+            <block v-else-if="statusText === '待发货'">
                 <button class="btn" @tap="contactService">联系客服</button>
             </block>
 
             <!-- 待收货 -->
-            <block v-else-if="orderInfo.status === '待收货'">
+            <block v-else-if="statusText === '待收货'">
                 <button class="btn" @tap="checkLogistics">查看物流</button>
                 <button class="btn primary" @tap="confirmReceipt">确认收货</button>
             </block>
 
             <!-- 已完成 -->
-            <block v-else-if="orderInfo.status === '已完成'">
+            <block v-else-if="statusText === '已完成'">
                 <button class="btn" @tap="contactService">联系客服</button>
             </block>
         </view>
@@ -120,6 +124,19 @@ export default {
             freight: '',
             actualPayment: ''
         };
+    },
+    computed: {
+        statusText() {
+            const status = this.orderInfo && this.orderInfo.order ? this.orderInfo.order.status : null;
+            const map = {
+                1: '待付款',
+                2: '待发货',
+                3: '待收货',
+                4: '已完成',
+                5: '已取消'
+            };
+            return map[status] || '';
+        }
     },
     onLoad: function (options) {
         const { id } = options;
@@ -183,7 +200,7 @@ export default {
         // 复制订单号
         copyOrderId: function () {
             uni.setClipboardData({
-                data: this.orderInfo.orderNo,
+                data: this.orderInfo.order.orderNo,
                 success: () => {
                     uni.showToast({
                         title: '订单号已复制',
@@ -223,7 +240,7 @@ export default {
         goToPay: function () {
             const { orderId, orderInfo } = this;
             uni.navigateTo({
-                url: `/pages/order/payment?id=${orderId}&amount=${orderInfo.actualPayment}`
+                url: `/pages/order/payment?id=${orderId}&amount=${orderInfo.order.actualPayment}`
             });
         },
 
@@ -332,6 +349,17 @@ export default {
 }
 
 /* 收货地址 */
+.status-section {
+    background-color: #c41e3a;
+    padding: 40rpx 30rpx;
+}
+
+.status-text {
+    color: #fff;
+    font-size: 38rpx;
+    font-weight: bold;
+}
+
 .address-section {
     background-color: #fff;
     margin-top: 20rpx;

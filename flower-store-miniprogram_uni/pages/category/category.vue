@@ -3,7 +3,7 @@
         <!-- 门店信息栏 -->
         <view class="store-bar">
             <view class="store-info" @tap="showStorePicker">
-                <text class="store-text">梭哈酒馆-武昌店</text>
+                <text class="store-text">梭哈酒馆-南京店</text>
                 <text class="store-arrow">›</text>
             </view>
             <view class="store-tag">店内</view>
@@ -238,7 +238,7 @@ export default {
             uni.navigateTo({ url: '/pages/cart/cart' });
         },
         showStorePicker() {
-            uni.showToast({ title: '梭哈酒馆-武昌店', icon: 'none' });
+            uni.showToast({ title: '梭哈酒馆-南京店', icon: 'none' });
         }
     }
 };
@@ -285,27 +285,39 @@ export default {
 }
 .sidebar-scroll { height: 100%; }
 .sidebar-item {
-    padding: 24rpx 12rpx;
+    padding: 26rpx 12rpx;
     text-align: center;
-    border-bottom: 1rpx solid #222;
+    position: relative;
+    transition: background 0.2s;
 }
 .sidebar-item.active {
-    background: #fff;
+    background: #000;
+}
+.sidebar-item.active::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 6rpx;
+    height: 40rpx;
+    background: linear-gradient(180deg, #f7dc8a, #c99a3a);
+    border-radius: 0 6rpx 6rpx 0;
 }
 .cat-icon {
     width: 60rpx;
     height: 60rpx;
-    border-radius: 8rpx;
+    border-radius: 10rpx;
     margin-bottom: 8rpx;
 }
 .cat-name {
-    font-size: 22rpx;
+    font-size: 24rpx;
     color: #888;
     line-height: 1.3;
     display: block;
 }
 .sidebar-item.active .cat-name {
-    color: #000;
+    color: #e8c547;
     font-weight: bold;
 }
 
@@ -324,16 +336,18 @@ export default {
 }
 .product-item {
     display: flex;
-    padding: 20rpx 24rpx;
+    padding: 24rpx;
     position: relative;
     align-items: flex-start;
+    border-bottom: 1rpx solid #161616;
 }
 .product-img {
     width: 160rpx;
     height: 160rpx;
-    border-radius: 12rpx;
+    border-radius: 14rpx;
     flex-shrink: 0;
     background: #222;
+    box-shadow: 0 4rpx 12rpx rgba(0,0,0,0.4);
 }
 .product-detail {
     flex: 1;
@@ -360,7 +374,7 @@ export default {
     margin-bottom: 8rpx;
 }
 .price-row { display: flex; align-items: baseline; gap: 12rpx; }
-.product-price { font-size: 32rpx; color: #fff; font-weight: bold; }
+.product-price { font-size: 34rpx; color: #e8c547; font-weight: bold; }
 .product-original {
     font-size: 24rpx;
     color: #666;
@@ -370,10 +384,10 @@ export default {
     position: absolute;
     right: 24rpx;
     bottom: 24rpx;
-    width: 56rpx;
-    height: 56rpx;
+    width: 58rpx;
+    height: 58rpx;
     border-radius: 50%;
-    background: #e8c547;
+    background: linear-gradient(135deg, #f7dc8a, #d4a72c);
     color: #000;
     font-size: 40rpx;
     font-weight: bold;
@@ -381,17 +395,19 @@ export default {
     align-items: center;
     justify-content: center;
     line-height: 1;
+    box-shadow: 0 4rpx 12rpx rgba(232,197,71,0.35);
 }
 .spec-btn {
     position: absolute;
     right: 24rpx;
     bottom: 24rpx;
-    background: #e8c547;
+    background: linear-gradient(135deg, #f7dc8a, #d4a72c);
     color: #000;
     font-size: 22rpx;
     font-weight: bold;
-    padding: 10rpx 20rpx;
+    padding: 12rpx 22rpx;
     border-radius: 24rpx;
+    box-shadow: 0 4rpx 12rpx rgba(232,197,71,0.3);
 }
 
 /* 购物车底栏 */
@@ -400,13 +416,14 @@ export default {
     bottom: 0;
     left: 0;
     right: 0;
-    height: 100rpx;
-    background: #1c1c1e;
+    height: 108rpx;
+    background: linear-gradient(180deg, #242426, #161618);
     display: flex;
     align-items: center;
     padding: 0 24rpx;
     z-index: 100;
-    border-top: 1rpx solid #333;
+    border-top: 1rpx solid rgba(232,197,71,0.15);
+    box-shadow: 0 -6rpx 24rpx rgba(0,0,0,0.5);
 }
 .cart-icon-wrap { position: relative; margin-right: 20rpx; }
 .cart-icon { font-size: 48rpx; }
@@ -426,15 +443,16 @@ export default {
     padding: 0 6rpx;
 }
 .cart-info { flex: 1; }
-.cart-total { font-size: 36rpx; color: #fff; font-weight: bold; display: block; }
+.cart-total { font-size: 36rpx; color: #e8c547; font-weight: bold; display: block; }
 .cart-tip { font-size: 20rpx; color: #888; }
 .checkout-btn {
-    background: #e8c547;
+    background: linear-gradient(135deg, #f7dc8a, #d4a72c);
     color: #000;
-    padding: 16rpx 40rpx;
+    padding: 18rpx 44rpx;
     border-radius: 40rpx;
     font-size: 28rpx;
     font-weight: bold;
+    box-shadow: 0 4rpx 14rpx rgba(232,197,71,0.35);
 }
 
 .no-data { text-align: center; padding: 100rpx 0; color: #666; font-size: 28rpx; }

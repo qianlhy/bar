@@ -187,21 +187,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /* pages/order/payment.wxss */
 .payment-container {
     min-height: 100vh;

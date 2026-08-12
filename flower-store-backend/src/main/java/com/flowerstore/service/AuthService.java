@@ -11,6 +11,7 @@ import com.flowerstore.util.MD5Utils;
 import com.flowerstore.util.WeChatUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -42,8 +43,13 @@ public class AuthService {
     public Map<String, Object> wxLogin(String code, String nickname, String avatar) {
         // 调用微信接口获取openid
         JSONObject sessionData = weChatUtils.code2Session(code);
-        if (sessionData == null || sessionData.getString("openid") == null) {
-            throw new RuntimeException("微信登录失败");
+        if (sessionData == null) {
+            throw new RuntimeException("微信登录失败：无法连接微信服务器");
+        }
+        if (sessionData.getString("openid") == null) {
+            String errcode = sessionData.getString("errcode");
+            String errmsg = sessionData.getString("errmsg");
+            throw new RuntimeException("微信登录失败：errcode=" + errcode + ", errmsg=" + errmsg);
         }
 
         String openid = sessionData.getString("openid");
@@ -63,14 +69,29 @@ public class AuthService {
             user.setStatus(1);
             userMapper.insert(user);
         } else {
-            // 更新用户信息
-            user.setNickname(nickname);
-            user.setAvatar(avatar);
-            userMapper.updateById(user);
+            // 仅在小程序端确实传了资料时才覆盖，避免把已有昵称头像清空
+            boolean changed = false;
+            if (StringUtils.hasText(nickname)) {
+                user.setNickname(nickname);
+                changed = true;
+            }
+            if (StringUtils.hasText(avatar)) {
+                user.setAvatar(avatar);
+                changed = true;
+            }
+            if (changed) {
+                userMapper.updateById(user);
+            }
+        }
+
+        if (user.getStatus() != null && user.getStatus() == 0) {
+            throw new RuntimeException("账号已被禁用");
         }
 
         // 生成Token
         String token = jwtUtils.generateToken(user.getId(), "user");
+
+        user.setPassword(null);
 
         Map<String, Object> result = new HashMap<>();
         result.put("token", token);

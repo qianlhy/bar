@@ -29,29 +29,72 @@
 /* 品牌区 */
 .brand-section {
     text-align: center;
-    padding: 20rpx 30rpx 40rpx;
+    padding: 30rpx 30rpx 44rpx;
+    position: relative;
+}
+.brand-glow {
+    position: absolute;
+    top: -30rpx;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+            transform: translateX(-50%);
+    width: 460rpx;
+    height: 460rpx;
+    background: radial-gradient(circle, rgba(232,197,71,0.20) 0%, rgba(232,197,71,0.06) 42%, transparent 70%);
+    pointer-events: none;
+}
+.logo-ring {
+    width: 220rpx;
+    height: 220rpx;
+    margin: 10rpx auto 26rpx;
+    border-radius: 50%;
+    padding: 5rpx;
+    background: linear-gradient(135deg, #f7dc8a 0%, #c99a3a 48%, #f7dc8a 100%);
+    box-shadow: 0 0 44rpx rgba(232,197,71,0.38), 0 10rpx 26rpx rgba(0,0,0,0.55);
+    position: relative;
+    z-index: 1;
 }
 .brand-logo {
-    width: 280rpx;
-    height: 280rpx;
-    border-radius: 28rpx;
-    margin: 10rpx auto 20rpx;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 5rpx solid #141414;
     display: block;
 }
 .brand-title {
-    font-size: 52rpx;
+    font-size: 54rpx;
     font-weight: bold;
-    color: #fff;
-    letter-spacing: 4rpx;
+    color: #f3d780;
+    letter-spacing: 8rpx;
     display: block;
+    text-shadow: 0 2rpx 14rpx rgba(232,197,71,0.45);
+    position: relative;
+    z-index: 1;
+}
+.brand-sub-line {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 18rpx;
+    margin-top: 18rpx;
+    position: relative;
+    z-index: 1;
+}
+.sub-line {
+    width: 70rpx;
+    height: 1px;
+}
+.sub-line-left {
+    background: linear-gradient(90deg, transparent, #c99a3a);
+}
+.sub-line-right {
+    background: linear-gradient(90deg, #c99a3a, transparent);
 }
 .texas-bar {
-    font-size: 30rpx;
-    color: #ccc;
+    font-size: 26rpx;
+    color: #d8b44a;
     font-weight: bold;
-    letter-spacing: 4rpx;
-    display: block;
-    margin-top: 12rpx;
+    letter-spacing: 6rpx;
 }
 /* 会员卡 */
 .member-card {

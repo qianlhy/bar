@@ -210,12 +210,12 @@ export default {
                         icon: 'success'
                     });
 
-                    // 跳转到订单列表
+                    // 跳转到支付页完成付款
                     setTimeout(() => {
                         uni.redirectTo({
-                            url: '/pages/order/list'
+                            url: `/pages/order/payment?id=${order.id}&amount=${order.actualPayment}`
                         });
-                    }, 1500);
+                    }, 1000);
                 })
                 .catch((err) => {
                     console.error('创建订单失败', err);

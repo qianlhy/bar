@@ -233,6 +233,9 @@ exports.default = void 0;
 //
 //
 //
+//
+//
+//
 
 var userApi = __webpack_require__(/*! ../../api/user */ 51);
 var _default = {
@@ -310,6 +313,32 @@ var _default = {
         title: '联系我们',
         content: '电话: 027-88888888\n微信: AllInTavern',
         showCancel: false
+      });
+    },
+    logout: function logout() {
+      var _this2 = this;
+      uni.showModal({
+        title: '退出登录',
+        content: '确定要退出当前账号吗？',
+        success: function success(res) {
+          if (!res.confirm) {
+            return;
+          }
+          uni.removeStorageSync('token');
+          uni.removeStorageSync('userInfo');
+          uni.removeStorageSync('isLoggedIn');
+          uni.removeStorageSync('cartSpecs');
+          _this2.isLogin = false;
+          _this2.userInfo = {
+            balance: 0,
+            coins: 0,
+            couponCount: 0
+          };
+          uni.showToast({
+            title: '已退出登录',
+            icon: 'success'
+          });
+        }
       });
     }
   }

@@ -81,6 +81,9 @@
             </view>
         </view>
 
+        <!-- 退出登录 -->
+        <view class="logout-btn" v-if="isLogin" @tap="logout">退出登录</view>
+
         <!-- 技术支持 -->
         <view class="footer">
             <text class="footer-icon">🔥</text>
@@ -144,6 +147,24 @@ export default {
                 content: '电话: 027-88888888\n微信: AllInTavern',
                 showCancel: false
             });
+        },
+        logout() {
+            uni.showModal({
+                title: '退出登录',
+                content: '确定要退出当前账号吗？',
+                success: (res) => {
+                    if (!res.confirm) {
+                        return;
+                    }
+                    uni.removeStorageSync('token');
+                    uni.removeStorageSync('userInfo');
+                    uni.removeStorageSync('isLoggedIn');
+                    uni.removeStorageSync('cartSpecs');
+                    this.isLogin = false;
+                    this.userInfo = { balance: 0, coins: 0, couponCount: 0 };
+                    uni.showToast({ title: '已退出登录', icon: 'success' });
+                }
+            });
         }
     }
 };
@@ -162,43 +183,68 @@ export default {
     padding: 20rpx 0 40rpx;
 }
 .user-avatar {
-    width: 100rpx;
-    height: 100rpx;
+    width: 104rpx;
+    height: 104rpx;
     border-radius: 50%;
     background: #333;
     flex-shrink: 0;
+    border: 3rpx solid #d4a72c;
+    box-shadow: 0 0 20rpx rgba(232,197,71,0.25);
 }
-.user-text { flex: 1; margin-left: 20rpx; }
-.user-greet { font-size: 32rpx; color: #fff; font-weight: bold; display: block; }
-.user-sub { font-size: 22rpx; color: #888; margin-top: 6rpx; display: block; }
+.user-text { flex: 1; margin-left: 22rpx; }
+.user-greet { font-size: 34rpx; color: #fff; font-weight: bold; display: block; }
+.user-sub { font-size: 22rpx; color: #888; margin-top: 8rpx; display: block; }
 .register-btn {
-    background: #2c2c2e;
-    color: #fff;
+    background: linear-gradient(135deg, #f7dc8a, #d4a72c);
+    color: #000;
     font-size: 24rpx;
-    padding: 12rpx 28rpx;
+    font-weight: bold;
+    padding: 14rpx 30rpx;
     border-radius: 30rpx;
     white-space: nowrap;
+    box-shadow: 0 4rpx 12rpx rgba(232,197,71,0.3);
 }
 
 .asset-card {
-    background: #1c1c1e;
-    border-radius: 16rpx;
+    background: linear-gradient(135deg, #262628 0%, #1a1a1c 100%);
+    border-radius: 20rpx;
+    border: 1rpx solid rgba(232,197,71,0.12);
     display: flex;
-    padding: 30rpx 0;
+    padding: 34rpx 0;
     margin-bottom: 24rpx;
+    box-shadow: 0 4rpx 18rpx rgba(0,0,0,0.35);
 }
 .asset-item { flex: 1; text-align: center; }
-.asset-label { font-size: 24rpx; color: #888; display: block; margin-bottom: 10rpx; }
-.asset-value { font-size: 40rpx; color: #fff; font-weight: bold; display: block; }
-.asset-divider { width: 1rpx; background: #333; align-self: stretch; }
+.asset-label { font-size: 24rpx; color: #999; display: block; margin-bottom: 12rpx; }
+.asset-value { font-size: 42rpx; color: #e8c547; font-weight: bold; display: block; }
+.asset-divider { width: 1rpx; background: rgba(255,255,255,0.08); align-self: stretch; }
 
 .func-card {
     background: #1c1c1e;
-    border-radius: 16rpx;
-    padding: 30rpx;
+    border-radius: 20rpx;
+    border: 1rpx solid rgba(255,255,255,0.04);
+    padding: 34rpx 30rpx 6rpx;
     margin-bottom: 24rpx;
 }
-.func-title { font-size: 30rpx; color: #fff; font-weight: bold; display: block; margin-bottom: 30rpx; }
+.func-title {
+    font-size: 30rpx;
+    color: #fff;
+    font-weight: bold;
+    display: block;
+    margin-bottom: 34rpx;
+    padding-left: 18rpx;
+    position: relative;
+}
+.func-title::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 4rpx;
+    width: 6rpx;
+    height: 32rpx;
+    background: linear-gradient(180deg, #f7dc8a, #c99a3a);
+    border-radius: 4rpx;
+}
 .func-grid {
     display: flex;
     flex-wrap: wrap;
@@ -210,12 +256,13 @@ export default {
     align-items: center;
     margin-bottom: 30rpx;
 }
-.func-icon { font-size: 44rpx; margin-bottom: 10rpx; }
+.func-icon { font-size: 46rpx; margin-bottom: 12rpx; }
 .func-name { font-size: 22rpx; color: #ccc; }
 
 .store-card {
     background: #1c1c1e;
-    border-radius: 16rpx;
+    border-radius: 20rpx;
+    border: 1rpx solid rgba(255,255,255,0.04);
     padding: 30rpx;
     margin-bottom: 30rpx;
 }
@@ -225,17 +272,19 @@ export default {
     margin-bottom: 20rpx;
 }
 .store-logo {
-    width: 60rpx;
-    height: 60rpx;
-    border-radius: 12rpx;
+    width: 64rpx;
+    height: 64rpx;
+    border-radius: 50%;
     margin-right: 16rpx;
+    border: 2rpx solid #d4a72c;
 }
 .store-name { flex: 1; font-size: 28rpx; color: #fff; font-weight: bold; }
 .store-contact {
-    background: #2c2c2e;
-    color: #fff;
+    background: linear-gradient(135deg, #f7dc8a, #d4a72c);
+    color: #000;
     font-size: 22rpx;
-    padding: 10rpx 24rpx;
+    font-weight: bold;
+    padding: 12rpx 26rpx;
     border-radius: 30rpx;
 }
 .store-msg {
@@ -248,6 +297,17 @@ export default {
     color: #999;
     line-height: 1.6;
     display: block;
+}
+
+.logout-btn {
+    background: #1c1c1e;
+    border: 1rpx solid rgba(196,30,58,0.4);
+    color: #c41e3a;
+    font-size: 30rpx;
+    text-align: center;
+    padding: 26rpx 0;
+    border-radius: 16rpx;
+    margin-bottom: 20rpx;
 }
 
 .footer {
