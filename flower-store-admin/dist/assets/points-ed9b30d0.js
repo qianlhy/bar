@@ -1,0 +1,1 @@
+import{r as s}from"./request-b6f62d35.js";const t=o=>s.post("/points/admin/add",o),r=o=>s.get("/points/admin/logs",{params:o}),e=o=>s.post(`/points/admin/lock/user/${o}`),a=o=>s.post(`/points/admin/unlock/user/${o}`),c=o=>s.post(`/points/admin/lock/order/${o}`),i=o=>s.post(`/points/admin/unlock/order/${o}`);export{a,e as b,t as c,r as g,c as l,i as u};

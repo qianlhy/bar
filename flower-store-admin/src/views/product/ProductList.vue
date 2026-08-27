@@ -25,7 +25,7 @@
         <el-table-column prop="name" label="商品名称" min-width="200" />
         <el-table-column prop="price" label="价格" width="100">
           <template #default="{ row }">
-            <span style="color: #f56c6c">¥{{ row.price }}</span>
+            <span class="price-emphasis">¥{{ row.price }}</span>
           </template>
         </el-table-column>
         <el-table-column prop="inventory" label="库存" width="100" />
@@ -249,7 +249,7 @@ const handleAdd = () => {
 const handleEdit = (row) => {
   dialogTitle.value = '编辑商品'
   form.value = { ...row }
-  
+
   // 初始化轮播图列表
   if (row.images) {
     const imageUrls = row.images.split(',')
@@ -260,7 +260,7 @@ const handleEdit = (row) => {
   } else {
     imageFileList.value = []
   }
-  
+
   dialogVisible.value = true
 }
 
@@ -323,7 +323,7 @@ const beforeImageUpload = (file) => {
 const handleMainImageSuccess = (response) => {
   if (response.code === 200) {
     form.value.image = response.data.url
-    ElMessage.success('上传成功') 
+    ElMessage.success('上传成功')
   } else {
     ElMessage.error(response.message || '上传失败')
   }

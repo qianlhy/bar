@@ -1,0 +1,1 @@
+import{r as t}from"./request-b6f62d35.js";function a(r){return t({url:"/order/page",method:"get",params:r})}function d(r){return t({url:`/order/${r}`,method:"get"})}function o(r,e){return t({url:`/order/${r}/status`,method:"put",params:{status:e}})}function s(){return t({url:"/order/admin/statistics",method:"get"})}export{a,d as b,s as g,o as u};

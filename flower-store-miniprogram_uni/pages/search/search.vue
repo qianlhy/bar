@@ -337,18 +337,18 @@ export default {
 };
 </script>
 <style>
-/* pages/search/search.wxss */
 .search-container {
     min-height: 100vh;
-    background-color: #f7f7f7;
+    background-color: var(--bg-page);
 }
 
 /* 搜索框样式 */
 .search-header {
     display: flex;
     align-items: center;
-    padding: 20rpx;
-    background-color: #fff;
+    padding: 20rpx 24rpx;
+    background: rgba(16, 16, 18, 0.98);
+    border-bottom: 1rpx solid var(--border-subtle);
     position: sticky;
     top: 0;
     z-index: 10;
@@ -356,37 +356,41 @@ export default {
 
 .search-input-box {
     flex: 1;
-    height: 70rpx;
-    background-color: #f5f5f5;
-    border-radius: 35rpx;
+    height: 76rpx;
+    background-color: var(--bg-elevated);
+    border: 1rpx solid var(--border-subtle);
+    border-radius: 38rpx;
     display: flex;
     align-items: center;
-    padding: 0 20rpx;
+    padding: 0 24rpx;
     margin-right: 20rpx;
 }
 
 .search-icon {
-    margin-right: 10rpx;
-    color: #999;
+    margin-right: 12rpx;
+    color: var(--text-faint);
 }
 
 .search-input {
     flex: 1;
     height: 100%;
     font-size: 28rpx;
+    color: var(--text-primary);
 }
 
 .clear-icon {
     padding: 10rpx;
+    color: var(--text-faint);
 }
 
 .search-btn {
     width: 100rpx;
-    height: 70rpx;
-    line-height: 70rpx;
+    height: 76rpx;
+    line-height: 76rpx;
     text-align: center;
     font-size: 28rpx;
-    color: var(--primary-color, #ff6b81);
+    font-weight: 600;
+    color: var(--gold);
 }
 
 /* 搜索历史和热门搜索样式 */
@@ -403,12 +407,13 @@ export default {
 
 .section-title {
     font-size: 28rpx;
-    color: #333;
-    font-weight: bold;
+    color: var(--text-primary);
+    font-weight: 600;
 }
 
 .clear-history {
     padding: 10rpx;
+    color: var(--text-faint);
 }
 
 .history-list,
@@ -419,17 +424,19 @@ export default {
 
 .history-item,
 .hot-item {
-    padding: 10rpx 20rpx;
-    background-color: #f5f5f5;
+    padding: 12rpx 26rpx;
+    background-color: var(--bg-elevated);
+    border: 1rpx solid var(--border-subtle);
     border-radius: 30rpx;
     margin: 0 20rpx 20rpx 0;
     font-size: 24rpx;
-    color: #666;
+    color: var(--text-regular);
 }
 
 .hot-item {
-    background-color: #fff;
-    border: 1rpx solid #eee;
+    background-color: rgba(232, 197, 71, 0.08);
+    border-color: rgba(232, 197, 71, 0.28);
+    color: var(--gold-light);
 }
 
 .hot-section {
@@ -457,7 +464,7 @@ export default {
 
 .loading text {
     font-size: 28rpx;
-    color: #999;
+    color: var(--text-muted);
 }
 
 /* 空结果样式 */
@@ -476,13 +483,13 @@ export default {
 
 .empty-tip {
     font-size: 30rpx;
-    color: #666;
+    color: var(--text-regular);
     margin-bottom: 10rpx;
 }
 
 .suggestion {
     font-size: 26rpx;
-    color: #999;
+    color: var(--text-faint);
 }
 
 /* 结果列表样式 */
@@ -492,24 +499,27 @@ export default {
 
 .result-item {
     display: flex;
-    padding: 20rpx;
-    background-color: #fff;
-    border-radius: 12rpx;
+    padding: 22rpx;
+    background: var(--bg-card-gradient);
+    border: 1rpx solid var(--border-subtle);
+    border-radius: 20rpx;
     margin-bottom: 20rpx;
     position: relative;
-    box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
+    box-shadow: 0 10rpx 28rpx rgba(0, 0, 0, 0.22);
 }
 
 .product-image {
     width: 180rpx;
     height: 180rpx;
-    border-radius: 8rpx;
-    background-color: #f9f9f9;
-    margin-right: 20rpx;
+    border-radius: 14rpx;
+    background-color: var(--bg-sunken);
+    margin-right: 22rpx;
+    flex-shrink: 0;
 }
 
 .product-info {
     flex: 1;
+    min-width: 0;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -517,7 +527,8 @@ export default {
 
 .product-name {
     font-size: 28rpx;
-    font-weight: bold;
+    font-weight: 600;
+    color: var(--text-primary);
     line-height: 1.4;
     margin-bottom: 10rpx;
     overflow: hidden;
@@ -529,7 +540,7 @@ export default {
 
 .product-desc {
     font-size: 24rpx;
-    color: #999;
+    color: var(--text-faint);
     line-height: 1.4;
     margin-bottom: 10rpx;
     overflow: hidden;
@@ -546,13 +557,13 @@ export default {
 }
 
 .price {
-    color: var(--price-color, #ff6b81);
-    font-weight: bold;
+    color: var(--gold);
+    font-weight: 700;
     font-size: 32rpx;
 }
 
 .price-original {
-    color: #999;
+    color: var(--text-faint);
     text-decoration: line-through;
     font-size: 24rpx;
     margin-left: 10rpx;
@@ -560,21 +571,23 @@ export default {
 
 .product-sales {
     font-size: 22rpx;
-    color: #999;
+    color: var(--text-faint);
 }
 
 .add-cart-btn {
     position: absolute;
-    right: 20rpx;
-    bottom: 20rpx;
-    width: 60rpx;
-    height: 60rpx;
+    right: 22rpx;
+    bottom: 22rpx;
+    width: 64rpx;
+    height: 64rpx;
     border-radius: 50%;
-    background-color: var(--primary-color, #ff6b81);
-    color: #fff;
+    background: var(--gold-gradient);
+    color: #171717;
     font-size: 40rpx;
+    font-weight: 600;
     display: flex;
     align-items: center;
     justify-content: center;
+    box-shadow: 0 8rpx 20rpx rgba(232, 197, 71, 0.24);
 }
 </style>

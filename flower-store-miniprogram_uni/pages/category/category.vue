@@ -36,7 +36,12 @@
                     </view>
 
                     <view class="product-item" v-for="(item, index) in products" :key="index" @tap="onTapProduct" :data-id="item.id">
-                        <image class="product-img" :src="item.image" mode="aspectFill"></image>
+                        <image
+                            class="product-img"
+                            :src="item.image || '/static/allIn.jpg'"
+                            mode="aspectFill"
+                            @error="onProductImageError(index)"
+                        ></image>
                         <view class="product-detail">
                             <text class="product-name">{{ item.name }}</text>
                             <text class="product-desc">{{ item.description }}</text>
@@ -54,7 +59,7 @@
                         >选规格</view>
                         <view
                             v-else
-                            class="add-btn"
+                            class="add-btn g-tap"
                             @tap.stop="onAddToCart"
                             :data-id="item.id"
                         >+</view>
@@ -66,11 +71,11 @@
         <!-- 购物车底栏 -->
         <view class="cart-bar" v-if="cartCount > 0" @tap="goCart">
             <view class="cart-icon-wrap">
-                <text class="cart-icon">🛒</text>
+                <view class="g-bag"></view>
                 <view class="cart-badge">{{ cartCount }}</view>
             </view>
             <view class="cart-info">
-                <text class="cart-total">¥{{ cartTotal }}</text>
+                <text class="cart-total g-num">¥{{ cartTotal }}</text>
                 <text class="cart-tip">点击查看购物车</text>
             </view>
             <view class="checkout-btn" @tap.stop="goCart">去结算</view>
@@ -95,6 +100,7 @@ const app = getApp();
 const eventBus = require('../../utils/eventBus');
 const categoryApi = require('../../api/category');
 const productApi = require('../../api/product');
+const { ensureAdultDrinking } = require('../../utils/adult-verification');
 import specModal from '@/components/spec-modal/spec-modal';
 
 export default {
@@ -108,14 +114,44 @@ export default {
             showSpecModal: false,
             specProduct: {},
             cartCount: 0,
-            cartTotal: '0.00'
+            cartTotal: '0.00',
+            adultAccessGranted: false,
+            adultChecking: false
         };
     },
     onLoad() {
-        this.getCategories();
         eventBus.on('switchCategory', this.handleSwitchCategory);
     },
     onShow() {
+        if (this.adultChecking) {
+            return;
+        }
+        if (!this.adultAccessGranted) {
+            this.adultChecking = true;
+            ensureAdultDrinking()
+                .then(() => {
+                    this.adultAccessGranted = true;
+                    this.adultChecking = false;
+                    this.enterOrderingPage();
+                })
+                .catch(() => {
+                    this.adultChecking = false;
+                    uni.switchTab({ url: '/pages/index/index' });
+                });
+            return;
+        }
+        this.enterOrderingPage();
+    },
+    onUnload() {
+        eventBus.off('switchCategory', this.handleSwitchCategory);
+    },
+    methods: {
+        enterOrderingPage() {
+            if (this.categories.length === 0) {
+                this.getCategories();
+                this.loadCartInfo();
+                return;
+            }
         if (app.globalData.tempCategoryId) {
             const categoryId = app.globalData.tempCategoryId;
             const category = this.categories.find((item) => item.id === categoryId);
@@ -129,10 +165,6 @@ export default {
         }
         this.loadCartInfo();
     },
-    onUnload() {
-        eventBus.off('switchCategory', this.handleSwitchCategory);
-    },
-    methods: {
         hasSpecs(item) {
             if (!item.specs) return false;
             try {
@@ -157,12 +189,21 @@ export default {
         },
         getCategoryProducts(categoryId) {
             productApi.getProductsByCategory(categoryId).then((data) => {
-                this.products = data.map((p) => {
+                this.products = (data || []).map((p) => {
                     if (p.images && typeof p.images === 'string') {
                         p.images = p.images.split(',').filter((img) => img.trim());
                     }
                     return p;
                 });
+            }).catch(() => {
+                this.products = [];
+            });
+        },
+        onProductImageError(index) {
+            if (!this.products[index]) return;
+            this.products.splice(index, 1, {
+                ...this.products[index],
+                image: '/static/allIn.jpg'
             });
         },
         switchCategory(e) {
@@ -210,12 +251,7 @@ export default {
                 return;
             }
             const cartApi = require('../../api/cart');
-            cartApi.addToCart(productId, count).then(() => {
-                if (specText) {
-                    const specs = uni.getStorageSync('cartSpecs') || {};
-                    specs[productId] = specText;
-                    uni.setStorageSync('cartSpecs', specs);
-                }
+            cartApi.addToCart(productId, count, specText).then(() => {
                 uni.showToast({ title: '已加入购物车', icon: 'success' });
                 this.loadCartInfo();
             });
@@ -327,7 +363,7 @@ export default {
     background: #000;
     overflow: hidden;
 }
-.product-scroll { height: 100%; padding-bottom: 120rpx; }
+.product-scroll { height: 100%; padding-bottom: calc(160rpx + env(safe-area-inset-bottom)); }
 .section-title {
     padding: 20rpx 24rpx 10rpx;
     font-size: 28rpx;
@@ -369,7 +405,7 @@ export default {
 }
 .product-sales {
     font-size: 22rpx;
-    color: #666;
+    color: var(--text-muted);
     display: block;
     margin-bottom: 8rpx;
 }
@@ -377,7 +413,7 @@ export default {
 .product-price { font-size: 34rpx; color: #e8c547; font-weight: bold; }
 .product-original {
     font-size: 24rpx;
-    color: #666;
+    color: var(--text-muted);
     text-decoration: line-through;
 }
 .add-btn {
@@ -416,21 +452,33 @@ export default {
     bottom: 0;
     left: 0;
     right: 0;
-    height: 108rpx;
-    background: linear-gradient(180deg, #242426, #161618);
+    height: auto;
+    min-height: 108rpx;
+    background: rgba(16, 16, 18, 0.96);
     display: flex;
     align-items: center;
-    padding: 0 24rpx;
+    padding: 16rpx 24rpx calc(16rpx + env(safe-area-inset-bottom));
     z-index: 100;
-    border-top: 1rpx solid rgba(232,197,71,0.15);
-    box-shadow: 0 -6rpx 24rpx rgba(0,0,0,0.5);
+    border-top: 1rpx solid var(--border-gold);
+    box-shadow: 0 -8rpx 28rpx rgba(0, 0, 0, 0.45);
 }
-.cart-icon-wrap { position: relative; margin-right: 20rpx; }
-.cart-icon { font-size: 48rpx; }
+.cart-icon-wrap {
+    position: relative;
+    margin-right: 20rpx;
+    width: 76rpx;
+    height: 76rpx;
+    border-radius: 50%;
+    background: radial-gradient(circle at 32% 26%, rgba(232, 197, 71, 0.22), rgba(232, 197, 71, 0.06));
+    border: 1rpx solid rgba(232, 197, 71, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--gold-light);
+}
 .cart-badge {
     position: absolute;
-    top: -8rpx;
-    right: -12rpx;
+    top: -6rpx;
+    right: -8rpx;
     background: #c41e3a;
     color: #fff;
     font-size: 20rpx;
@@ -441,6 +489,7 @@ export default {
     align-items: center;
     justify-content: center;
     padding: 0 6rpx;
+    border: 2rpx solid #161618;
 }
 .cart-info { flex: 1; }
 .cart-total { font-size: 36rpx; color: #e8c547; font-weight: bold; display: block; }
@@ -455,7 +504,7 @@ export default {
     box-shadow: 0 4rpx 14rpx rgba(232,197,71,0.35);
 }
 
-.no-data { text-align: center; padding: 100rpx 0; color: #666; font-size: 28rpx; }
+.no-data { text-align: center; padding: 100rpx 0; color: var(--text-muted); font-size: 28rpx; }
 .loading-mask {
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;

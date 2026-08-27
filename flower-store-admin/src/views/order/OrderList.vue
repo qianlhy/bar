@@ -10,8 +10,8 @@
           style="width: 200px"
         >
           <el-option label="待付款" :value="1" />
-          <el-option label="待发货" :value="2" />
-          <el-option label="已发货" :value="3" />
+          <el-option label="待出品" :value="2" />
+          <el-option label="出品中" :value="3" />
           <el-option label="已完成" :value="4" />
           <el-option label="已取消" :value="5" />
         </el-select>
@@ -26,16 +26,22 @@
 
       <el-table :data="tableData" border style="margin-top: 20px">
         <el-table-column prop="orderNo" label="订单号" width="180" />
-        <el-table-column prop="receiverName" label="收货人" width="100" />
-        <el-table-column prop="receiverPhone" label="联系电话" width="120" />
-        <el-table-column prop="actualPayment" label="订单金额" width="100">
+        <el-table-column prop="receiverName" label="桌台/顾客" width="110" />
+        <el-table-column prop="receiverPhone" label="联系方式" width="120" />
+        <el-table-column prop="actualPayment" label="实付" width="90">
           <template #default="{ row }">
-            <span style="color: #f56c6c">¥{{ row.actualPayment }}</span>
+            <span class="price-emphasis">¥{{ row.actualPayment }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="pointsUsed" label="积分抵扣" width="110">
+          <template #default="{ row }">
+            <span v-if="row.pointsUsed">{{ row.pointsUsed }}分/¥{{ row.pointsAmount }}</span>
+            <span v-else>-</span>
           </template>
         </el-table-column>
         <el-table-column prop="paymentMethod" label="支付方式" width="120">
           <template #default="{ row }">
-            {{ row.paymentMethod === 'online' ? '在线支付' : '货到付款' }}
+            {{ formatPayMethod(row.paymentMethod) }}
           </template>
         </el-table-column>
         <el-table-column prop="status" label="订单状态" width="100">
@@ -50,15 +56,15 @@
           <template #default="{ row }">
             <el-button type="primary" text @click="handleView(row)">查看详情</el-button>
             <el-button
-              v-if="row.status === 2"
+              v-if="!isStaff && row.status === 2"
               type="success"
               text
               @click="handleShip(row)"
             >
-              发货
+              开始出品
             </el-button>
             <el-button
-              v-if="row.status === 3"
+              v-if="!isStaff && row.status === 3"
               type="success"
               text
               @click="handleComplete(row)"
@@ -84,12 +90,15 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { getOrderPage, updateOrderStatus } from '@/api/order'
+import { useUserStore } from '@/stores/user'
 
 const router = useRouter()
+const userStore = useUserStore()
+const isStaff = computed(() => userStore.userInfo?.role === 3)
 
 const queryParams = ref({
   current: 1,
@@ -125,12 +134,23 @@ const getStatusType = (status) => {
 const getStatusText = (status) => {
   const map = {
     1: '待付款',
-    2: '待发货',
-    3: '已发货',
+    2: '待出品',
+    3: '出品中',
     4: '已完成',
     5: '已取消'
   }
   return map[status] || '未知'
+}
+
+const formatPayMethod = (method) => {
+  const map = {
+    wechat: '微信支付',
+    coins: 'All In 币',
+    mixed: '混合支付',
+    online: '微信支付',
+    delivery: '店内支付'
+  }
+  return map[method] || method || '-'
 }
 
 const handleView = (row) => {
@@ -138,14 +158,14 @@ const handleView = (row) => {
 }
 
 const handleShip = (row) => {
-  ElMessageBox.confirm('确定要发货吗？', '提示', {
+  ElMessageBox.confirm('确认开始出品该订单吗？', '操作确认', {
     confirmButtonText: '确定',
     cancelButtonText: '取消',
     type: 'warning'
   }).then(async () => {
     try {
       await updateOrderStatus(row.id, 3)
-      ElMessage.success('发货成功')
+      ElMessage.success('已开始出品')
       fetchData()
     } catch (error) {
       console.error(error)

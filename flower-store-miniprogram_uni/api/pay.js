@@ -1,11 +1,12 @@
 const { get, post } = require('../utils/request');
 
 /**
- * 商品订单发起微信支付，返回调起支付所需参数
+ * 商品订单支付
  * @param {Number} orderId 订单ID
+ * @param {Object} data { payMethod: 'wechat'|'coins'|'mixed' }
  */
-function payOrder(orderId) {
-    return post('/pay/order/' + orderId);
+function payOrder(orderId, data = {}) {
+    return post('/pay/order/' + orderId, data);
 }
 
 /**

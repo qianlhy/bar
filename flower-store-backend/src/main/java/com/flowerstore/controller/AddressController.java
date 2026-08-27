@@ -40,9 +40,11 @@ public class AddressController {
      * 根据ID查询地址
      */
     @GetMapping("/{id}")
-    public Result<Address> getById(@PathVariable Long id) {
-        Address address = addressService.getById(id);
-        return Result.success(address);
+    public Result<Address> getById(
+            @RequestHeader("Authorization") String token,
+            @PathVariable Long id) {
+        Long userId = jwtUtils.getUserIdFromToken(token);
+        return Result.success(addressService.getById(userId, id));
     }
 
     /**
@@ -80,9 +82,12 @@ public class AddressController {
      * 更新地址
      */
     @PutMapping
-    public Result<String> update(@RequestBody Address address) {
+    public Result<String> update(
+            @RequestHeader("Authorization") String token,
+            @RequestBody Address address) {
         try {
-            addressService.update(address);
+            Long userId = jwtUtils.getUserIdFromToken(token);
+            addressService.update(userId, address);
             return Result.success("更新成功");
         } catch (Exception e) {
             return Result.error(e.getMessage());
@@ -93,9 +98,12 @@ public class AddressController {
      * 删除地址
      */
     @DeleteMapping("/{id}")
-    public Result<String> delete(@PathVariable Long id) {
+    public Result<String> delete(
+            @RequestHeader("Authorization") String token,
+            @PathVariable Long id) {
         try {
-            addressService.delete(id);
+            Long userId = jwtUtils.getUserIdFromToken(token);
+            addressService.delete(userId, id);
             return Result.success("删除成功");
         } catch (Exception e) {
             return Result.error(e.getMessage());

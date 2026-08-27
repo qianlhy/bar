@@ -11,6 +11,8 @@
             <!-- 品牌区域 -->
             <view class="brand-section">
                 <view class="brand-glow"></view>
+                <view class="brand-orb brand-orb-a"></view>
+                <view class="brand-orb brand-orb-b"></view>
                 <view class="logo-ring">
                     <image class="brand-logo" src="/static/allIn.jpg" mode="aspectFill"></image>
                 </view>
@@ -20,87 +22,74 @@
                     <text class="texas-bar">All In Tavern</text>
                     <view class="sub-line sub-line-right"></view>
                 </view>
+                <text class="brand-motto">夜色入场 · 点单即达</text>
             </view>
 
-            <!-- 会员信息卡 -->
-            <view class="member-card">
-                <view class="avatar-wrap">
-                    <image class="avatar" :src="userInfo.avatar || '/static/images/default-avatar.png'" mode="aspectFill"></image>
+            <!-- 会员身份卡 -->
+            <view class="vip-card g-tap" @tap="showMemberCode">
+                <view class="vip-shine"></view>
+                <view class="vip-left">
+                    <view class="vip-avatar-wrap">
+                        <image
+                            class="vip-avatar"
+                            :src="userInfo.avatar || '/static/allIn.jpg'"
+                            mode="aspectFill"
+                        ></image>
+                    </view>
+                    <view class="vip-copy">
+                        <text class="vip-hello">{{ userInfo.nickname || userInfo.nickName || '尊贵会员' }}</text>
+                        <text class="vip-sub">点击出示会员码 · 到店核验</text>
+                    </view>
                 </view>
-                <view class="member-stats">
-                    <view class="stat-item" @tap="showMemberCode">
-                        <text class="stat-icon">▦</text>
-                        <text class="stat-label">会员码</text>
-                    </view>
-                    <view class="stat-item">
-                        <text class="stat-value">{{ userInfo.balance || 20 }}</text>
-                        <text class="stat-label">我的余额</text>
-                    </view>
-                    <view class="stat-item">
-                        <text class="stat-value">{{ userInfo.coins || 0 }}</text>
-                        <text class="stat-label">我的 All In 币</text>
-                    </view>
+                <view class="vip-badge">
+                    <text class="vip-badge-text">MEMBER</text>
+                    <text class="vip-badge-code">码</text>
                 </view>
             </view>
 
-            <!-- 主操作按钮 -->
-            <view class="action-grid">
-                <view class="action-card" @tap="goOrder">
-                    <text class="action-icon">🍸</text>
-                    <text class="action-title">立即点单</text>
-                    <text class="action-sub">ORDER</text>
+            <!-- 主操作：立即点单 -->
+            <view class="hero-order g-tap" @tap="goOrder">
+                <view class="hero-order-bg">ORDER</view>
+                <view class="hero-order-main">
+                    <view class="hero-order-icon">点</view>
+                    <view class="hero-order-copy">
+                        <text class="hero-order-title">立即点单</text>
+                        <text class="hero-order-desc">精选酒水套餐 · 桌边即点即达</text>
+                    </view>
                 </view>
-                <view class="action-card" @tap="goCoinMall">
-                    <text class="action-icon">🃏</text>
-                    <text class="action-title">All In 币商城</text>
-                    <text class="action-sub">POINT</text>
-                </view>
+                <view class="hero-order-go">GO</view>
             </view>
 
             <!-- 会员充值 -->
-            <view class="recharge-card">
-                <view class="recharge-bg-text">MEMBER</view>
-                <view class="recharge-content">
-                    <view class="recharge-info">
-                        <text class="recharge-title">会员充值</text>
-                        <text class="recharge-desc">享受更多专属优惠福利</text>
-                    </view>
-                    <view class="recharge-btn" @tap="goRecharge">立即充值</view>
+            <view class="recharge-row g-tap" @tap="goRecharge">
+                <view class="recharge-icon">充</view>
+                <view class="recharge-copy">
+                    <text class="recharge-title">会员充值</text>
+                    <text class="recharge-sub">当前 All In 币 {{ userInfo.coins || 0 }} · 充值享赠送</text>
                 </view>
+                <text class="recharge-arrow">›</text>
             </view>
 
-            <!-- 服务功能 -->
-            <view class="service-grid">
-                <view class="service-card" @tap="goReservation">
-                    <text class="service-title">房台预定</text>
-                    <text class="service-sub">RESERVATION</text>
-                    <text class="service-icon">🪑</text>
+            <!-- WIFI -->
+            <view class="wifi-row g-tap" @tap="showWifi">
+                <view class="wifi-icon">Wi</view>
+                <view class="wifi-copy">
+                    <text class="wifi-title">查看门店 WIFI</text>
+                    <text class="wifi-sub">一键获取网络名称与密码</text>
                 </view>
-                <view class="service-card" @tap="goStorage">
-                    <text class="service-title">我的存酒</text>
-                    <text class="service-sub">STORAGE</text>
-                    <text class="service-icon">🍾</text>
-                </view>
-                <view class="service-card" @tap="showWifi">
-                    <text class="service-title">查看WIFI</text>
-                    <text class="service-sub">WIFI</text>
-                    <text class="service-icon">📶</text>
-                </view>
+                <text class="wifi-arrow">›</text>
             </view>
 
             <!-- 位置信息 -->
             <view class="location-bar">
                 <text class="diamond">◆</text>
-                <text class="location-text">位置：{{ storeAddress }}</text>
+                <text class="location-text">{{ storeAddress }}</text>
                 <text class="diamond">◆</text>
             </view>
 
             <!-- 技术支持 -->
             <view class="footer">
-                <text class="footer-icon">🔥</text>
-                <text class="footer-text">熠火</text>
-                <text class="footer-divider">|</text>
-                <text class="footer-support">熠火提供技术支持</text>
+                <text class="footer-text">熠火提供技术支持</text>
             </view>
         </scroll-view>
 
@@ -109,12 +98,17 @@
             <view class="privacy-modal">
                 <text class="privacy-title">用户隐私保护提示</text>
                 <scroll-view scroll-y class="privacy-content">
-                    <text>欢迎使用梭哈酒馆小程序。我们将严格按照相关法律法规要求，采取相应安全保护措施，保护您的个人信息安全。在使用本小程序前，请您仔细阅读并充分理解《用户隐私保护指引》的全部内容。</text>
-                    <text class="privacy-p">当您点击"同意"并开始使用本小程序时，即表示您已理解并同意该指引。我们将收集您的位置信息用于查找附近门店，收集您的订单信息用于完成交易服务。</text>
+                    <text>欢迎使用梭哈酒馆小程序。请在授权前阅读微信官方{{ privacyContractName }}，了解头像、昵称以及订单和支付必要信息的处理方式。</text>
+                    <text class="privacy-p">您可以拒绝非必要授权并继续浏览商品；登录、下单或资料设置等功能只会在实际需要时申请对应信息。</text>
+                    <text class="privacy-link" @tap="openPrivacyContract">查看微信官方{{ privacyContractName }}</text>
                 </scroll-view>
                 <view class="privacy-btns">
-                    <view class="privacy-btn decline" @tap="declinePrivacy">拒绝</view>
-                    <view class="privacy-btn agree" @tap="agreePrivacy">同意</view>
+                    <view class="privacy-btn decline" @tap="declinePrivacy">暂不授权</view>
+                    <button
+                        class="privacy-btn agree"
+                        open-type="agreePrivacyAuthorization"
+                        @agreeprivacyauthorization="onAgreePrivacyAuthorization"
+                    >同意并继续</button>
                 </view>
             </view>
         </view>
@@ -143,21 +137,19 @@ export default {
             statusBarHeight: 20,
             userInfo: { balance: 20, coins: 0 },
             showPrivacy: false,
+            privacyContractName: '《用户隐私保护指引》',
             showMemberModal: false,
             storeName: '梭哈酒馆 - 南京店',
             storeAddress: '江苏省南京市浦口区江浦街道明发新城中心2栋4单元1007',
             wifiName: 'AllInTavern',
-            wifiPassword: '27272727',
+            wifiPassword: '66668888',
             memberCodeUrl: ''
         };
     },
     onLoad() {
         const sys = uni.getSystemInfoSync();
         this.statusBarHeight = sys.statusBarHeight || 20;
-        const agreed = uni.getStorageSync('privacyAgreed');
-        if (!agreed) {
-            this.showPrivacy = true;
-        }
+        this.checkPrivacyAuthorization();
         this.loadUserInfo();
         this.loadConfig();
     },
@@ -203,17 +195,14 @@ export default {
         goOrder() {
             uni.switchTab({ url: '/pages/category/category' });
         },
-        goCoinMall() {
-            uni.navigateTo({ url: '/pages/coin-mall/coin-mall' });
-        },
         goRecharge() {
+            const token = uni.getStorageSync('token');
+            if (!token) {
+                uni.showToast({ title: '请先登录', icon: 'none' });
+                setTimeout(() => uni.navigateTo({ url: '/pages/login/login' }), 1200);
+                return;
+            }
             uni.navigateTo({ url: '/pages/recharge/recharge' });
-        },
-        goReservation() {
-            uni.showToast({ title: '房台预定功能开发中', icon: 'none' });
-        },
-        goStorage() {
-            uni.showToast({ title: '我的存酒功能开发中', icon: 'none' });
         },
         showWifi() {
             uni.showModal({
@@ -222,12 +211,41 @@ export default {
                 showCancel: false
             });
         },
-        agreePrivacy() {
-            uni.setStorageSync('privacyAgreed', true);
+        checkPrivacyAuthorization() {
+            // #ifdef MP-WEIXIN
+            if (typeof wx === 'undefined' || !wx.getPrivacySetting) {
+                return;
+            }
+            wx.getPrivacySetting({
+                success: (res) => {
+                    this.privacyContractName = res.privacyContractName || '《用户隐私保护指引》';
+                    this.showPrivacy = !!res.needAuthorization;
+                },
+                fail: () => {
+                    this.showPrivacy = false;
+                }
+            });
+            // #endif
+        },
+        openPrivacyContract() {
+            // #ifdef MP-WEIXIN
+            if (typeof wx === 'undefined' || !wx.openPrivacyContract) {
+                uni.showToast({ title: '当前微信版本暂不支持', icon: 'none' });
+                return;
+            }
+            wx.openPrivacyContract({
+                fail: () => {
+                    uni.showToast({ title: '隐私指引暂未配置完成', icon: 'none' });
+                }
+            });
+            // #endif
+        },
+        onAgreePrivacyAuthorization() {
             this.showPrivacy = false;
         },
         declinePrivacy() {
-            uni.showToast({ title: '需同意隐私政策才能使用', icon: 'none' });
+            this.showPrivacy = false;
+            uni.showToast({ title: '您仍可浏览商品', icon: 'none' });
         }
     }
 };
@@ -236,18 +254,21 @@ export default {
 <style>
 .home-page {
     min-height: 100vh;
-    background: #0a0a0a;
-    background-image: radial-gradient(ellipse at 50% 0%, #1a1a1a 0%, #0a0a0a 70%);
+    background:
+        radial-gradient(ellipse at 12% 8%, rgba(232, 197, 71, 0.12), transparent 28%),
+        radial-gradient(ellipse at 88% 18%, rgba(201, 154, 58, 0.08), transparent 26%),
+        linear-gradient(180deg, #121214 0%, #0a0a0b 42%, #070708 100%);
 }
 .status-bar { width: 100%; }
 .store-selector {
     display: flex;
     align-items: center;
-    padding: 10rpx 30rpx 20rpx;
+    padding: 10rpx 30rpx 12rpx;
 }
 .store-name {
     color: #e8c547;
     font-size: 26rpx;
+    letter-spacing: 1rpx;
 }
 .store-arrow {
     color: #e8c547;
@@ -263,27 +284,47 @@ export default {
 /* 品牌区 */
 .brand-section {
     text-align: center;
-    padding: 30rpx 30rpx 44rpx;
+    padding: 18rpx 30rpx 28rpx;
     position: relative;
 }
 .brand-glow {
     position: absolute;
-    top: -30rpx;
+    top: -20rpx;
     left: 50%;
     transform: translateX(-50%);
-    width: 460rpx;
-    height: 460rpx;
-    background: radial-gradient(circle, rgba(232,197,71,0.20) 0%, rgba(232,197,71,0.06) 42%, transparent 70%);
+    width: 520rpx;
+    height: 420rpx;
+    background: radial-gradient(circle, rgba(232,197,71,0.22) 0%, rgba(232,197,71,0.06) 42%, transparent 72%);
     pointer-events: none;
 }
+.brand-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(2rpx);
+    pointer-events: none;
+}
+.brand-orb-a {
+    top: 40rpx;
+    left: 48rpx;
+    width: 18rpx;
+    height: 18rpx;
+    background: rgba(247, 220, 138, 0.55);
+}
+.brand-orb-b {
+    top: 88rpx;
+    right: 70rpx;
+    width: 10rpx;
+    height: 10rpx;
+    background: rgba(232, 197, 71, 0.35);
+}
 .logo-ring {
-    width: 220rpx;
-    height: 220rpx;
-    margin: 10rpx auto 26rpx;
+    width: 210rpx;
+    height: 210rpx;
+    margin: 8rpx auto 22rpx;
     border-radius: 50%;
     padding: 5rpx;
     background: linear-gradient(135deg, #f7dc8a 0%, #c99a3a 48%, #f7dc8a 100%);
-    box-shadow: 0 0 44rpx rgba(232,197,71,0.38), 0 10rpx 26rpx rgba(0,0,0,0.55);
+    box-shadow: 0 0 48rpx rgba(232,197,71,0.36), 0 12rpx 28rpx rgba(0,0,0,0.55);
     position: relative;
     z-index: 1;
 }
@@ -295,12 +336,12 @@ export default {
     display: block;
 }
 .brand-title {
-    font-size: 54rpx;
+    font-size: 56rpx;
     font-weight: bold;
     color: #f3d780;
-    letter-spacing: 8rpx;
+    letter-spacing: 10rpx;
     display: block;
-    text-shadow: 0 2rpx 14rpx rgba(232,197,71,0.45);
+    text-shadow: 0 2rpx 16rpx rgba(232,197,71,0.42);
     position: relative;
     z-index: 1;
 }
@@ -309,7 +350,7 @@ export default {
     align-items: center;
     justify-content: center;
     gap: 18rpx;
-    margin-top: 18rpx;
+    margin-top: 16rpx;
     position: relative;
     z-index: 1;
 }
@@ -324,163 +365,275 @@ export default {
     background: linear-gradient(90deg, #c99a3a, transparent);
 }
 .texas-bar {
-    font-size: 26rpx;
+    font-size: 24rpx;
     color: #d8b44a;
     font-weight: bold;
     letter-spacing: 6rpx;
 }
-
-/* 会员卡 */
-.member-card {
-    margin: 0 30rpx 30rpx;
-    background: linear-gradient(135deg, #3a3a3c 0%, #2c2c2e 100%);
-    border-radius: 20rpx;
-    padding: 60rpx 30rpx 30rpx;
-    position: relative;
-    box-shadow: 0 4rpx 20rpx rgba(0,0,0,0.4);
-}
-.avatar-wrap {
-    position: absolute;
-    top: -50rpx;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100rpx;
-    height: 100rpx;
-    border-radius: 50%;
-    background: #555;
-    border: 4rpx solid #3a3a3c;
-    overflow: hidden;
-}
-.avatar { width: 100%; height: 100%; }
-.member-stats {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-}
-.stat-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    flex: 1;
-}
-.stat-icon { font-size: 40rpx; color: #fff; margin-bottom: 8rpx; }
-.stat-value {
-    font-size: 40rpx;
-    font-weight: bold;
-    color: #fff;
-    margin-bottom: 6rpx;
-}
-.stat-label { font-size: 22rpx; color: #aaa; }
-
-/* 主操作 */
-.action-grid {
-    display: flex;
-    gap: 20rpx;
-    padding: 0 30rpx;
-    margin-bottom: 24rpx;
-}
-.action-card {
-    flex: 1;
-    background: #1c1c1e;
-    border-radius: 20rpx;
-    padding: 40rpx 20rpx;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    box-shadow: 0 2rpx 12rpx rgba(0,0,0,0.3);
-}
-.action-icon { font-size: 56rpx; margin-bottom: 16rpx; }
-.action-title { font-size: 30rpx; color: #fff; font-weight: bold; }
-.action-sub { font-size: 20rpx; color: #666; margin-top: 6rpx; letter-spacing: 2rpx; }
-
-/* 充值卡 */
-.recharge-card {
-    margin: 0 30rpx 24rpx;
-    background: linear-gradient(135deg, #3a3a3c 0%, #2c2c2e 100%);
-    border-radius: 20rpx;
-    padding: 30rpx;
-    position: relative;
-    overflow: hidden;
-}
-.recharge-bg-text {
-    position: absolute;
-    right: 20rpx;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 80rpx;
-    font-weight: 900;
-    color: rgba(255,255,255,0.06);
-    letter-spacing: 8rpx;
-}
-.recharge-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.brand-motto {
+    display: block;
+    margin-top: 16rpx;
+    color: rgba(245, 245, 245, 0.48);
+    font-size: 22rpx;
+    letter-spacing: 6rpx;
     position: relative;
     z-index: 1;
 }
-.recharge-title { font-size: 32rpx; color: #fff; font-weight: bold; display: block; }
-.recharge-desc { font-size: 22rpx; color: #999; margin-top: 8rpx; display: block; }
-.recharge-btn {
-    background: #c41e3a;
-    color: #fff;
-    padding: 16rpx 36rpx;
-    border-radius: 40rpx;
-    font-size: 26rpx;
-    font-weight: bold;
+
+/* 会员身份卡 */
+.vip-card {
+    margin: 18rpx 30rpx 22rpx;
+    padding: 28rpx 26rpx;
+    border-radius: 24rpx;
+    border: 1rpx solid rgba(232, 197, 71, 0.28);
+    background:
+        linear-gradient(135deg, rgba(232, 197, 71, 0.16), transparent 42%),
+        linear-gradient(160deg, #262628, #161618 70%);
+    box-shadow: 0 18rpx 40rpx rgba(0, 0, 0, 0.36);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+}
+.vip-shine {
+    position: absolute;
+    top: -40%;
+    right: -10%;
+    width: 220rpx;
+    height: 220rpx;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(247, 220, 138, 0.18), transparent 68%);
+    pointer-events: none;
+}
+.vip-left {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    flex: 1;
+    position: relative;
+    z-index: 1;
+}
+.vip-avatar-wrap {
+    width: 96rpx;
+    height: 96rpx;
+    border-radius: 50%;
+    padding: 3rpx;
+    background: linear-gradient(145deg, #f7dc8a, #c99a3a);
+    margin-right: 20rpx;
+    flex-shrink: 0;
+}
+.vip-avatar {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 4rpx solid #171717;
+    background: #1c1c1e;
+    display: block;
+}
+.vip-copy {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+.vip-hello {
+    color: #f7f7f7;
+    font-size: 30rpx;
+    font-weight: 700;
+    overflow: hidden;
+    text-overflow: ellipsis;
     white-space: nowrap;
 }
-
-/* 服务 */
-.service-grid {
+.vip-sub {
+    margin-top: 8rpx;
+    color: #9a9a9e;
+    font-size: 22rpx;
+}
+.vip-badge {
+    width: 92rpx;
+    height: 92rpx;
+    border-radius: 22rpx;
+    border: 1rpx solid rgba(232, 197, 71, 0.35);
+    background: rgba(232, 197, 71, 0.1);
     display: flex;
-    gap: 16rpx;
-    padding: 0 30rpx;
-    margin-bottom: 24rpx;
-}
-.service-card {
-    flex: 1;
-    background: linear-gradient(135deg, #3a3a3c 0%, #2c2c2e 100%);
-    border-radius: 16rpx;
-    padding: 24rpx 16rpx;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
     position: relative;
-    min-height: 140rpx;
+    z-index: 1;
 }
-.service-title { font-size: 26rpx; color: #fff; font-weight: bold; display: block; }
-.service-sub { font-size: 18rpx; color: #666; margin-top: 4rpx; display: block; letter-spacing: 1rpx; }
-.service-icon {
+.vip-badge-text {
+    color: rgba(232, 197, 71, 0.72);
+    font-size: 14rpx;
+    letter-spacing: 1rpx;
+}
+.vip-badge-code {
+    margin-top: 4rpx;
+    color: #f7dc8a;
+    font-size: 34rpx;
+    font-weight: 700;
+}
+
+/* 主点单 */
+.hero-order {
+    margin: 0 30rpx 20rpx;
+    padding: 30rpx 26rpx;
+    border-radius: 26rpx;
+    border: 1rpx solid rgba(232, 197, 71, 0.34);
+    background:
+        linear-gradient(120deg, rgba(247, 220, 138, 0.18), transparent 40%),
+        linear-gradient(160deg, #2a2418, #17150f 72%);
+    box-shadow: 0 18rpx 42rpx rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+.hero-order-bg {
     position: absolute;
-    right: 16rpx;
-    bottom: 16rpx;
+    right: 12rpx;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 84rpx;
+    font-weight: 900;
+    letter-spacing: 4rpx;
+    color: rgba(232, 197, 71, 0.08);
+}
+.hero-order-main {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    flex: 1;
+    position: relative;
+    z-index: 1;
+}
+.hero-order-icon {
+    width: 88rpx;
+    height: 88rpx;
+    border-radius: 50%;
+    margin-right: 20rpx;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #171717;
+    font-size: 34rpx;
+    font-weight: 700;
+    background: linear-gradient(135deg, #f7dc8a, #d4a72c);
+    box-shadow: 0 10rpx 24rpx rgba(232, 197, 71, 0.28);
+}
+.hero-order-copy {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+.hero-order-title {
+    color: #f7dc8a;
     font-size: 36rpx;
-    opacity: 0.7;
+    font-weight: 700;
+    letter-spacing: 2rpx;
+}
+.hero-order-desc {
+    margin-top: 8rpx;
+    color: rgba(245, 245, 245, 0.62);
+    font-size: 22rpx;
+}
+.hero-order-go {
+    width: 72rpx;
+    height: 72rpx;
+    border-radius: 50%;
+    margin-left: 12rpx;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #171717;
+    font-size: 22rpx;
+    font-weight: 800;
+    letter-spacing: 1rpx;
+    background: #f3d780;
+    position: relative;
+    z-index: 1;
+}
+
+/* 充值 / WIFI */
+.recharge-row,
+.wifi-row {
+    margin: 0 30rpx 22rpx;
+    padding: 24rpx 22rpx;
+    border-radius: 20rpx;
+    border: 1rpx solid rgba(255, 255, 255, 0.08);
+    background: linear-gradient(145deg, #1f1f21, #151517);
+    display: flex;
+    align-items: center;
+    box-shadow: 0 12rpx 28rpx rgba(0, 0, 0, 0.28);
+}
+.recharge-icon,
+.wifi-icon {
+    width: 72rpx;
+    height: 72rpx;
+    border-radius: 50%;
+    margin-right: 18rpx;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #f7dc8a;
+    font-size: 24rpx;
+    font-weight: 700;
+    border: 1rpx solid rgba(232, 197, 71, 0.34);
+    background: radial-gradient(circle at 32% 26%, rgba(232, 197, 71, 0.2), rgba(232, 197, 71, 0.05));
+}
+.recharge-copy,
+.wifi-copy {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+.recharge-title,
+.wifi-title {
+    color: #f1f1f1;
+    font-size: 28rpx;
+    font-weight: 600;
+}
+.recharge-sub,
+.wifi-sub {
+    margin-top: 6rpx;
+    color: #8a8a8e;
+    font-size: 22rpx;
+}
+.recharge-arrow,
+.wifi-arrow {
+    color: #c99a3a;
+    font-size: 40rpx;
+    line-height: 1;
+    margin-left: 8rpx;
 }
 
 /* 位置 */
 .location-bar {
-    margin: 0 30rpx 30rpx;
-    background: #1c1c1e;
-    border-radius: 12rpx;
-    padding: 24rpx 20rpx;
+    margin: 0 30rpx 24rpx;
+    background: rgba(28, 28, 30, 0.88);
+    border: 1rpx solid rgba(255, 255, 255, 0.06);
+    border-radius: 16rpx;
+    padding: 22rpx 20rpx;
     display: flex;
     align-items: center;
     gap: 12rpx;
 }
-.diamond { color: #c41e3a; font-size: 20rpx; flex-shrink: 0; }
-.location-text { font-size: 22rpx; color: #ccc; line-height: 1.5; flex: 1; }
+.diamond { color: var(--gold); font-size: 16rpx; flex-shrink: 0; }
+.location-text { font-size: 22rpx; color: var(--text-muted); line-height: 1.5; flex: 1; text-align: center; }
 
 /* 页脚 */
 .footer {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 20rpx 0 40rpx;
-    gap: 8rpx;
+    padding: 8rpx 0 48rpx;
 }
-.footer-icon { font-size: 24rpx; }
-.footer-text { font-size: 24rpx; color: #666; }
-.footer-divider { color: #444; font-size: 24rpx; }
-.footer-support { font-size: 22rpx; color: #555; }
+.footer-text { font-size: 22rpx; color: var(--text-faint); letter-spacing: 1rpx; }
 
 /* 隐私弹窗 */
 .privacy-mask {
@@ -494,7 +647,9 @@ export default {
     padding: 60rpx;
 }
 .privacy-modal {
-    background: #fff;
+    background: var(--bg-card-gradient);
+    border: 1rpx solid var(--border-gold);
+    box-shadow: 0 20rpx 60rpx rgba(0, 0, 0, 0.5);
     border-radius: 24rpx;
     padding: 40rpx;
     width: 100%;
@@ -503,7 +658,7 @@ export default {
 .privacy-title {
     font-size: 32rpx;
     font-weight: bold;
-    color: #333;
+    color: var(--text-primary);
     text-align: center;
     display: block;
     margin-bottom: 24rpx;
@@ -514,11 +669,17 @@ export default {
 }
 .privacy-content text {
     font-size: 26rpx;
-    color: #666;
+    color: var(--text-muted);
     line-height: 1.6;
     display: block;
 }
 .privacy-p { margin-top: 16rpx; }
+.privacy-link {
+    margin-top: 20rpx;
+    color: var(--gold) !important;
+    text-align: center;
+    text-decoration: underline;
+}
 .privacy-btns {
     display: flex;
     gap: 20rpx;
@@ -531,9 +692,19 @@ export default {
     align-items: center;
     justify-content: center;
     font-size: 28rpx;
+    font-weight: 600;
+    margin: 0;
+    padding: 0;
+    line-height: 80rpx;
+    border: none;
 }
-.privacy-btn.decline { background: #f0f0f0; color: #666; }
-.privacy-btn.agree { background: #000; color: #fff; }
+.privacy-btn::after { border: none; }
+.privacy-btn.decline { background: var(--bg-elevated); color: var(--text-muted); }
+.privacy-btn.agree {
+    background: var(--gold-gradient);
+    color: #171717;
+    box-shadow: 0 8rpx 22rpx rgba(232, 197, 71, 0.24);
+}
 
 /* 会员码 */
 .member-mask {
@@ -546,17 +717,20 @@ export default {
     justify-content: center;
 }
 .member-modal {
-    background: #fff;
+    background: var(--bg-card-gradient);
+    border: 1rpx solid var(--border-gold);
+    box-shadow: 0 20rpx 60rpx rgba(0, 0, 0, 0.5);
     border-radius: 24rpx;
     padding: 50rpx;
     width: 500rpx;
     text-align: center;
 }
-.member-modal-title { font-size: 32rpx; font-weight: bold; color: #333; display: block; margin-bottom: 30rpx; }
+.member-modal-title { font-size: 32rpx; font-weight: bold; color: var(--gold); display: block; margin-bottom: 30rpx; }
 .qrcode-placeholder {
     width: 300rpx;
     height: 300rpx;
-    background: #f5f5f5;
+    background: #ffffff;
+    border-radius: 16rpx;
     margin: 0 auto 20rpx;
     display: flex;
     flex-direction: column;
@@ -564,7 +738,14 @@ export default {
     justify-content: center;
     gap: 10rpx;
 }
-.qrcode-text { font-size: 32rpx; color: #999; letter-spacing: 4rpx; }
-.qrcode-img { width: 360rpx; height: 360rpx; margin: 0 auto 20rpx; display: block; }
-.member-modal-tip { font-size: 24rpx; color: #999; }
+.qrcode-text { font-size: 32rpx; color: #8a8a8e; letter-spacing: 4rpx; }
+.qrcode-img {
+    width: 360rpx;
+    height: 360rpx;
+    margin: 0 auto 20rpx;
+    display: block;
+    border-radius: 16rpx;
+    background: #ffffff;
+}
+.member-modal-tip { font-size: 24rpx; color: var(--text-muted); }
 </style>

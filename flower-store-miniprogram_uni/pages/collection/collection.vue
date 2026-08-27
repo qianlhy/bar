@@ -25,7 +25,7 @@
 
             <!-- 收藏列表 -->
             <view class="collection-list" v-else>
-                <view class="collection-item" @tap="viewProductDetail" :data-id="item.id" v-for="(item, index) in favorites" :key="index">
+                <view class="collection-item" @tap="goToDetail" :data-id="item.id" v-for="(item, index) in favorites" :key="index">
                     <view class="product-card">
                         <image class="product-image" :src="item.image" mode="aspectFill"></image>
                         <view class="product-info">
@@ -85,7 +85,7 @@ export default {
     },
     methods: {
         checkLoginStatus: function () {
-            const isLogin = uni.getStorageSync('isLoggedIn') || false;
+            const isLogin = !!uni.getStorageSync('token');
             this.setData({
                 isLogin
             });
@@ -186,20 +186,15 @@ export default {
             uni.navigateTo({
                 url: '/pages/login/login'
             });
-        },
-
-        viewProductDetail() {
-            console.log('占位：函数 viewProductDetail 未声明');
         }
     }
 };
 </script>
 <style>
-/* pages/collection/collection.wxss */
 .collection-container {
     min-height: 100vh;
-    background-color: #f5f5f5;
-    padding-bottom: 30rpx;
+    background-color: var(--bg-page);
+    padding-bottom: calc(40rpx + env(safe-area-inset-bottom));
 }
 
 /* 未登录状态样式 */
@@ -220,21 +215,28 @@ export default {
 
 .login-tip {
     font-size: 28rpx;
-    color: #999;
+    color: var(--text-muted);
     margin-bottom: 40rpx;
 }
 
 .login-btn {
     width: 240rpx;
-    height: 80rpx;
-    line-height: 80rpx;
+    height: 84rpx;
+    line-height: 84rpx;
     text-align: center;
-    background-color: var(--primary-color, #ff6b81);
-    color: #fff;
+    background: var(--gold-gradient);
+    color: #171717;
     font-size: 30rpx;
-    border-radius: 40rpx;
+    font-weight: 600;
+    border: none;
+    border-radius: 42rpx;
     margin: 0;
     padding: 0;
+    box-shadow: 0 8rpx 22rpx rgba(232, 197, 71, 0.22);
+}
+
+.login-btn::after {
+    border: none;
 }
 
 /* 加载中样式 */
@@ -253,7 +255,7 @@ export default {
 
 .loading text {
     font-size: 28rpx;
-    color: #999;
+    color: var(--text-muted);
 }
 
 /* 空收藏样式 */
@@ -272,19 +274,21 @@ export default {
 
 .empty-tip {
     font-size: 28rpx;
-    color: #999;
+    color: var(--text-muted);
     margin-bottom: 40rpx;
 }
 
 .go-shopping {
     width: 240rpx;
-    height: 80rpx;
-    line-height: 80rpx;
+    height: 84rpx;
+    line-height: 84rpx;
     text-align: center;
-    background-color: var(--primary-color, #ff6b81);
-    color: #fff;
+    background: var(--gold-gradient);
+    color: #171717;
     font-size: 30rpx;
-    border-radius: 40rpx;
+    font-weight: 600;
+    border-radius: 42rpx;
+    box-shadow: 0 8rpx 22rpx rgba(232, 197, 71, 0.22);
 }
 
 /* 收藏列表样式 */
@@ -298,21 +302,24 @@ export default {
 
 .product-card {
     display: flex;
-    background-color: #fff;
-    border-radius: 12rpx;
+    background: var(--bg-card-gradient);
+    border: 1rpx solid var(--border-subtle);
+    border-radius: 20rpx;
     overflow: hidden;
-    box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
+    box-shadow: 0 10rpx 28rpx rgba(0, 0, 0, 0.22);
 }
 
 .product-image {
     width: 200rpx;
     height: 200rpx;
-    background-color: #f9f9f9;
+    background-color: var(--bg-sunken);
+    flex-shrink: 0;
 }
 
 .product-info {
     flex: 1;
-    padding: 20rpx;
+    min-width: 0;
+    padding: 22rpx;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -320,6 +327,7 @@ export default {
 
 .product-name {
     font-size: 28rpx;
+    color: var(--text-primary);
     line-height: 1.4;
     margin-bottom: 10rpx;
     overflow: hidden;
@@ -337,20 +345,20 @@ export default {
 
 .current-price {
     font-size: 32rpx;
-    font-weight: bold;
-    color: var(--price-color, #ff6b81);
+    font-weight: 700;
+    color: var(--gold);
 }
 
 .original-price {
     font-size: 24rpx;
-    color: #999;
+    color: var(--text-faint);
     text-decoration: line-through;
     margin-left: 10rpx;
 }
 
 .product-sales {
     font-size: 24rpx;
-    color: #999;
+    color: var(--text-faint);
     margin-bottom: 20rpx;
 }
 
@@ -367,13 +375,14 @@ export default {
 }
 
 .action-btn.cancel {
-    color: #666;
-    border: 1rpx solid #ddd;
-    background-color: #f9f9f9;
+    color: var(--text-regular);
+    border: 1rpx solid var(--border-subtle);
+    background-color: var(--bg-elevated);
 }
 
 .action-btn.add-cart {
-    color: #fff;
-    background-color: var(--primary-color, #ff6b81);
+    color: #171717;
+    font-weight: 600;
+    background: var(--gold-gradient);
 }
 </style>

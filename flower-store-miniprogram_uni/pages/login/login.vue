@@ -3,24 +3,45 @@
     <view class="login-container">
         <view class="login-header">
             <view class="logo-area">
-                <image class="logo-img" src="/static/allIn.jpg" mode="aspectFit"></image>
+                <view class="logo-ring">
+                    <image class="logo-img" src="/static/allIn.jpg" mode="aspectFill"></image>
+                </view>
             </view>
             <text class="title">欢迎来到 梭哈酒馆</text>
         </view>
 
         <!-- 完善头像昵称 -->
         <view class="profile-setup" v-if="showProfile">
+            <view class="profile-kicker">MEMBER PROFILE</view>
             <text class="profile-title">完善个人资料</text>
-            <text class="profile-tip">使用微信头像昵称，快速完成注册</text>
+            <text class="profile-tip">使用微信头像与昵称，开启你的酒馆会员身份</text>
 
             <button class="avatar-picker" open-type="chooseAvatar" @chooseavatar="onChooseAvatar">
-                <image class="avatar-preview" :src="profileAvatar || '/static/images/icons/default-avatar.png'" mode="aspectFill"></image>
-                <text class="avatar-hint">{{ avatarUploading ? '上传中...' : '点击选择头像' }}</text>
+                <view class="avatar-ring">
+                    <view class="avatar-glow"></view>
+                    <image
+                        class="avatar-preview"
+                        :src="profileAvatar || '/static/allIn.jpg'"
+                        mode="aspectFill"
+                    ></image>
+                    <view class="avatar-camera">
+                        <text class="camera-dot"></text>
+                        <text class="camera-text">{{ avatarUploading ? '上传中' : '换头像' }}</text>
+                    </view>
+                </view>
+                <text class="avatar-hint">{{ avatarUploading ? '头像上传中，请稍候...' : '点击上方选择微信头像' }}</text>
             </button>
 
             <view class="profile-item">
                 <text class="profile-label">昵称</text>
-                <input class="profile-input" type="nickname" placeholder="点击获取微信昵称" :value="profileNickname" @input="onNicknameInput" @change="onNicknameInput" />
+                <input
+                    class="profile-input"
+                    type="nickname"
+                    placeholder="点击获取微信昵称"
+                    :value="profileNickname"
+                    @input="onNicknameInput"
+                    @change="onNicknameInput"
+                />
             </view>
 
             <button class="login-btn" @tap="saveProfile" :disabled="avatarUploading">完成</button>
@@ -433,7 +454,7 @@ export default {
                     app.globalData.login({
                         ...current,
                         nickName: nickname,
-                        avatarUrl: this.profileAvatar || current.avatarUrl || '/static/images/icons/default-avatar.png'
+                        avatarUrl: this.profileAvatar || current.avatarUrl || '/static/allIn.jpg'
                     });
                     uni.showToast({ title: '登录成功', icon: 'success' });
                     setTimeout(() => this.backToPrevPage(), 1200);
@@ -458,28 +479,12 @@ export default {
             }
         },
 
-        // 跳转到注册页面
-        goToRegister: function () {
-            uni.navigateTo({
-                url: '/pages/register/register'
-            });
-        },
-
-        // 查看协议
-        viewAgreement: function () {
-            uni.showModal({
-                title: '用户协议',
-                content: '这是用户协议内容...',
-                showCancel: false
-            });
-        },
-
         goToUserAgreement() {
-            console.log('占位：函数 goToUserAgreement 未声明');
+            uni.navigateTo({ url: '/pages/agreement/agreement?type=user' });
         },
 
         goToPrivacyPolicy() {
-            console.log('占位：函数 goToPrivacyPolicy 未声明');
+            uni.navigateTo({ url: '/pages/agreement/agreement?type=privacy' });
         }
     }
 };
@@ -509,18 +514,43 @@ export default {
     z-index: 1;
 }
 .logo-area { text-align: center; margin-bottom: 30rpx; }
-.logo-img { width: 240rpx; height: 240rpx; border-radius: 24rpx; }
+.logo-ring {
+    width: 220rpx;
+    height: 220rpx;
+    margin: 0 auto;
+    border-radius: 50%;
+    padding: 5rpx;
+    background: linear-gradient(135deg, #f7dc8a 0%, #c99a3a 48%, #f7dc8a 100%);
+    box-shadow:
+        0 0 40rpx rgba(232, 197, 71, 0.28),
+        0 14rpx 30rpx rgba(0, 0, 0, 0.45);
+    overflow: hidden;
+    box-sizing: border-box;
+}
+.logo-img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 5rpx solid #141414;
+    display: block;
+    background: #f5efe0;
+}
 .title {
-    font-size: 32rpx;
+    font-size: 34rpx;
     font-weight: bold;
-    color: #fff;
+    color: #f5f5f5;
+    letter-spacing: 2rpx;
 }
 .login-form {
     padding: 40rpx;
-    background-color: #1c1c1e;
+    background:
+        radial-gradient(circle at 100% 0, rgba(232, 197, 71, 0.08), transparent 40%),
+        linear-gradient(160deg, #222224, #151517);
+    border: 1rpx solid rgba(232, 197, 71, 0.16);
     border-radius: 30rpx;
     position: relative;
     z-index: 1;
+    box-shadow: 0 18rpx 40rpx rgba(0, 0, 0, 0.35);
 }
 .input-label { font-size: 28rpx; color: #999; margin-bottom: 16rpx; }
 .form-item { position: relative; margin-bottom: 40rpx; }
@@ -580,7 +610,7 @@ export default {
 .checkbox {
     width: 36rpx;
     height: 36rpx;
-    border: 1px solid #ddd;
+    border: 1rpx solid rgba(232, 197, 71, 0.45);
     border-radius: 50%;
     margin-right: 16rpx;
     position: relative;
@@ -695,33 +725,50 @@ export default {
 
 /* 完善头像昵称 */
 .profile-setup {
-    padding: 50rpx 40rpx 40rpx;
-    background-color: #1c1c1e;
-    border-radius: 30rpx;
+    padding: 46rpx 36rpx 42rpx;
+    background:
+        radial-gradient(circle at 50% 0%, rgba(232, 197, 71, 0.14), transparent 46%),
+        linear-gradient(160deg, #242426 0%, #151517 55%, #101012 100%);
+    border: 1rpx solid rgba(232, 197, 71, 0.22);
+    border-radius: 28rpx;
     position: relative;
     z-index: 1;
     text-align: center;
+    box-shadow: 0 20rpx 48rpx rgba(0, 0, 0, 0.42);
+}
+
+.profile-kicker {
+    display: inline-block;
+    margin-bottom: 14rpx;
+    padding: 6rpx 18rpx;
+    border-radius: 999rpx;
+    border: 1rpx solid rgba(232, 197, 71, 0.28);
+    background: rgba(232, 197, 71, 0.08);
+    color: #e8c547;
+    font-size: 18rpx;
+    letter-spacing: 4rpx;
 }
 
 .profile-title {
     display: block;
-    font-size: 36rpx;
-    font-weight: bold;
-    color: #f3d780;
-    letter-spacing: 2rpx;
+    font-size: 40rpx;
+    font-weight: 700;
+    color: #f7dc8a;
+    letter-spacing: 3rpx;
 }
 
 .profile-tip {
     display: block;
     font-size: 24rpx;
-    color: #8a8a8e;
-    margin-top: 12rpx;
+    color: #9a9a9e;
+    margin-top: 14rpx;
+    line-height: 1.6;
 }
 
 .avatar-picker {
-    width: 180rpx;
+    width: 100%;
     height: auto;
-    margin: 40rpx auto 30rpx;
+    margin: 42rpx auto 10rpx;
     background: transparent;
     border: none;
     padding: 0;
@@ -735,37 +782,97 @@ export default {
     border: none;
 }
 
-.avatar-preview {
-    width: 160rpx;
-    height: 160rpx;
+.avatar-ring {
+    position: relative;
+    width: 220rpx;
+    height: 220rpx;
     border-radius: 50%;
-    border: 3rpx solid #c99a3a;
-    background-color: #2c2c2e;
+    padding: 6rpx;
+    background: linear-gradient(145deg, #f7dc8a, #c99a3a 48%, #8a6824);
+    box-shadow:
+        0 0 0 8rpx rgba(232, 197, 71, 0.08),
+        0 16rpx 36rpx rgba(0, 0, 0, 0.45),
+        0 0 40rpx rgba(232, 197, 71, 0.22);
+}
+
+.avatar-glow {
+    position: absolute;
+    inset: -24rpx;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(232, 197, 71, 0.22), transparent 68%);
+    pointer-events: none;
+}
+
+.avatar-preview {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 6rpx solid #141416;
+    background-color: #1c1c1e;
+    display: block;
+    position: relative;
+    z-index: 1;
+}
+
+.avatar-camera {
+    position: absolute;
+    right: 6rpx;
+    bottom: 10rpx;
+    z-index: 2;
+    min-width: 88rpx;
+    height: 44rpx;
+    padding: 0 14rpx;
+    border-radius: 999rpx;
+    background: linear-gradient(135deg, #f7dc8a, #d4a72c);
+    border: 3rpx solid #141416;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6rpx;
+    box-shadow: 0 8rpx 18rpx rgba(0, 0, 0, 0.35);
+}
+
+.camera-dot {
+    width: 10rpx;
+    height: 10rpx;
+    border-radius: 50%;
+    background: #171717;
+}
+
+.camera-text {
+    color: #171717;
+    font-size: 18rpx;
+    font-weight: 700;
 }
 
 .avatar-hint {
     font-size: 24rpx;
     color: #8a8a8e;
-    margin-top: 16rpx;
+    margin-top: 22rpx;
 }
 
 .profile-item {
     display: flex;
     align-items: center;
-    border-bottom: 1px solid #333;
-    margin: 20rpx 0 50rpx;
+    margin: 28rpx 0 42rpx;
+    padding: 0 24rpx;
+    height: 96rpx;
+    border-radius: 18rpx;
+    border: 1rpx solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.03);
 }
 
 .profile-label {
     font-size: 28rpx;
-    color: #999;
+    color: #cfcfd2;
     width: 100rpx;
     text-align: left;
+    font-weight: 600;
 }
 
 .profile-input {
     flex: 1;
-    height: 90rpx;
+    height: 96rpx;
     font-size: 30rpx;
     color: #fff;
     text-align: left;
@@ -774,7 +881,8 @@ export default {
 .profile-skip {
     font-size: 26rpx;
     color: #8a8a8e;
-    margin-top: 10rpx;
+    margin-top: 8rpx;
+    letter-spacing: 1rpx;
 }
 
 /* 注册链接 */

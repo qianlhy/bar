@@ -1,7 +1,7 @@
 {
-	"name": "",
+	"name": "梭哈酒馆",
 	"appid": "wx39c20690901c74e4",
-	"description": "",
+	"description": "梭哈酒馆南京店店内商品浏览、点单与订单服务",
 	"versionName": "1.0.0",
 	"versionCode": "100",
 	"transformPx": false,
@@ -44,18 +44,10 @@
 	"mp-weixin": {
 		"appid": "wx39c20690901c74e4",
 		"setting": {
-			"urlCheck": false
+			"urlCheck": true
 		},
 		"usingComponents": true,
-		"permission": {
-			"scope.userLocation": {
-				"desc": "你的位置信息将用于小程序位置接口的效果展示"
-			}
-		},
-		"plugins": {},
-		"requiredBackgroundModes": [
-			"audio"
-		]
+		"plugins": {}
 	},
 	"mp-alipay": {
 		"usingComponents": true

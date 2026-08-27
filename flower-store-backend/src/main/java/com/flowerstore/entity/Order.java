@@ -49,8 +49,23 @@ public class Order implements Serializable {
     
     /** 实付金额 */
     private BigDecimal actualPayment;
+
+    /** 本单使用积分数 */
+    private Integer pointsUsed;
+
+    /** 积分抵扣金额（元） */
+    private BigDecimal pointsAmount;
+
+    /** 本单使用 All In 币数（意图或已扣） */
+    private Integer coinsUsed;
+
+    /** 币抵扣金额（元，与 used 1:1） */
+    private BigDecimal coinsAmount;
+
+    /** 微信支付金额（元，混合支付用） */
+    private BigDecimal wechatAmount;
     
-    /** 支付方式：online-在线支付，delivery-货到付款 */
+    /** 支付方式：wechat / coins / mixed（创建时可写 online） */
     private String paymentMethod;
     
     /** 订单备注 */

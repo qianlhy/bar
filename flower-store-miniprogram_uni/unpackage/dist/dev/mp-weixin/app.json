@@ -6,11 +6,6 @@
     "pages/user/user",
     "pages/cart/cart",
     "pages/product/detail",
-    "pages/coin-mall/coin-mall",
-    "pages/recharge/recharge",
-    "pages/coin-records/coin-records",
-    "pages/address/list",
-    "pages/address/edit",
     "pages/order/order",
     "pages/order/payment",
     "pages/order/detail",
@@ -18,14 +13,17 @@
     "pages/login/login",
     "pages/settings/settings",
     "pages/collection/collection",
-    "pages/search/search"
+    "pages/search/search",
+    "pages/agreement/agreement",
+    "pages/recharge/recharge"
   ],
   "subPackages": [],
   "window": {
     "navigationBarTextStyle": "white",
     "navigationBarBackgroundColor": "#000000",
     "navigationBarTitleText": "梭哈酒馆",
-    "backgroundColor": "#000000"
+    "backgroundColor": "#0b0b0c",
+    "backgroundTextStyle": "light"
   },
   "tabBar": {
     "color": "#999999",
@@ -59,14 +57,6 @@
       }
     ]
   },
-  "permission": {
-    "scope.userLocation": {
-      "desc": "你的位置信息将用于小程序位置接口的效果展示"
-    }
-  },
   "plugins": {},
-  "requiredBackgroundModes": [
-    "audio"
-  ],
   "usingComponents": {}
 }

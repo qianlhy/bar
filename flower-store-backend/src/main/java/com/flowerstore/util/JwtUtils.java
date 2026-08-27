@@ -70,6 +70,17 @@ public class JwtUtils {
     }
 
     /**
+     * 从Token中获取用户类型（user / admin）
+     */
+    public String getUserTypeFromToken(String token) {
+        Claims claims = getClaimsFromToken(token);
+        if (claims != null && claims.get("userType") != null) {
+            return claims.get("userType").toString();
+        }
+        return null;
+    }
+
+    /**
      * 验证Token是否有效
      */
     public boolean validateToken(String token) {

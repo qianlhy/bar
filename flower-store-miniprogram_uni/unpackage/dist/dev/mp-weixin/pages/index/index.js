@@ -140,7 +140,7 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {
+/* WEBPACK VAR INJECTION */(function(uni, wx) {
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ 4);
 Object.defineProperty(exports, "__esModule", {
@@ -150,12 +150,6 @@ exports.default = void 0;
 var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/defineProperty */ 11));
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { (0, _defineProperty2.default)(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -299,21 +293,19 @@ var _default = {
         coins: 0
       },
       showPrivacy: false,
+      privacyContractName: '《用户隐私保护指引》',
       showMemberModal: false,
       storeName: '梭哈酒馆 - 南京店',
       storeAddress: '江苏省南京市浦口区江浦街道明发新城中心2栋4单元1007',
       wifiName: 'AllInTavern',
-      wifiPassword: '27272727',
+      wifiPassword: '66668888',
       memberCodeUrl: ''
     };
   },
   onLoad: function onLoad() {
     var sys = uni.getSystemInfoSync();
     this.statusBarHeight = sys.statusBarHeight || 20;
-    var agreed = uni.getStorageSync('privacyAgreed');
-    if (!agreed) {
-      this.showPrivacy = true;
-    }
+    this.checkPrivacyAuthorization();
     this.loadUserInfo();
     this.loadConfig();
   },
@@ -372,26 +364,22 @@ var _default = {
         url: '/pages/category/category'
       });
     },
-    goCoinMall: function goCoinMall() {
-      uni.navigateTo({
-        url: '/pages/coin-mall/coin-mall'
-      });
-    },
     goRecharge: function goRecharge() {
+      var token = uni.getStorageSync('token');
+      if (!token) {
+        uni.showToast({
+          title: '请先登录',
+          icon: 'none'
+        });
+        setTimeout(function () {
+          return uni.navigateTo({
+            url: '/pages/login/login'
+          });
+        }, 1200);
+        return;
+      }
       uni.navigateTo({
         url: '/pages/recharge/recharge'
-      });
-    },
-    goReservation: function goReservation() {
-      uni.showToast({
-        title: '房台预定功能开发中',
-        icon: 'none'
-      });
-    },
-    goStorage: function goStorage() {
-      uni.showToast({
-        title: '我的存酒功能开发中',
-        icon: 'none'
       });
     },
     showWifi: function showWifi() {
@@ -401,20 +389,52 @@ var _default = {
         showCancel: false
       });
     },
-    agreePrivacy: function agreePrivacy() {
-      uni.setStorageSync('privacyAgreed', true);
+    checkPrivacyAuthorization: function checkPrivacyAuthorization() {
+      var _this3 = this;
+      if (typeof wx === 'undefined' || !wx.getPrivacySetting) {
+        return;
+      }
+      wx.getPrivacySetting({
+        success: function success(res) {
+          _this3.privacyContractName = res.privacyContractName || '《用户隐私保护指引》';
+          _this3.showPrivacy = !!res.needAuthorization;
+        },
+        fail: function fail() {
+          _this3.showPrivacy = false;
+        }
+      });
+    },
+    openPrivacyContract: function openPrivacyContract() {
+      if (typeof wx === 'undefined' || !wx.openPrivacyContract) {
+        uni.showToast({
+          title: '当前微信版本暂不支持',
+          icon: 'none'
+        });
+        return;
+      }
+      wx.openPrivacyContract({
+        fail: function fail() {
+          uni.showToast({
+            title: '隐私指引暂未配置完成',
+            icon: 'none'
+          });
+        }
+      });
+    },
+    onAgreePrivacyAuthorization: function onAgreePrivacyAuthorization() {
       this.showPrivacy = false;
     },
     declinePrivacy: function declinePrivacy() {
+      this.showPrivacy = false;
       uni.showToast({
-        title: '需同意隐私政策才能使用',
+        title: '您仍可浏览商品',
         icon: 'none'
       });
     }
   }
 };
 exports.default = _default;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"], __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/wx.js */ 1)["default"]))
 
 /***/ }),
 

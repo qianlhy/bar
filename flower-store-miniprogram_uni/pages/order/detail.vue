@@ -1,34 +1,35 @@
 <template>
-    <!-- pages/order/detail.wxml -->
     <view class="order-detail-container">
         <!-- 订单状态 -->
-        <view class="status-section" v-if="statusText">
-            <text class="status-text">{{ statusText }}</text>
+        <view :class="'status-section status-' + statusTone">
+            <text class="status-text">{{ statusText || '订单详情' }}</text>
+            <text class="status-desc">{{ statusDesc }}</text>
         </view>
 
-        <!-- 收货地址 -->
-        <view class="address-section">
-            <view class="section-title">收货地址</view>
-            <view class="address-content">
-                <view class="name-phone">
-                    <text class="name">{{ orderInfo.order.receiverName }}</text>
-                    <text class="phone">{{ orderInfo.order.receiverPhone }}</text>
+        <!-- 就餐信息 -->
+        <view class="card">
+            <view class="section-head">就餐信息</view>
+            <view class="store-row">
+                <view class="store-copy">
+                    <text class="store-name">梭哈酒馆 · 南京店</text>
+                    <text class="store-address">南京市浦口区江浦街道</text>
                 </view>
-                <view class="address-detail">{{ orderInfo.order.province }}{{ orderInfo.order.city }}{{ orderInfo.order.district }}{{ orderInfo.order.address }}</view>
+                <view class="instore-tag">{{ tableNoText }}</view>
             </view>
         </view>
 
         <!-- 商品信息 -->
-        <view class="goods-section">
-            <view class="section-title">商品信息</view>
+        <view class="card">
+            <view class="section-head">商品清单</view>
             <view class="goods-list">
-                <view class="goods-item" v-for="(item, index) in orderInfo.items" :key="index">
-                    <image class="goods-image" :src="item.productImage" mode="aspectFill"></image>
+                <view class="goods-item" v-for="(item, index) in goodsList" :key="index">
+                    <image class="goods-image" :src="item.productImage || '/static/allIn.jpg'" mode="aspectFill"></image>
 
                     <view class="goods-info">
                         <view class="goods-name">{{ item.productName }}</view>
+                        <view class="goods-spec" v-if="item.specText">{{ item.specText }}</view>
                         <view class="goods-price-count">
-                            <text class="goods-price">¥{{ item.price }}</text>
+                            <text class="goods-price">¥{{ money(item.price) }}</text>
                             <text class="goods-count">x{{ item.count }}</text>
                         </view>
                     </view>
@@ -37,68 +38,54 @@
         </view>
 
         <!-- 订单信息 -->
-        <view class="order-info-section">
-            <view class="section-title">订单信息</view>
+        <view class="card">
+            <view class="section-head">订单信息</view>
             <view class="order-info-item">
                 <text class="label">订单编号</text>
                 <view class="value-copy">
-                    <text class="value">{{ orderId }}</text>
+                    <text class="value">{{ order.orderNo || orderId }}</text>
                     <view class="copy-btn" @tap="copyOrderId">复制</view>
                 </view>
             </view>
             <view class="order-info-item">
-                <text class="label">创建时间</text>
-                <text class="value">{{ orderInfo.order.createTime }}</text>
+                <text class="label">下单时间</text>
+                <text class="value">{{ order.createTime }}</text>
             </view>
             <view class="order-info-item">
                 <text class="label">支付方式</text>
-                <text class="value">{{ orderInfo.order.paymentMethod === 'online' ? '在线支付' : '货到付款' }}</text>
+                <text class="value">微信支付</text>
             </view>
-            <view class="order-info-item" v-if="orderInfo.order.remark">
+            <view class="order-info-item" v-if="order.remark">
                 <text class="label">订单备注</text>
-                <text class="value">{{ orderInfo.order.remark }}</text>
+                <text class="value">{{ order.remark }}</text>
             </view>
         </view>
 
         <!-- 金额信息 -->
-        <view class="amount-section">
+        <view class="card">
             <view class="amount-item">
-                <text class="label">商品总额</text>
-                <text class="value">¥{{ orderInfo.order.totalPrice }}</text>
+                <text class="label">商品金额</text>
+                <text class="value">¥{{ money(order.totalPrice) }}</text>
             </view>
             <view class="amount-item">
-                <text class="label">运费</text>
-                <text class="value">¥{{ orderInfo.order.freight }}</text>
+                <text class="label">服务费</text>
+                <text class="value">¥0.00</text>
             </view>
+            <view class="amount-item" v-if="order.pointsUsed > 0">
+                <text class="label">积分抵扣</text>
+                <text class="value discount">-¥{{ money(order.pointsAmount) }}（{{ order.pointsUsed }}分）</text>
+            </view>
+            <view class="divider"></view>
             <view class="amount-item total">
                 <text class="label">实付款</text>
-                <text class="value">¥{{ orderInfo.order.actualPayment }}</text>
+                <text class="value">¥{{ money(order.actualPayment) }}</text>
             </view>
         </view>
 
         <!-- 底部操作按钮 -->
-        <view class="footer">
-            <!-- 待付款 -->
-            <block v-if="statusText === '待付款'">
-                <button class="btn cancel" @tap="cancelOrder">取消订单</button>
-                <button class="btn primary" @tap="goToPay">去支付</button>
-            </block>
-
-            <!-- 待发货 -->
-            <block v-else-if="statusText === '待发货'">
-                <button class="btn" @tap="contactService">联系客服</button>
-            </block>
-
-            <!-- 待收货 -->
-            <block v-else-if="statusText === '待收货'">
-                <button class="btn" @tap="checkLogistics">查看物流</button>
-                <button class="btn primary" @tap="confirmReceipt">确认收货</button>
-            </block>
-
-            <!-- 已完成 -->
-            <block v-else-if="statusText === '已完成'">
-                <button class="btn" @tap="contactService">联系客服</button>
-            </block>
+        <view class="footer" v-if="statusText === '待付款'">
+            <button class="btn" @tap="cancelOrder">取消订单</button>
+            <button class="btn primary" @tap="goToPay">去支付</button>
         </view>
     </view>
 </template>
@@ -109,7 +96,7 @@ export default {
     data() {
         return {
             orderId: '',
-            orderInfo: null,
+            orderInfo: { order: {}, items: [] },
             isLoading: true,
             receiverName: '',
             receiverPhone: '',
@@ -126,16 +113,39 @@ export default {
         };
     },
     computed: {
+        order() {
+            return (this.orderInfo && this.orderInfo.order) || {};
+        },
+        goodsList() {
+            return (this.orderInfo && this.orderInfo.items) || [];
+        },
         statusText() {
-            const status = this.orderInfo && this.orderInfo.order ? this.orderInfo.order.status : null;
             const map = {
                 1: '待付款',
-                2: '待发货',
-                3: '待收货',
+                2: '待出品',
+                3: '出品中',
                 4: '已完成',
                 5: '已取消'
             };
-            return map[status] || '';
+            return map[this.order.status] || '';
+        },
+        statusDesc() {
+            const map = {
+                1: '请在15分钟内完成支付，超时订单自动取消',
+                2: '已支付成功，吧台正在为您安排',
+                3: '酒品正在调制，请稍候',
+                4: '感谢惠顾，欢迎下次光临',
+                5: '该订单已取消'
+            };
+            return map[this.order.status] || '';
+        },
+        statusTone() {
+            const map = { 1: 'pending', 2: 'active', 3: 'active', 4: 'done', 5: 'closed' };
+            return map[this.order.status] || 'done';
+        },
+        tableNoText() {
+            const no = this.order.tableNo || this.order.receiverName;
+            return no ? `${no} 桌` : '店内';
         }
     },
     onLoad: function (options) {
@@ -156,6 +166,10 @@ export default {
         }
     },
     methods: {
+        money: function (val) {
+            return Number(val || 0).toFixed(2);
+        },
+
         // 获取订单详情
         getOrderDetail: function (orderId) {
             const token = uni.getStorageSync('token');
@@ -200,7 +214,7 @@ export default {
         // 复制订单号
         copyOrderId: function () {
             uni.setClipboardData({
-                data: this.orderInfo.order.orderNo,
+                data: this.order.orderNo || String(this.orderId),
                 success: () => {
                     uni.showToast({
                         title: '订单号已复制',
@@ -270,168 +284,130 @@ export default {
             });
         },
 
-        // 查看物流
-        checkLogistics: function () {
-            uni.showToast({
-                title: '物流查询功能开发中',
-                icon: 'none'
-            });
-        },
+        // 查看物流（店内点单无物流，保留空实现避免误调用）
+        checkLogistics: function () {},
 
-        // 联系客服
-        contactService: function () {
-            uni.showToast({
-                title: '客服功能开发中',
-                icon: 'none'
-            });
+        // 联系客服入口已移除，避免审核看到「开发中」
+        contactService: function () {}
         }
-    }
 };
 </script>
 <style>
-/* pages/order/detail.wxss */
 .order-detail-container {
     min-height: 100vh;
-    background-color: #f5f5f5;
-    padding-bottom: 120rpx;
-}
-
-/* 加载中 */
-.loading-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-}
-
-.loading {
-    width: 80rpx;
-    height: 80rpx;
-    border: 6rpx solid #f3f3f3;
-    border-top: 6rpx solid #ff6b81;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-    0% {
-        transform: rotate(0deg);
-    }
-    100% {
-        transform: rotate(360deg);
-    }
-}
-
-/* 通用样式 */
-.section-title {
-    font-size: 30rpx;
-    color: #333;
-    font-weight: 500;
-    padding-bottom: 20rpx;
+    box-sizing: border-box;
+    background: var(--bg-page);
+    padding: 24rpx 24rpx calc(160rpx + env(safe-area-inset-bottom));
 }
 
 /* 订单状态 */
 .status-section {
-    background-color: #ff6b81;
-    color: #fff;
-    padding: 40rpx 30rpx;
-}
-
-.status {
-    font-size: 36rpx;
-    font-weight: bold;
-    margin-bottom: 10rpx;
-}
-
-.status-desc {
-    font-size: 28rpx;
-    opacity: 0.8;
-}
-
-/* 收货地址 */
-.status-section {
-    background-color: #c41e3a;
-    padding: 40rpx 30rpx;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 24rpx;
+    padding: 46rpx 36rpx;
+    border-radius: 24rpx;
+    border: 1rpx solid var(--border-gold);
+    background:
+        radial-gradient(circle at 88% 0, rgba(232, 197, 71, 0.14), transparent 55%),
+        var(--bg-card-gradient);
 }
 
 .status-text {
-    color: #fff;
-    font-size: 38rpx;
-    font-weight: bold;
+    color: var(--text-primary);
+    font-size: 40rpx;
+    font-weight: 700;
+    letter-spacing: 1rpx;
 }
 
-.address-section {
-    background-color: #fff;
-    margin-top: 20rpx;
-    padding: 30rpx;
+.status-desc {
+    margin-top: 14rpx;
+    color: var(--text-muted);
+    font-size: 25rpx;
 }
 
-.address-content {
-    padding-top: 10rpx;
+.status-pending .status-text {
+    color: var(--gold);
 }
 
-.name-phone {
-    margin-bottom: 10rpx;
+.status-closed .status-text {
+    color: var(--text-muted);
 }
 
-.name {
-    font-size: 30rpx;
-    font-weight: 500;
-    margin-right: 20rpx;
+/* 门店信息 */
+.store-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
-.phone {
-    font-size: 28rpx;
-    color: #666;
+.store-copy {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
 }
 
-.address-detail {
-    font-size: 28rpx;
-    color: #333;
-    line-height: 1.5;
+.store-name {
+    color: var(--text-primary);
+    font-size: 29rpx;
+    font-weight: 600;
+}
+
+.store-address {
+    margin-top: 8rpx;
+    color: var(--text-faint);
+    font-size: 23rpx;
+}
+
+.instore-tag {
+    flex-shrink: 0;
+    margin-left: 20rpx;
+    padding: 8rpx 22rpx;
+    border-radius: 24rpx;
+    border: 1rpx solid rgba(232, 197, 71, 0.36);
+    background: rgba(232, 197, 71, 0.1);
+    color: var(--gold-light);
+    font-size: 23rpx;
 }
 
 /* 商品信息 */
-.goods-section {
-    background-color: #fff;
-    margin-top: 20rpx;
-    padding: 30rpx;
-}
-
-.goods-list {
-    padding-top: 10rpx;
-}
-
 .goods-item {
     display: flex;
-    padding: 20rpx 0;
-    border-bottom: 1rpx solid #eee;
+    padding: 24rpx 0;
+    border-bottom: 1rpx solid var(--border-subtle);
 }
 
 .goods-item:last-child {
     border-bottom: none;
+    padding-bottom: 0;
 }
 
 .goods-image {
-    width: 160rpx;
-    height: 160rpx;
-    border-radius: 8rpx;
-    margin-right: 20rpx;
-    background-color: #f9f9f9;
+    width: 150rpx;
+    height: 150rpx;
+    border-radius: 14rpx;
+    margin-right: 22rpx;
+    background-color: var(--bg-sunken);
+    flex-shrink: 0;
 }
 
 .goods-info {
     flex: 1;
+    min-width: 0;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
 }
 
 .goods-name {
+    color: var(--text-primary);
     font-size: 28rpx;
-    color: #333;
     line-height: 1.4;
-    margin-bottom: 20rpx;
+}
+
+.goods-spec {
+    color: var(--text-muted);
+    font-size: 23rpx;
 }
 
 .goods-price-count {
@@ -441,37 +417,37 @@ export default {
 }
 
 .goods-price {
+    color: var(--gold);
     font-size: 30rpx;
-    color: #ff6b81;
-    font-weight: 500;
+    font-weight: 600;
 }
 
 .goods-count {
-    font-size: 28rpx;
-    color: #999;
+    color: var(--text-faint);
+    font-size: 26rpx;
 }
 
 /* 订单信息 */
-.order-info-section {
-    background-color: #fff;
-    margin-top: 20rpx;
-    padding: 30rpx;
-}
-
-.order-info-item {
+.order-info-item,
+.amount-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 15rpx 0;
-    font-size: 28rpx;
+    padding: 14rpx 0;
+    font-size: 27rpx;
 }
 
 .label {
-    color: #666;
+    color: var(--text-muted);
 }
 
 .value {
-    color: #333;
+    color: var(--text-regular);
+    text-align: right;
+}
+
+.value.discount {
+    color: var(--gold-light);
 }
 
 .value-copy {
@@ -480,36 +456,25 @@ export default {
 }
 
 .copy-btn {
-    margin-left: 20rpx;
-    color: #ff6b81;
-    font-size: 26rpx;
+    margin-left: 18rpx;
+    padding: 4rpx 18rpx;
+    border-radius: 20rpx;
+    border: 1rpx solid rgba(232, 197, 71, 0.4);
+    color: var(--gold);
+    font-size: 22rpx;
 }
 
 /* 金额信息 */
-.amount-section {
-    background-color: #fff;
-    margin-top: 20rpx;
-    padding: 30rpx;
+.amount-item.total .label {
+    color: var(--text-primary);
+    font-size: 30rpx;
+    font-weight: 600;
 }
 
-.amount-item {
-    display: flex;
-    justify-content: space-between;
-    padding: 10rpx 0;
-    font-size: 28rpx;
-}
-
-.amount-item.total {
-    padding-top: 20rpx;
-    margin-top: 10rpx;
-    border-top: 1rpx solid #eee;
-}
-
-.amount-item.total .label,
 .amount-item.total .value {
-    font-size: 32rpx;
-    font-weight: bold;
-    color: #ff6b81;
+    color: var(--gold);
+    font-size: 38rpx;
+    font-weight: 700;
 }
 
 /* 底部按钮 */
@@ -518,31 +483,34 @@ export default {
     bottom: 0;
     left: 0;
     right: 0;
-    background-color: #fff;
-    padding: 20rpx 30rpx;
     display: flex;
     justify-content: flex-end;
-    box-shadow: 0 -2rpx 10rpx rgba(0, 0, 0, 0.05);
+    align-items: center;
+    padding: 20rpx 24rpx calc(20rpx + env(safe-area-inset-bottom));
+    background: rgba(16, 16, 18, 0.96);
+    border-top: 1rpx solid var(--border-subtle);
 }
 
 .btn {
-    height: 80rpx;
-    line-height: 80rpx;
-    padding: 0 40rpx;
+    height: 82rpx;
+    line-height: 82rpx;
+    padding: 0 48rpx;
     margin-left: 20rpx;
     font-size: 28rpx;
-    border-radius: 40rpx;
-    background-color: #f5f5f5;
-    color: #666;
+    font-weight: 600;
+    border-radius: 41rpx;
+    border: none;
+    background: var(--bg-elevated);
+    color: var(--text-regular);
+}
+
+.btn::after {
+    border: none;
 }
 
 .btn.primary {
-    background-color: #ff6b81;
-    color: #fff;
-}
-
-.btn.cancel {
-    background-color: #fff;
-    border: 1rpx solid #ddd;
+    background: var(--gold-gradient);
+    color: #171717;
+    box-shadow: 0 10rpx 26rpx rgba(232, 197, 71, 0.24);
 }
 </style>

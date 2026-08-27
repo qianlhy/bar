@@ -10,10 +10,11 @@ function getCartList() {
 /**
  * 添加到购物车
  */
-function addToCart(productId, count) {
+function addToCart(productId, count, specText) {
     return post('/cart', {
         productId: productId,
-        count: count
+        count: count,
+        specText: specText || ''
     });
 }
 

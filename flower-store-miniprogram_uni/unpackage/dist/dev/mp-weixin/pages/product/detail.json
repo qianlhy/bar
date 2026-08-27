@@ -1,6 +1,9 @@
 {
   "navigationBarTitleText": "商品详情",
-  "navigationBarBackgroundColor": "#ffffff",
-  "navigationBarTextStyle": "black",
-  "usingComponents": {}
+  "navigationBarBackgroundColor": "#000000",
+  "navigationBarTextStyle": "white",
+  "backgroundColor": "#000000",
+  "usingComponents": {
+    "spec-modal": "/components/spec-modal/spec-modal"
+  }
 }

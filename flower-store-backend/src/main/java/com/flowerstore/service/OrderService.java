@@ -2,8 +2,11 @@ package com.flowerstore.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.flowerstore.entity.Cart;
 import com.flowerstore.entity.Order;
 import com.flowerstore.entity.OrderItem;
+import com.flowerstore.entity.Product;
+import com.flowerstore.mapper.CartMapper;
 import com.flowerstore.mapper.OrderItemMapper;
 import com.flowerstore.mapper.OrderMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +34,15 @@ public class OrderService {
 
     @Autowired
     private ProductService productService;
+
+    @Autowired
+    private ProductSpecService productSpecService;
+
+    @Autowired
+    private CartMapper cartMapper;
+
+    @Autowired
+    private PointsService pointsService;
 
     /**
      * 分页查询订单列表
@@ -80,6 +92,11 @@ public class OrderService {
             orderMap.put("totalPrice", order.getTotalPrice());
             orderMap.put("freight", order.getFreight());
             orderMap.put("actualPayment", order.getActualPayment());
+            orderMap.put("pointsUsed", order.getPointsUsed());
+            orderMap.put("pointsAmount", order.getPointsAmount());
+            orderMap.put("coinsUsed", order.getCoinsUsed());
+            orderMap.put("coinsAmount", order.getCoinsAmount());
+            orderMap.put("wechatAmount", order.getWechatAmount());
             orderMap.put("paymentMethod", order.getPaymentMethod());
             orderMap.put("remark", order.getRemark());
             orderMap.put("status", order.getStatus());
@@ -124,9 +141,10 @@ public class OrderService {
 
     /**
      * 创建订单
+     * @param usePoints 用户希望使用的积分数（可为 null）
      */
     @Transactional(rollbackFor = Exception.class)
-    public Order createOrder(Order order, List<Map<String, Object>> items) {
+    public Order createOrder(Order order, List<Map<String, Object>> items, Integer usePoints) {
         // 生成订单号
         String orderNo = generateOrderNo();
         order.setOrderNo(orderNo);
@@ -135,39 +153,73 @@ public class OrderService {
         // 计算订单金额
         BigDecimal totalPrice = BigDecimal.ZERO;
         for (Map<String, Object> item : items) {
-            Long productId = Long.valueOf(item.get("productId").toString());
             Integer count = Integer.valueOf(item.get("count").toString());
-            BigDecimal price = new BigDecimal(item.get("price").toString());
+            if (count <= 0) {
+                throw new RuntimeException("商品数量必须大于0");
+            }
+            Product product = productService.getById(Long.valueOf(item.get("productId").toString()));
+            String specText = item.get("specText") == null ? "" : item.get("specText").toString();
+            BigDecimal price = productSpecService.resolvePrice(product, specText);
             totalPrice = totalPrice.add(price.multiply(new BigDecimal(count)));
         }
         
         order.setTotalPrice(totalPrice);
         
-        // 计算运费（满99免运费）
-        BigDecimal freight = totalPrice.compareTo(new BigDecimal("99")) >= 0 
-                ? BigDecimal.ZERO : new BigDecimal("8");
+        // 酒吧场景：店内消费不计运费
+        BigDecimal freight = BigDecimal.ZERO;
         order.setFreight(freight);
-        
-        // 计算实付金额
-        order.setActualPayment(totalPrice.add(freight));
 
-        // 保存订单
+        BigDecimal payable = totalPrice.add(freight);
+
+        // 先落库拿订单ID，再扣积分（失败则整单回滚）
+        order.setPointsUsed(0);
+        order.setPointsAmount(BigDecimal.ZERO);
+        order.setActualPayment(payable);
         orderMapper.insert(order);
+
+        if (usePoints != null && usePoints > 0) {
+            Map<String, Object> consumed = pointsService.consumeForOrder(
+                    order.getUserId(), payable, usePoints, order.getId());
+            int pointsUsed = (Integer) consumed.get("pointsUsed");
+            BigDecimal pointsAmount = (BigDecimal) consumed.get("pointsAmount");
+            order.setPointsUsed(pointsUsed);
+            order.setPointsAmount(pointsAmount);
+            order.setActualPayment(payable.subtract(pointsAmount).max(BigDecimal.ZERO));
+            orderMapper.updateById(order);
+        }
+
+        // 理论上积分最多抵50%，这里仍兼容活动赠送等产生的0元订单
+        if (order.getActualPayment().compareTo(BigDecimal.ZERO) <= 0) {
+            order.setStatus(2);
+            order.setPayTime(LocalDateTime.now());
+            orderMapper.updateById(order);
+        }
 
         // 保存订单明细
         for (Map<String, Object> item : items) {
             OrderItem orderItem = new OrderItem();
+            Product product = productService.getById(Long.valueOf(item.get("productId").toString()));
+            String specText = item.get("specText") == null ? "" : item.get("specText").toString();
             orderItem.setOrderId(order.getId());
-            orderItem.setProductId(Long.valueOf(item.get("productId").toString()));
-            orderItem.setProductName(item.get("productName").toString());
-            orderItem.setProductImage(item.get("productImage").toString());
-            orderItem.setPrice(new BigDecimal(item.get("price").toString()));
+            orderItem.setProductId(product.getId());
+            orderItem.setProductName(product.getName());
+            orderItem.setProductImage(product.getImage() == null ? "" : product.getImage());
+            orderItem.setSpecText(productSpecService.normalize(specText));
+            orderItem.setPrice(productSpecService.resolvePrice(product, specText));
             orderItem.setCount(Integer.valueOf(item.get("count").toString()));
             orderItem.setSubtotal(orderItem.getPrice().multiply(new BigDecimal(orderItem.getCount())));
             orderItemMapper.insert(orderItem);
 
             // 更新商品库存和销量
             productService.updateInventory(orderItem.getProductId(), orderItem.getCount());
+
+            // 仅清理本次从购物车结算且属于当前用户的条目
+            if (item.get("cartId") != null) {
+                LambdaQueryWrapper<Cart> cartWrapper = new LambdaQueryWrapper<>();
+                cartWrapper.eq(Cart::getId, Long.valueOf(item.get("cartId").toString()));
+                cartWrapper.eq(Cart::getUserId, order.getUserId());
+                cartMapper.delete(cartWrapper);
+            }
         }
 
         return order;
@@ -195,10 +247,27 @@ public class OrderService {
     }
 
     /**
-     * 取消订单
+     * 取消订单（退回已扣积分）
      */
+    @Transactional(rollbackFor = Exception.class)
     public void cancelOrder(Long id) {
-        updateStatus(id, 5);
+        Order order = orderMapper.selectById(id);
+        if (order == null) {
+            return;
+        }
+        if (order.getStatus() != null && order.getStatus() == 1) {
+            if (order.getPointsUsed() != null && order.getPointsUsed() > 0) {
+                pointsService.refundForOrder(order.getUserId(), order.getPointsUsed(), order.getId());
+                order.setPointsUsed(0);
+                order.setPointsAmount(BigDecimal.ZERO);
+            }
+            // 未支付取消：清除混合支付意图（币尚未扣）
+            order.setCoinsUsed(0);
+            order.setCoinsAmount(BigDecimal.ZERO);
+            order.setWechatAmount(null);
+        }
+        order.setStatus(5);
+        orderMapper.updateById(order);
     }
 
     /**

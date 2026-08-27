@@ -23,10 +23,12 @@ function request(options) {
                     if (res.data.code === 200) {
                         resolve(res.data.data);
                     } else {
-                        uni.showToast({
-                            title: res.data.message || '请求失败',
-                            icon: 'none'
-                        });
+                        if (!options.silent) {
+                            uni.showToast({
+                                title: res.data.message || '请求失败',
+                                icon: 'none'
+                            });
+                        }
                         reject(new Error(res.data.message));
                     }
                 } else if (res.statusCode === 401) {
@@ -38,18 +40,22 @@ function request(options) {
                     uni.removeStorageSync('userInfo');
                     reject(new Error('登录已过期'));
                 } else {
-                    uni.showToast({
-                        title: '网络错误',
-                        icon: 'none'
-                    });
+                    if (!options.silent) {
+                        uni.showToast({
+                            title: '网络错误',
+                            icon: 'none'
+                        });
+                    }
                     reject(new Error('网络错误'));
                 }
             },
             fail: (err) => {
-                uni.showToast({
-                    title: '网络连接失败',
-                    icon: 'none'
-                });
+                if (!options.silent) {
+                    uni.showToast({
+                        title: '网络连接失败',
+                        icon: 'none'
+                    });
+                }
                 reject(err);
             }
         });

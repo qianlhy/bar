@@ -254,43 +254,51 @@ export default {
 };
 </script>
 <style>
-/* pages/address/edit.wxss */
 .address-edit-container {
     min-height: 100vh;
-    background-color: #f7f7f7;
-    padding-bottom: 120rpx;
+    box-sizing: border-box;
+    background-color: var(--bg-page);
+    padding: 24rpx 24rpx calc(160rpx + env(safe-area-inset-bottom));
 }
 
 /* 表单容器 */
 .form-container {
-    background-color: #fff;
-    padding: 0 30rpx;
+    background: var(--bg-card-gradient);
+    border: 1rpx solid var(--border-subtle);
+    border-radius: 22rpx;
+    padding: 0 28rpx;
+    box-shadow: 0 10rpx 28rpx rgba(0, 0, 0, 0.22);
 }
 
 /* 表单项 */
 .form-item {
-    padding: 30rpx 0;
-    border-bottom: 1px solid #f5f5f5;
+    padding: 28rpx 0;
+    border-bottom: 1rpx solid var(--border-subtle);
+}
+
+.form-item:last-child {
+    border-bottom: none;
 }
 
 .form-label {
-    font-size: 28rpx;
-    color: #333;
-    margin-bottom: 20rpx;
+    display: block;
+    font-size: 27rpx;
+    color: var(--text-muted);
+    margin-bottom: 18rpx;
 }
 
 .form-input {
     width: 100%;
-    height: 80rpx;
-    font-size: 28rpx;
-    color: #333;
+    height: 76rpx;
+    font-size: 29rpx;
+    color: var(--text-primary);
 }
 
 .form-textarea {
     width: 100%;
     height: 160rpx;
-    font-size: 28rpx;
-    color: #333;
+    font-size: 29rpx;
+    color: var(--text-primary);
 }
 
 /* 地区选择器 */
@@ -302,17 +310,17 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 80rpx;
-    font-size: 28rpx;
-    color: #333;
+    height: 76rpx;
+    font-size: 29rpx;
+    color: var(--text-primary);
 }
 
 .placeholder {
-    color: #999;
+    color: var(--text-faint);
 }
 
 .arrow {
-    color: #999;
+    color: var(--text-faint);
     font-size: 28rpx;
 }
 
@@ -338,12 +346,14 @@ export default {
     width: 100rpx;
     height: 60rpx;
     border-radius: 30rpx;
-    background-color: #ccc;
+    background-color: var(--bg-elevated);
+    border: 1rpx solid var(--border-subtle);
     transition: all 0.3s;
 }
 
 .switch.on {
-    background-color: var(--primary-color);
+    background: var(--gold-gradient);
+    border-color: transparent;
 }
 
 .switch-handle {
@@ -353,12 +363,13 @@ export default {
     width: 50rpx;
     height: 50rpx;
     border-radius: 50%;
-    background-color: #fff;
+    background-color: #ffffff;
+    box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.3);
     transition: all 0.3s;
 }
 
 .switch.on .switch-handle {
-    transform: translateX(40rpx);
+    transform: translateX(38rpx);
 }
 
 /* 底部按钮 */
@@ -367,19 +378,28 @@ export default {
     bottom: 0;
     left: 0;
     right: 0;
-    background-color: #fff;
-    padding: 20rpx;
-    box-shadow: 0 -2rpx 10rpx rgba(0, 0, 0, 0.05);
+    background: rgba(16, 16, 18, 0.96);
+    border-top: 1rpx solid var(--border-subtle);
+    padding: 20rpx 24rpx calc(20rpx + env(safe-area-inset-bottom));
 }
 
 .save-btn {
-    background-color: var(--primary-color);
-    color: #fff;
+    background: var(--gold-gradient);
+    color: #171717;
     font-size: 30rpx;
-    border-radius: 40rpx;
+    font-weight: 600;
+    border: none;
+    border-radius: 44rpx;
+    box-shadow: 0 10rpx 26rpx rgba(232, 197, 71, 0.22);
+}
+
+.save-btn::after {
+    border: none;
 }
 
 .save-btn.loading {
-    opacity: 0.8;
+    background: var(--bg-elevated);
+    color: var(--text-faint);
+    box-shadow: none;
 }
 </style>

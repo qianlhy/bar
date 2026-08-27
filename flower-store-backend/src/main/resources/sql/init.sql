@@ -98,11 +98,12 @@ CREATE TABLE `t_cart` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
   `user_id` bigint(20) NOT NULL COMMENT '用户ID',
   `product_id` bigint(20) NOT NULL COMMENT '商品ID',
+  `spec_text` varchar(255) NOT NULL DEFAULT '' COMMENT '已选规格',
   `count` int(11) NOT NULL DEFAULT '1' COMMENT '数量',
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_user_product` (`user_id`,`product_id`),
+  UNIQUE KEY `uk_user_product_spec` (`user_id`,`product_id`,`spec_text`),
   KEY `idx_user_id` (`user_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='购物车表';
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -113,7 +114,7 @@ CREATE TABLE `t_cart` (
 
 LOCK TABLES `t_cart` WRITE;
 /*!40000 ALTER TABLE `t_cart` DISABLE KEYS */;
-INSERT INTO `t_cart` VALUES (1,1,9,1,'2025-12-22 17:32:44','2025-12-22 17:32:44');
+INSERT INTO `t_cart` VALUES (1,1,9,'',1,'2025-12-22 17:32:44','2025-12-22 17:32:44');
 /*!40000 ALTER TABLE `t_cart` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -235,6 +236,7 @@ CREATE TABLE `t_order_item` (
   `product_id` bigint(20) NOT NULL COMMENT '商品ID',
   `product_name` varchar(100) NOT NULL COMMENT '商品名称',
   `product_image` varchar(255) DEFAULT NULL COMMENT '商品图片',
+  `spec_text` varchar(255) NOT NULL DEFAULT '' COMMENT '下单时选择的规格',
   `price` decimal(10,2) NOT NULL COMMENT '商品价格',
   `count` int(11) NOT NULL COMMENT '购买数量',
   `subtotal` decimal(10,2) NOT NULL COMMENT '小计',
@@ -251,7 +253,7 @@ CREATE TABLE `t_order_item` (
 
 LOCK TABLES `t_order_item` WRITE;
 /*!40000 ALTER TABLE `t_order_item` DISABLE KEYS */;
-INSERT INTO `t_order_item` VALUES (1,1,9,'满天星花束 - 浪漫星空','https://qcloud.dpfile.com/pc/tSUjWiqr9Oe_gr0diUfHNU_5I1tIKBWZYay4biyqeLA57EIn_lnJvPOWlS4lMt0N.jpg',128.00,1,128.00,'2025-12-22 17:33:11','2025-12-22 17:33:11');
+INSERT INTO `t_order_item` VALUES (1,1,9,'满天星花束 - 浪漫星空','https://qcloud.dpfile.com/pc/tSUjWiqr9Oe_gr0diUfHNU_5I1tIKBWZYay4biyqeLA57EIn_lnJvPOWlS4lMt0N.jpg','',128.00,1,128.00,'2025-12-22 17:33:11','2025-12-22 17:33:11');
 /*!40000 ALTER TABLE `t_order_item` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -475,8 +477,11 @@ INSERT INTO `t_config` VALUES
 (2,'store_address','江苏省南京市浦口区江浦街道明发新城中心2栋4单元1007','门店地址'),
 (3,'store_phone','','门店电话'),
 (4,'wifi_name','AllInTavern','WiFi名称'),
-(5,'wifi_password','27272727','WiFi密码'),
-(6,'recharge_tip','享受更多专属优惠福利','充值说明');
+(5,'wifi_password','66668888','WiFi密码'),
+(6,'recharge_tip','享受更多专属优惠福利','充值说明'),
+(7,'points_enabled','1','积分抵扣开关：1-开启 0-关闭'),
+(8,'points_rate','100','积分兑换比例：多少积分抵1元'),
+(9,'points_max_ratio','0.5','单笔订单积分最多可抵总金额的比例');
 UNLOCK TABLES;
 
 --

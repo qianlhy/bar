@@ -74,9 +74,9 @@
 
         <!-- 隐私政策和用户协议 -->
         <view class="agreement">
-            <navigator url="/pages/agreement/privacy" class="agreement-link">隐私政策</navigator>
+            <navigator url="/pages/agreement/agreement?type=privacy" class="agreement-link">隐私政策</navigator>
             <text class="divider">|</text>
-            <navigator url="/pages/agreement/user" class="agreement-link">用户协议</navigator>
+            <navigator url="/pages/agreement/agreement?type=user" class="agreement-link">用户协议</navigator>
         </view>
 
         <!-- 退出登录 -->
@@ -143,13 +143,13 @@ export default {
         // 检查登录状态
         checkLoginStatus: function () {
             const userInfo = uni.getStorageSync('userInfo');
-            const isLogin = uni.getStorageSync('isLoggedIn') || false;
+            const isLogin = !!uni.getStorageSync('token');
             if (userInfo && isLogin) {
                 this.setData({
                     userInfo,
                     isLogin,
-                    nickName: userInfo.nickName || '微信用户',
-                    avatarUrl: userInfo.avatarUrl || '/static/images/icons/default-avatar.png'
+                    nickName: userInfo.nickname || userInfo.nickName || '微信用户',
+                    avatarUrl: userInfo.avatar || userInfo.avatarUrl || '/static/images/icons/default-avatar.png'
                 });
             } else {
                 this.setData({
@@ -193,8 +193,8 @@ export default {
             const userInfo = uni.getStorageSync('userInfo');
             this.setData({
                 editMode: true,
-                nickName: userInfo.nickName || '微信用户',
-                avatarUrl: userInfo.avatarUrl || '/static/images/icons/default-avatar.png'
+                nickName: userInfo.nickname || userInfo.nickName || '微信用户',
+                avatarUrl: userInfo.avatar || userInfo.avatarUrl || '/static/images/icons/default-avatar.png'
             });
         },
 
@@ -203,8 +203,8 @@ export default {
             const userInfo = this.userInfo;
             this.setData({
                 editMode: false,
-                nickName: userInfo.nickName || '微信用户',
-                avatarUrl: userInfo.avatarUrl || '/static/images/icons/default-avatar.png'
+                nickName: userInfo.nickname || userInfo.nickName || '微信用户',
+                avatarUrl: userInfo.avatar || userInfo.avatarUrl || '/static/images/icons/default-avatar.png'
             });
         },
 
@@ -376,6 +376,8 @@ export default {
                     // 更新本地缓存的用户信息
                     const userInfo = {
                         ...this.userInfo,
+                        nickname: this.nickName,
+                        avatar: this.avatarUrl,
                         nickName: this.nickName,
                         avatarUrl: this.avatarUrl
                     };
@@ -408,15 +410,16 @@ export default {
                     if (res.confirm) {
                         // 保留用户信息和登录状态
                         const userInfo = uni.getStorageSync('userInfo');
-                        const isLogin = uni.getStorageSync('isLoggedIn');
+                        const token = uni.getStorageSync('token');
 
                         // 清空缓存
                         uni.clearStorageSync();
 
                         // 恢复用户信息和登录状态
-                        if (userInfo && isLogin) {
+                        if (userInfo && token) {
                             uni.setStorageSync('userInfo', userInfo);
-                            uni.setStorageSync('isLoggedIn', isLogin);
+                            uni.setStorageSync('isLoggedIn', true);
+                            uni.setStorageSync('token', token);
                         }
 
                         // 重新初始化数据
@@ -435,8 +438,10 @@ export default {
 
         // 关于我们
         aboutUs: function () {
-            uni.navigateTo({
-                url: '/pages/about/about'
+            uni.showModal({
+                title: '关于梭哈酒馆',
+                content: '梭哈酒馆 · 南京店\nALL IN TAVERN\n当前版本 ' + this.version,
+                showCancel: false
             });
         },
 
@@ -476,50 +481,71 @@ export default {
 };
 </script>
 <style>
-/* pages/settings/settings.wxss */
 .settings-container {
     min-height: 100vh;
-    background-color: #f5f5f5;
-    padding-bottom: 40rpx;
+    box-sizing: border-box;
+    background: var(--bg-page);
+    padding: 24rpx 24rpx calc(60rpx + env(safe-area-inset-bottom));
 }
 
 /* 退出登录 */
 .logout-wrapper {
-    padding: 40rpx 30rpx 20rpx;
+    padding: 30rpx 0 20rpx;
 }
 
 .logout-btn {
-    background-color: #fff;
-    color: #c41e3a;
-    font-size: 32rpx;
+    background: var(--bg-card);
+    border: 1rpx solid rgba(196, 30, 58, 0.35);
+    color: #f0616f;
+    font-size: 30rpx;
+    font-weight: 600;
     text-align: center;
     padding: 28rpx 0;
-    border-radius: 12rpx;
+    border-radius: 20rpx;
 }
 
 /* 个人资料样式 */
-.user-profile {
-    background-color: #fff;
-    margin-bottom: 20rpx;
+.user-profile,
+.system-settings {
+    margin-bottom: 24rpx;
+    padding: 0 28rpx;
+    border: 1rpx solid var(--border-subtle);
+    border-radius: 22rpx;
+    background: var(--bg-card-gradient);
+    box-shadow: 0 10rpx 30rpx rgba(0, 0, 0, 0.24);
 }
 
-.profile-header {
-    padding: 30rpx;
-    font-size: 32rpx;
-    font-weight: bold;
-    color: #333;
-    border-bottom: 1rpx solid #eee;
+.profile-header,
+.settings-header {
+    position: relative;
+    padding: 30rpx 0 26rpx 22rpx;
+    font-size: 30rpx;
+    font-weight: 600;
+    color: var(--text-primary);
+    border-bottom: 1rpx solid var(--border-subtle);
+}
+
+.profile-header::before,
+.settings-header::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 34rpx;
+    width: 6rpx;
+    height: 28rpx;
+    border-radius: 4rpx;
+    background: linear-gradient(180deg, var(--gold-light), var(--gold-dark));
 }
 
 .profile-content {
-    padding: 0 30rpx;
+    padding: 0;
 }
 
 .profile-item {
     display: flex;
     align-items: center;
-    padding: 30rpx 0;
-    border-bottom: 1rpx solid #f5f5f5;
+    padding: 28rpx 0;
+    border-bottom: 1rpx solid var(--border-subtle);
 }
 
 .profile-item:last-child {
@@ -532,38 +558,39 @@ export default {
 
 .item-label {
     width: 140rpx;
-    font-size: 30rpx;
-    color: #333;
+    font-size: 29rpx;
+    color: var(--text-regular);
 }
 
 .item-content {
     flex: 1;
-    font-size: 30rpx;
-    color: #666;
+    font-size: 29rpx;
+    color: var(--text-muted);
 }
 
 .user-avatar {
-    width: 100rpx;
-    height: 100rpx;
+    width: 96rpx;
+    height: 96rpx;
     border-radius: 50%;
-    background-color: #f5f5f5;
+    background-color: var(--bg-sunken);
+    border: 2rpx solid rgba(232, 197, 71, 0.3);
 }
 
 .item-action {
     display: flex;
     align-items: center;
-    font-size: 28rpx;
-    color: #999;
+    font-size: 27rpx;
+    color: var(--gold);
 }
 
 .arrow {
     margin-left: 10rpx;
-    color: #ccc;
+    color: var(--text-faint);
 }
 
 /* 个人资料编辑样式 */
 .profile-edit {
-    padding: 30rpx;
+    padding: 30rpx 0;
 }
 
 .edit-item {
@@ -572,8 +599,8 @@ export default {
 
 .edit-label {
     display: block;
-    font-size: 30rpx;
-    color: #333;
+    font-size: 29rpx;
+    color: var(--text-regular);
     margin-bottom: 20rpx;
 }
 
@@ -634,25 +661,14 @@ export default {
 
 .edit-input {
     width: 100%;
-    height: 80rpx;
-    border: 1rpx solid #eee;
-    border-radius: 8rpx;
-    padding: 0 20rpx;
+    box-sizing: border-box;
+    height: 88rpx;
+    border: 1rpx solid var(--border-subtle);
+    border-radius: 14rpx;
+    padding: 0 24rpx;
     font-size: 28rpx;
-    background-color: #f9f9f9;
-}
-
-/* 使用微信头像和昵称按钮 */
-.use-wechat-profile {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 30rpx 0;
-    padding: 20rpx 0;
-    background-color: #07c160;
-    color: #fff;
-    font-size: 28rpx;
-    border-radius: 8rpx;
+    color: var(--text-primary);
+    background-color: var(--bg-sunken);
 }
 
 .edit-actions {
@@ -663,81 +679,91 @@ export default {
 
 .btn {
     width: 180rpx;
-    height: 80rpx;
+    height: 84rpx;
     font-size: 28rpx;
+    font-weight: 600;
     margin: 0;
     padding: 0;
-    line-height: 80rpx;
-    border-radius: 40rpx;
+    line-height: 84rpx;
+    text-align: center;
+    border-radius: 42rpx;
 }
 
 .cancel {
-    background-color: #f5f5f5;
-    color: #666;
+    background-color: var(--bg-elevated);
+    color: var(--text-regular);
     margin-right: 20rpx;
 }
 
 .save {
-    background-color: var(--primary-color, #ff6b81);
-    color: #fff;
+    background: var(--gold-gradient);
+    color: #171717;
+    box-shadow: 0 8rpx 22rpx rgba(232, 197, 71, 0.22);
 }
 
 /* 未登录状态 */
 .not-login {
-    padding: 30rpx;
+    padding: 30rpx 0;
     display: flex;
     justify-content: center;
 }
 
 .login-btn {
     width: 80%;
-    height: 80rpx;
+    height: 88rpx;
     font-size: 30rpx;
-    color: #fff;
-    background-color: var(--primary-color, #ff6b81);
-    border-radius: 40rpx;
-    line-height: 80rpx;
+    font-weight: 600;
+    color: #171717;
+    background: var(--gold-gradient);
+    border: none;
+    border-radius: 44rpx;
+    line-height: 88rpx;
+    box-shadow: 0 8rpx 22rpx rgba(232, 197, 71, 0.22);
 }
 
-/* 系统设置样式 */
-.system-settings {
-    background-color: #fff;
-    margin-bottom: 20rpx;
-}
-
-.settings-header {
-    padding: 30rpx;
-    font-size: 32rpx;
-    font-weight: bold;
-    color: #333;
-    border-bottom: 1rpx solid #eee;
+.login-btn::after {
+    border: none;
 }
 
 .settings-item {
     display: flex;
     align-items: center;
-    padding: 30rpx;
-    border-bottom: 1rpx solid #f5f5f5;
+    padding: 30rpx 0;
+    border-bottom: 1rpx solid var(--border-subtle);
 }
 
 .settings-item:last-child {
     border-bottom: none;
 }
 
+.settings-item .item-label {
+    width: auto;
+    flex: 1;
+}
+
+.settings-item .item-content {
+    flex: none;
+    margin-right: 12rpx;
+    font-size: 27rpx;
+    color: var(--text-faint);
+}
+
 /* 协议样式 */
 .agreement {
     display: flex;
     justify-content: center;
-    padding: 30rpx 0;
-    font-size: 26rpx;
-    color: #999;
+    padding: 20rpx 0;
+    font-size: 25rpx;
+    color: var(--text-faint);
 }
 
 .agreement-link {
-    color: #666;
+    color: var(--text-muted);
 }
 
 .divider {
     margin: 0 20rpx;
+    height: auto;
+    background: none;
 }
 </style>

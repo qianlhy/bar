@@ -37,7 +37,7 @@ export function updateOrderStatus(id, status) {
  */
 export function getOrderStatistics() {
   return request({
-    url: '/order/statistics',
+    url: '/order/admin/statistics',
     method: 'get'
   })
 }

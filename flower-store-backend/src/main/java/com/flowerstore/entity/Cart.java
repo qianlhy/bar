@@ -21,6 +21,9 @@ public class Cart implements Serializable {
     
     /** 商品ID */
     private Long productId;
+
+    /** 已选规格文案 */
+    private String specText;
     
     /** 数量 */
     private Integer count;

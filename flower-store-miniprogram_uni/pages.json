@@ -50,56 +50,21 @@
 			"path": "pages/product/detail",
 			"style": {
 				"navigationBarTitleText": "商品详情",
-				"navigationBarBackgroundColor": "#ffffff",
-				"navigationBarTextStyle": "black",
-				"usingComponents": {}
-			}
-		},
-		{
-			"path": "pages/coin-mall/coin-mall",
-			"style": {
-				"navigationBarTitleText": "All In 币商城",
 				"navigationBarBackgroundColor": "#000000",
 				"navigationBarTextStyle": "white",
-				"usingComponents": {}
-			}
-		},
-		{
-			"path": "pages/recharge/recharge",
-			"style": {
-				"navigationBarTitleText": "会员充值",
-				"navigationBarBackgroundColor": "#000000",
-				"navigationBarTextStyle": "white",
-				"usingComponents": {}
-			}
-		},
-		{
-			"path": "pages/coin-records/coin-records",
-			"style": {
-				"navigationBarTitleText": "兑换记录",
-				"navigationBarBackgroundColor": "#000000",
-				"navigationBarTextStyle": "white",
-				"usingComponents": {}
-			}
-		},
-		{
-			"path": "pages/address/list",
-			"style": {
-				"navigationBarTitleText": "我的地址",
-				"usingComponents": {}
-			}
-		},
-		{
-			"path": "pages/address/edit",
-			"style": {
-				"navigationBarTitleText": "编辑地址",
-				"usingComponents": {}
+				"backgroundColor": "#000000",
+				"usingComponents": {
+					"spec-modal": "/components/spec-modal/spec-modal"
+				}
 			}
 		},
 		{
 			"path": "pages/order/order",
 			"style": {
 				"navigationBarTitleText": "确认订单",
+				"navigationBarBackgroundColor": "#000000",
+				"navigationBarTextStyle": "white",
+				"backgroundColor": "#000000",
 				"usingComponents": {}
 			}
 		},
@@ -107,6 +72,7 @@
 			"path": "pages/order/payment",
 			"style": {
 				"navigationBarTitleText": "订单支付",
+				"backgroundColor": "#0b0b0c",
 				"usingComponents": {}
 			}
 		},
@@ -114,6 +80,7 @@
 			"path": "pages/order/detail",
 			"style": {
 				"navigationBarTitleText": "订单详情",
+				"backgroundColor": "#0b0b0c",
 				"usingComponents": {}
 			}
 		},
@@ -122,7 +89,8 @@
 			"style": {
 				"navigationBarTitleText": "订单中心",
 				"enablePullDownRefresh": true,
-				"backgroundColor": "#000000",
+				"backgroundColor": "#0b0b0c",
+				"backgroundTextStyle": "light",
 				"usingComponents": {}
 			}
 		},
@@ -139,6 +107,7 @@
 			"path": "pages/settings/settings",
 			"style": {
 				"navigationBarTitleText": "设置",
+				"backgroundColor": "#0b0b0c",
 				"usingComponents": {}
 			}
 		},
@@ -147,7 +116,8 @@
 			"style": {
 				"navigationBarTitleText": "我的收藏",
 				"enablePullDownRefresh": true,
-				"backgroundColor": "#f5f5f5",
+				"backgroundColor": "#0b0b0c",
+				"backgroundTextStyle": "light",
 				"usingComponents": {}
 			}
 		},
@@ -155,6 +125,25 @@
 			"path": "pages/search/search",
 			"style": {
 				"navigationBarTitleText": "搜索",
+				"backgroundColor": "#0b0b0c",
+				"usingComponents": {}
+			}
+		},
+		{
+			"path": "pages/agreement/agreement",
+			"style": {
+				"navigationBarTitleText": "服务协议",
+				"backgroundColor": "#0b0b0c",
+				"usingComponents": {}
+			}
+		},
+		{
+			"path": "pages/recharge/recharge",
+			"style": {
+				"navigationBarTitleText": "会员充值",
+				"navigationBarBackgroundColor": "#000000",
+				"navigationBarTextStyle": "white",
+				"backgroundColor": "#0b0b0c",
 				"usingComponents": {}
 			}
 		}
@@ -199,7 +188,8 @@
 		"navigationBarTextStyle": "white",
 		"navigationBarBackgroundColor": "#000000",
 		"navigationBarTitleText": "梭哈酒馆",
-		"backgroundColor": "#000000"
+		"backgroundColor": "#0b0b0c",
+		"backgroundTextStyle": "light"
 	},
 	"subPackages": []
 }

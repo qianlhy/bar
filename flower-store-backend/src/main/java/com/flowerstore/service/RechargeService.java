@@ -4,15 +4,14 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.flowerstore.entity.RechargeOrder;
 import com.flowerstore.entity.RechargePackage;
-import com.flowerstore.entity.User;
 import com.flowerstore.mapper.RechargeOrderMapper;
 import com.flowerstore.mapper.RechargePackageMapper;
-import com.flowerstore.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -29,7 +28,7 @@ public class RechargeService {
     private RechargeOrderMapper orderMapper;
 
     @Autowired
-    private UserMapper userMapper;
+    private CoinAccountService coinAccountService;
 
     // ==================== 套餐 ====================
 
@@ -65,9 +64,7 @@ public class RechargeService {
     // ==================== 充值订单 ====================
 
     /**
-     * 创建充值订单（待支付）。
-     * 微信支付能力预留：当前仅创建待支付订单，真实支付接入后在此返回支付参数，
-     * 支付成功回调中调用 confirmOrder 完成到账。
+     * 创建充值订单（待支付）
      */
     public RechargeOrder createOrder(Long userId, Long packageId) {
         RechargePackage pkg = packageMapper.selectById(packageId);
@@ -79,7 +76,8 @@ public class RechargeService {
         order.setUserId(userId);
         order.setPackageId(packageId);
         order.setPayAmount(pkg.getPayAmount());
-        order.setBalance(pkg.getBalance());
+        // 点单支付不再使用余额；套餐 balance 置 0 兼容旧字段
+        order.setBalance(BigDecimal.ZERO);
         order.setGiftCoins(pkg.getGiftCoins() == null ? 0 : pkg.getGiftCoins());
         order.setPayMethod("wechat");
         order.setStatus(0);
@@ -105,7 +103,8 @@ public class RechargeService {
     }
 
     /**
-     * 确认到账：将余额、赠送币计入用户账户（管理端手动确认，或真实支付回调调用）
+     * 确认到账：实付金额(元取整) + 赠送币 → 全部进入 All In 币。
+     * 幂等：已到账则直接返回，不重复加币。
      */
     @Transactional(rollbackFor = Exception.class)
     public void confirmOrder(Long orderId) {
@@ -114,20 +113,28 @@ public class RechargeService {
             throw new RuntimeException("充值订单不存在");
         }
         if (order.getStatus() != null && order.getStatus() == 1) {
-            throw new RuntimeException("该订单已到账，请勿重复操作");
+            return;
         }
-        User user = userMapper.selectById(order.getUserId());
-        if (user == null) {
-            throw new RuntimeException("用户不存在");
+        // 先抢占订单状态，保证并发/重复回调只加币一次
+        RechargeOrder claimed = new RechargeOrder();
+        claimed.setId(order.getId());
+        claimed.setStatus(1);
+        LambdaQueryWrapper<RechargeOrder> cond = new LambdaQueryWrapper<>();
+        cond.eq(RechargeOrder::getId, order.getId()).eq(RechargeOrder::getStatus, 0);
+        int updated = orderMapper.update(claimed, cond);
+        if (updated == 0) {
+            return;
         }
-        BigDecimal balance = user.getBalance() == null ? BigDecimal.ZERO : user.getBalance();
-        user.setBalance(balance.add(order.getBalance() == null ? BigDecimal.ZERO : order.getBalance()));
-        int coins = user.getCoins() == null ? 0 : user.getCoins();
-        user.setCoins(coins + (order.getGiftCoins() == null ? 0 : order.getGiftCoins()));
-        userMapper.updateById(user);
-
-        order.setStatus(1);
-        orderMapper.updateById(order);
+        int payCoins = 0;
+        if (order.getPayAmount() != null) {
+            payCoins = order.getPayAmount().setScale(0, RoundingMode.DOWN).intValue();
+        }
+        int gift = order.getGiftCoins() == null ? 0 : order.getGiftCoins();
+        int credit = payCoins + gift;
+        if (credit > 0) {
+            coinAccountService.credit(order.getUserId(), credit, "recharge", order.getOrderNo(),
+                    "充值到账：实付" + payCoins + "+赠送" + gift);
+        }
     }
 
     private String generateOrderNo() {

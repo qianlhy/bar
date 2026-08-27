@@ -32,8 +32,11 @@ public class AddressService {
     /**
      * 根据ID查询地址
      */
-    public Address getById(Long id) {
-        return addressMapper.selectById(id);
+    public Address getById(Long userId, Long id) {
+        LambdaQueryWrapper<Address> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Address::getId, id);
+        wrapper.eq(Address::getUserId, userId);
+        return addressMapper.selectOne(wrapper);
     }
 
     /**
@@ -52,7 +55,7 @@ public class AddressService {
     @Transactional(rollbackFor = Exception.class)
     public void add(Address address) {
         // 如果设为默认地址，则取消其他默认地址
-        if (address.getIsDefault() == 1) {
+        if (Integer.valueOf(1).equals(address.getIsDefault())) {
             cancelDefaultAddress(address.getUserId());
         }
         addressMapper.insert(address);
@@ -62,10 +65,15 @@ public class AddressService {
      * 更新地址
      */
     @Transactional(rollbackFor = Exception.class)
-    public void update(Address address) {
+    public void update(Long userId, Address address) {
+        Address existing = getById(userId, address.getId());
+        if (existing == null) {
+            throw new RuntimeException("地址不存在");
+        }
+        address.setUserId(userId);
         // 如果设为默认地址，则取消其他默认地址
-        if (address.getIsDefault() == 1) {
-            cancelDefaultAddress(address.getUserId());
+        if (Integer.valueOf(1).equals(address.getIsDefault())) {
+            cancelDefaultAddress(userId);
         }
         addressMapper.updateById(address);
     }
@@ -73,8 +81,11 @@ public class AddressService {
     /**
      * 删除地址
      */
-    public void delete(Long id) {
-        addressMapper.deleteById(id);
+    public void delete(Long userId, Long id) {
+        LambdaQueryWrapper<Address> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Address::getId, id);
+        wrapper.eq(Address::getUserId, userId);
+        addressMapper.delete(wrapper);
     }
 
     /**

@@ -9,9 +9,12 @@
 
         <!-- 购物车为空 -->
         <view class="empty-cart" v-if="isEmpty">
-            <image src="/static/images/icons/empty-cart.png" mode="aspectFit" class="empty-icon"></image>
-            <text class="empty-text">购物车还是空的</text>
-            <button class="go-shopping-btn" @tap="goToShopping">去逛逛</button>
+            <view class="empty-state">
+                <text class="empty-state-icon">空</text>
+                <text class="empty-state-text">购物车还是空的</text>
+                <text class="empty-state-tip">去点一杯，开启今晚的局</text>
+            </view>
+            <button class="go-shopping-btn g-tap" @tap="goToShopping">去点单</button>
         </view>
 
         <!-- 购物车商品列表 -->
@@ -25,12 +28,18 @@
 
                 <!-- 商品信息 -->
 
-                <image class="product-image" :src="item.image" mode="aspectFill"></image>
+                <image
+                    class="product-image"
+                    :src="item.image || '/static/allIn.jpg'"
+                    mode="aspectFill"
+                    @error="onProductImageError(index)"
+                ></image>
 
                 <view class="product-info">
                     <text class="product-name text-ellipsis">{{ item.name }}</text>
+                    <text class="product-spec" v-if="item.specText">{{ item.specText }}</text>
                     <view class="product-price-box">
-                        <text class="price">¥{{ item.price }}</text>
+                    <text class="price g-num">¥{{ item.price }}</text>
                     </view>
 
                     <!-- 商品数量控制 -->
@@ -65,9 +74,9 @@
             <view class="cart-total">
                 <view class="total-price">
                     <text class="price-label">合计：</text>
-                    <text class="price">¥{{ totalPrice }}</text>
+                    <text class="price g-num">¥{{ totalPrice }}</text>
                 </view>
-                <text class="price-desc">不含运费</text>
+                <text class="price-desc">店内消费</text>
             </view>
             <button class="checkout-btn" @tap="goToCheckout">结算({{ totalCount }})</button>
         </view>
@@ -151,6 +160,14 @@ export default {
                 totalPrice: totalPrice.toFixed(2),
                 totalCount
             };
+        },
+
+        onProductImageError: function (index) {
+            if (!this.cartList[index]) return;
+            this.cartList.splice(index, 1, {
+                ...this.cartList[index],
+                image: '/static/allIn.jpg'
+            });
         },
 
         // 商品数量减1
@@ -301,8 +318,8 @@ export default {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    background-color: var(--bg-dark);
-    padding-bottom: 120rpx;
+    background-color: var(--bg-page);
+    padding-bottom: calc(140rpx + env(safe-area-inset-bottom));
 }
 
 /* 未登录提示 */
@@ -343,18 +360,23 @@ export default {
 }
 
 .empty-text {
-    color: var(--text-secondary);
+    color: var(--text-muted);
     font-size: 28rpx;
     margin-bottom: 40rpx;
 }
 
 .go-shopping-btn {
-    background: linear-gradient(135deg, #f7dc8a 0%, #c99a3a 100%);
-    color: #1a1a1a;
-    font-weight: bold;
+    background: var(--gold-gradient);
+    color: #171717;
+    font-weight: 700;
     font-size: 28rpx;
-    width: 300rpx;
-    border-radius: 40rpx;
+    width: 280rpx;
+    border-radius: 44rpx;
+    border: none;
+    box-shadow: 0 8rpx 22rpx rgba(232, 197, 71, 0.22);
+}
+
+.go-shopping-btn::after {
     border: none;
 }
 
@@ -368,7 +390,8 @@ export default {
     display: flex;
     padding: 24rpx 20rpx;
     position: relative;
-    background-color: var(--bg-card);
+    background: var(--bg-card-gradient);
+    border: 1rpx solid var(--border-subtle);
     border-radius: 20rpx;
     margin-bottom: 20rpx;
 }
@@ -432,6 +455,13 @@ export default {
     color: var(--text-color);
 }
 
+.product-spec {
+    display: block;
+    margin: -2rpx 0 10rpx;
+    color: var(--text-muted);
+    font-size: 23rpx;
+}
+
 .product-price-box {
     margin-bottom: 20rpx;
 }
@@ -455,26 +485,26 @@ export default {
 }
 
 .counter-btn {
-    width: 60rpx;
-    height: 60rpx;
-    border: 1px solid var(--border-color);
-    color: var(--text-color);
+    width: 56rpx;
+    height: 56rpx;
+    border: 1rpx solid var(--border-subtle);
+    border-radius: 50%;
+    background: var(--bg-elevated);
+    color: var(--gold);
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 28rpx;
+    font-size: 32rpx;
 }
 
 .counter-btn.disabled {
-    color: var(--disabled-color);
+    color: var(--text-faint);
 }
 
 .counter-num {
-    width: 80rpx;
-    height: 60rpx;
-    border-top: 1px solid var(--border-color);
-    border-bottom: 1px solid var(--border-color);
-    color: var(--text-color);
+    width: 72rpx;
+    height: 56rpx;
+    color: var(--text-primary);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -496,11 +526,12 @@ export default {
     bottom: 0;
     left: 0;
     right: 0;
-    height: 100rpx;
-    background-color: var(--bg-card);
-    border-top: 1px solid var(--border-color);
+    min-height: 100rpx;
+    background: rgba(16, 16, 18, 0.96);
+    border-top: 1rpx solid var(--border-subtle);
     display: flex;
     align-items: center;
+    padding-bottom: env(safe-area-inset-bottom);
     z-index: 99;
 }
 
@@ -513,6 +544,7 @@ export default {
 .select-all text {
     margin-left: 10rpx;
     font-size: 28rpx;
+    color: var(--text-regular);
 }
 
 .cart-total {
@@ -528,27 +560,32 @@ export default {
 }
 
 .price-label {
-    font-size: 28rpx;
-    color: var(--text-color);
+    font-size: 26rpx;
+    color: var(--text-muted);
 }
 
 .price-desc {
     font-size: 22rpx;
-    color: var(--text-secondary);
+    color: var(--text-faint);
 }
 
 .checkout-btn {
-    width: 240rpx;
-    height: 100%;
-    background: linear-gradient(135deg, #f7dc8a 0%, #c99a3a 100%);
-    color: #1a1a1a;
-    font-weight: bold;
+    width: 220rpx;
+    height: 80rpx;
+    margin: 0 20rpx 0 12rpx;
+    background: var(--gold-gradient);
+    color: #171717;
+    font-weight: 700;
     font-size: 30rpx;
     display: flex;
     justify-content: center;
     align-items: center;
-    border-radius: 0;
-    margin: 0;
+    border-radius: 40rpx;
+    border: none;
+    box-shadow: 0 8rpx 20rpx rgba(232, 197, 71, 0.22);
+}
+
+.checkout-btn::after {
     border: none;
 }
 </style>

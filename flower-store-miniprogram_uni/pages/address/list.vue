@@ -137,18 +137,23 @@ export default {
             });
         },
 
-        setDefault() {
-            console.log('占位：函数 setDefault 未声明');
+        setDefault(e) {
+            const id = e.currentTarget.dataset.id;
+            const address = this.addressList.find((item) => String(item.id) === String(id));
+            if (!address) return;
+            addressApi.updateAddress({ ...address, isDefault: 1 }).then(() => {
+                uni.showToast({ title: '已设为默认', icon: 'success' });
+                this.getAddressList();
+            });
         }
     }
 };
 </script>
 <style>
-/* pages/address/list.wxss */
 .address-container {
     min-height: 100vh;
-    background-color: #f7f7f7;
-    padding-bottom: 120rpx;
+    background-color: var(--bg-page);
+    padding-bottom: calc(160rpx + env(safe-area-inset-bottom));
 }
 
 /* 空地址提示 */
@@ -167,27 +172,28 @@ export default {
 }
 
 .empty-text {
-    color: #999;
+    color: var(--text-muted);
     font-size: 28rpx;
 }
 
 /* 地址列表 */
 .address-list {
-    padding: 20rpx;
+    padding: 24rpx;
 }
 
 .address-item {
-    background-color: #fff;
-    border-radius: 16rpx;
+    background: var(--bg-card-gradient);
+    border: 1rpx solid var(--border-subtle);
+    border-radius: 20rpx;
     padding: 30rpx;
     margin-bottom: 20rpx;
-    box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
+    box-shadow: 0 10rpx 28rpx rgba(0, 0, 0, 0.22);
 }
 
 /* 地址信息 */
 .address-info {
     padding-bottom: 20rpx;
-    border-bottom: 1px solid #f5f5f5;
+    border-bottom: 1rpx solid var(--border-subtle);
     margin-bottom: 20rpx;
 }
 
@@ -199,28 +205,30 @@ export default {
 
 .name {
     font-size: 32rpx;
-    font-weight: bold;
+    font-weight: 600;
+    color: var(--text-primary);
     margin-right: 20rpx;
 }
 
 .phone {
     font-size: 28rpx;
-    color: #666;
+    color: var(--text-muted);
 }
 
 .default-tag {
     font-size: 22rpx;
-    color: #fff;
-    background-color: var(--primary-color);
-    padding: 4rpx 12rpx;
-    border-radius: 4rpx;
+    color: var(--gold-light);
+    background-color: rgba(232, 197, 71, 0.12);
+    border: 1rpx solid rgba(232, 197, 71, 0.35);
+    padding: 4rpx 14rpx;
+    border-radius: 6rpx;
     margin-left: 20rpx;
 }
 
 .address-detail {
     font-size: 28rpx;
     line-height: 1.5;
-    color: #333;
+    color: var(--text-regular);
 }
 
 /* 地址操作 */
@@ -244,7 +252,7 @@ export default {
 
 .btn-text {
     font-size: 26rpx;
-    color: #666;
+    color: var(--text-muted);
 }
 
 /* 底部按钮 */
@@ -253,15 +261,22 @@ export default {
     bottom: 0;
     left: 0;
     right: 0;
-    background-color: #fff;
-    padding: 20rpx;
-    box-shadow: 0 -2rpx 10rpx rgba(0, 0, 0, 0.05);
+    background: rgba(16, 16, 18, 0.96);
+    border-top: 1rpx solid var(--border-subtle);
+    padding: 20rpx 24rpx calc(20rpx + env(safe-area-inset-bottom));
 }
 
 .add-address-btn {
-    background-color: var(--primary-color);
-    color: #fff;
+    background: var(--gold-gradient);
+    color: #171717;
     font-size: 30rpx;
-    border-radius: 40rpx;
+    font-weight: 600;
+    border: none;
+    border-radius: 44rpx;
+    box-shadow: 0 10rpx 26rpx rgba(232, 197, 71, 0.22);
+}
+
+.add-address-btn::after {
+    border: none;
 }
 </style>

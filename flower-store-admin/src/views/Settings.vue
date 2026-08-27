@@ -31,6 +31,34 @@
 
     <el-card style="margin-top: 20px">
       <template #header>
+        <span>积分抵扣设置</span>
+      </template>
+      <el-form label-width="160px">
+        <el-form-item label="积分抵扣开关">
+          <el-switch
+            v-model="pointsEnabled"
+            active-text="开启"
+            inactive-text="关闭"
+            @change="savePointsConfig"
+          />
+          <span style="margin-left: 12px; color: #999; font-size: 12px">
+            关闭后小程序下单不可使用积分
+          </span>
+        </el-form-item>
+        <el-form-item label="兑换比例">
+          <span>100 积分 = 1 元（固定）</span>
+        </el-form-item>
+        <el-form-item label="单笔最高抵扣">
+          <span>订单金额的 50%（固定）</span>
+        </el-form-item>
+        <el-form-item label="清零规则">
+          <span>每日 0 点自动清零所有用户积分</span>
+        </el-form-item>
+      </el-form>
+    </el-card>
+
+    <el-card style="margin-top: 20px">
+      <template #header>
         <span>微信小程序配置</span>
       </template>
       <el-form :model="wechatForm" label-width="120px">
@@ -112,6 +140,8 @@ const storeForm = ref({
   recharge_tip: ''
 })
 
+const pointsEnabled = ref(true)
+
 const loadStoreConfig = async () => {
   try {
     const res = await getAllConfig()
@@ -119,7 +149,18 @@ const loadStoreConfig = async () => {
     Object.keys(storeForm.value).forEach((k) => {
       if (data[k] !== undefined) storeForm.value[k] = data[k]
     })
+    pointsEnabled.value = data.points_enabled !== '0'
   } catch (error) {
+    console.error(error)
+  }
+}
+
+const savePointsConfig = async (val) => {
+  try {
+    await saveConfig({ points_enabled: val ? '1' : '0' })
+    ElMessage.success(val ? '已开启积分抵扣' : '已关闭积分抵扣')
+  } catch (error) {
+    pointsEnabled.value = !val
     console.error(error)
   }
 }

@@ -31,7 +31,7 @@ public class Admin implements Serializable {
     /** 手机号 */
     private String phone;
     
-    /** 角色：1-超级管理员，2-普通管理员 */
+    /** 角色：1-超级管理员，2-普通管理员，3-员工（仅查看订单+录入积分） */
     private Integer role;
     
     /** 状态：0-禁用，1-正常 */

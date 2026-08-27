@@ -2,7 +2,7 @@
     <view class="user-page">
         <!-- 用户信息 -->
         <view class="user-header">
-            <image class="user-avatar" :src="userInfo.avatar || '/static/images/default-avatar.png'" mode="aspectFill"></image>
+            <image class="user-avatar" :src="userInfo.avatar || '/static/allIn.jpg'" mode="aspectFill"></image>
             <view class="user-text" v-if="isLogin">
                 <text class="user-greet">{{ userInfo.nickname || '欢迎加入' }}</text>
                 <text class="user-sub">注册后解锁更多会员特权</text>
@@ -11,25 +11,20 @@
                 <text class="user-greet">欢迎加入</text>
                 <text class="user-sub">注册后解锁更多会员特权</text>
             </view>
-            <view class="register-btn" @tap="goToLogin" v-if="!isLogin">注册会员</view>
-            <view class="register-btn" @tap="goSettings" v-else>个人中心</view>
+            <view class="register-btn g-tap" @tap="goToLogin" v-if="!isLogin">注册会员</view>
+            <view class="register-btn g-tap" @tap="goSettings" v-else>个人中心</view>
         </view>
 
         <!-- 资产统计 -->
         <view class="asset-card">
-            <view class="asset-item">
-                <text class="asset-label">余额</text>
-                <text class="asset-value">{{ userInfo.balance || 0 }}</text>
-            </view>
-            <view class="asset-divider"></view>
-            <view class="asset-item">
-                <text class="asset-label">优惠券</text>
-                <text class="asset-value">{{ userInfo.couponCount || 0 }}</text>
-            </view>
-            <view class="asset-divider"></view>
-            <view class="asset-item">
+            <view class="asset-item g-tap" @tap="goRecharge">
                 <text class="asset-label">All In 币</text>
-                <text class="asset-value">{{ userInfo.coins || 0 }}</text>
+                <text class="asset-value g-num">{{ userInfo.coins || 0 }}</text>
+            </view>
+            <view class="asset-divider"></view>
+            <view class="asset-item">
+                <text class="asset-label">积分</text>
+                <text class="asset-value g-num">{{ userInfo.points || 0 }}</text>
             </view>
         </view>
 
@@ -37,33 +32,21 @@
         <view class="func-card">
             <text class="func-title">常用功能</text>
             <view class="func-grid">
-                <view class="func-item" @tap="goSettings">
-                    <text class="func-icon">👤</text>
+                <view class="func-item g-tap" @tap="goSettings">
+                    <view class="g-icon">我</view>
                     <text class="func-name">个人中心</text>
                 </view>
-                <view class="func-item" @tap="navigateTo" data-url="/pages/address/list">
-                    <text class="func-icon">📍</text>
-                    <text class="func-name">我的地址</text>
-                </view>
-                <view class="func-item" @tap="goCoinMall">
-                    <text class="func-icon">⚡</text>
-                    <text class="func-name">All In 币商城</text>
-                </view>
-                <view class="func-item" @tap="showCoupon">
-                    <text class="func-icon">🎫</text>
-                    <text class="func-name">我的优惠券</text>
-                </view>
-                <view class="func-item" @tap="goOrders">
-                    <text class="func-icon">📋</text>
+                <view class="func-item g-tap" @tap="goOrders">
+                    <view class="g-icon">单</view>
                     <text class="func-name">订单中心</text>
                 </view>
-                <view class="func-item" @tap="goRank">
-                    <text class="func-icon">🃏</text>
-                    <text class="func-name">大师分</text>
+                <view class="func-item g-tap" @tap="goRecharge">
+                    <view class="g-icon">充</view>
+                    <text class="func-name">会员充值</text>
                 </view>
-                <view class="func-item" @tap="contactUs">
-                    <text class="func-icon">💬</text>
-                    <text class="func-name">联系我们</text>
+                <view class="func-item g-tap" @tap="goRank">
+                    <view class="g-icon">榜</view>
+                    <text class="func-name">大师分</text>
                 </view>
             </view>
         </view>
@@ -73,22 +56,19 @@
             <view class="store-top">
                 <image class="store-logo" src="/static/allIn.jpg" mode="aspectFit"></image>
                 <text class="store-name">梭哈酒馆</text>
-                <view class="store-contact" @tap="contactUs">联系我们</view>
             </view>
             <view class="store-msg">
                 <text>HI~ 欢迎光临本店</text>
-                <text>如有需要，请点击联系我们按钮为您快速服务~</text>
+                <text>如需帮助，请到店咨询工作人员。</text>
             </view>
         </view>
 
         <!-- 退出登录 -->
-        <view class="logout-btn" v-if="isLogin" @tap="logout">退出登录</view>
+        <view class="logout-btn g-tap" v-if="isLogin" @tap="logout">退出登录</view>
 
         <!-- 技术支持 -->
         <view class="footer">
-            <text class="footer-icon">🔥</text>
-            <text class="footer-text">熠火</text>
-            <text class="footer-support">熠火提供技术支持</text>
+            <text class="footer-text">熠火提供技术支持</text>
         </view>
     </view>
 </template>
@@ -98,7 +78,7 @@ const userApi = require('../../api/user');
 export default {
     data() {
         return {
-            userInfo: { balance: 0, coins: 0, couponCount: 0 },
+            userInfo: { balance: 0, coins: 0, couponCount: 0, points: 0 },
             isLogin: false
         };
     },
@@ -110,7 +90,7 @@ export default {
             const token = uni.getStorageSync('token');
             this.isLogin = !!token;
             if (!token) {
-                this.userInfo = { balance: 0, coins: 0, couponCount: 0 };
+                this.userInfo = { balance: 0, coins: 0, couponCount: 0, points: 0 };
                 return;
             }
             userApi.getUserInfo().then((data) => {
@@ -124,29 +104,16 @@ export default {
             if (!this.isLogin) return this.goToLogin();
             uni.navigateTo({ url: '/pages/settings/settings' });
         },
-        navigateTo(e) {
-            if (!this.isLogin) return this.goToLogin();
-            uni.navigateTo({ url: e.currentTarget.dataset.url });
-        },
-        goCoinMall() {
-            uni.navigateTo({ url: '/pages/coin-mall/coin-mall' });
-        },
-        showCoupon() {
-            uni.showToast({ title: '暂无可用优惠券', icon: 'none' });
-        },
         goOrders() {
             if (!this.isLogin) return this.goToLogin();
             uni.navigateTo({ url: '/pages/order/list' });
         },
+        goRecharge() {
+            if (!this.isLogin) return this.goToLogin();
+            uni.navigateTo({ url: '/pages/recharge/recharge' });
+        },
         goRank() {
             uni.switchTab({ url: '/pages/rank/rank' });
-        },
-        contactUs() {
-            uni.showModal({
-                title: '联系我们',
-                content: '电话: 027-88888888\n微信: AllInTavern',
-                showCancel: false
-            });
         },
         logout() {
             uni.showModal({
@@ -161,7 +128,7 @@ export default {
                     uni.removeStorageSync('isLoggedIn');
                     uni.removeStorageSync('cartSpecs');
                     this.isLogin = false;
-                    this.userInfo = { balance: 0, coins: 0, couponCount: 0 };
+                    this.userInfo = { balance: 0, coins: 0, couponCount: 0, points: 0 };
                     uni.showToast({ title: '已退出登录', icon: 'success' });
                 }
             });
@@ -173,65 +140,65 @@ export default {
 <style>
 .user-page {
     min-height: 100vh;
-    background: #000;
-    padding: 30rpx;
-    padding-bottom: 60rpx;
+    background: var(--bg-page);
+    padding: 30rpx 24rpx calc(40rpx + env(safe-area-inset-bottom));
+    box-sizing: border-box;
 }
 .user-header {
     display: flex;
     align-items: center;
-    padding: 20rpx 0 40rpx;
+    padding: 12rpx 4rpx 36rpx;
 }
 .user-avatar {
-    width: 104rpx;
-    height: 104rpx;
+    width: 108rpx;
+    height: 108rpx;
     border-radius: 50%;
-    background: #333;
+    background: var(--bg-sunken);
     flex-shrink: 0;
-    border: 3rpx solid #d4a72c;
-    box-shadow: 0 0 20rpx rgba(232,197,71,0.25);
+    border: 3rpx solid var(--gold);
+    box-shadow: 0 0 22rpx rgba(232, 197, 71, 0.28);
 }
-.user-text { flex: 1; margin-left: 22rpx; }
-.user-greet { font-size: 34rpx; color: #fff; font-weight: bold; display: block; }
-.user-sub { font-size: 22rpx; color: #888; margin-top: 8rpx; display: block; }
+.user-text { flex: 1; min-width: 0; margin-left: 22rpx; }
+.user-greet { font-size: 34rpx; color: var(--text-primary); font-weight: 700; display: block; }
+.user-sub { font-size: 22rpx; color: var(--text-muted); margin-top: 8rpx; display: block; }
 .register-btn {
-    background: linear-gradient(135deg, #f7dc8a, #d4a72c);
-    color: #000;
+    background: var(--gold-gradient);
+    color: #171717;
     font-size: 24rpx;
-    font-weight: bold;
+    font-weight: 700;
     padding: 14rpx 30rpx;
     border-radius: 30rpx;
     white-space: nowrap;
-    box-shadow: 0 4rpx 12rpx rgba(232,197,71,0.3);
+    box-shadow: 0 6rpx 16rpx rgba(232, 197, 71, 0.26);
 }
 
 .asset-card {
-    background: linear-gradient(135deg, #262628 0%, #1a1a1c 100%);
-    border-radius: 20rpx;
-    border: 1rpx solid rgba(232,197,71,0.12);
+    background: var(--bg-card-gradient);
+    border-radius: 22rpx;
+    border: 1rpx solid var(--border-gold);
     display: flex;
     padding: 34rpx 0;
     margin-bottom: 24rpx;
-    box-shadow: 0 4rpx 18rpx rgba(0,0,0,0.35);
+    box-shadow: 0 12rpx 32rpx rgba(0, 0, 0, 0.28);
 }
 .asset-item { flex: 1; text-align: center; }
-.asset-label { font-size: 24rpx; color: #999; display: block; margin-bottom: 12rpx; }
-.asset-value { font-size: 42rpx; color: #e8c547; font-weight: bold; display: block; }
-.asset-divider { width: 1rpx; background: rgba(255,255,255,0.08); align-self: stretch; }
+.asset-label { font-size: 22rpx; color: var(--text-muted); display: block; margin-bottom: 12rpx; }
+.asset-value { font-size: 40rpx; color: var(--gold); font-weight: 700; display: block; }
+.asset-divider { width: 1rpx; background: var(--border-subtle); align-self: stretch; }
 
 .func-card {
-    background: #1c1c1e;
-    border-radius: 20rpx;
-    border: 1rpx solid rgba(255,255,255,0.04);
-    padding: 34rpx 30rpx 6rpx;
+    background: var(--bg-card-gradient);
+    border-radius: 22rpx;
+    border: 1rpx solid var(--border-subtle);
+    padding: 32rpx 20rpx 10rpx;
     margin-bottom: 24rpx;
 }
 .func-title {
     font-size: 30rpx;
-    color: #fff;
-    font-weight: bold;
+    color: var(--text-primary);
+    font-weight: 600;
     display: block;
-    margin-bottom: 34rpx;
+    margin-bottom: 28rpx;
     padding-left: 18rpx;
     position: relative;
 }
@@ -239,10 +206,10 @@ export default {
     content: '';
     position: absolute;
     left: 0;
-    top: 4rpx;
+    top: 6rpx;
     width: 6rpx;
-    height: 32rpx;
-    background: linear-gradient(180deg, #f7dc8a, #c99a3a);
+    height: 28rpx;
+    background: linear-gradient(180deg, var(--gold-light), var(--gold-dark));
     border-radius: 4rpx;
 }
 .func-grid {
@@ -254,17 +221,16 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-bottom: 30rpx;
+    margin-bottom: 28rpx;
 }
-.func-icon { font-size: 46rpx; margin-bottom: 12rpx; }
-.func-name { font-size: 22rpx; color: #ccc; }
+.func-name { font-size: 22rpx; color: var(--text-muted); margin-top: 12rpx; }
 
 .store-card {
-    background: #1c1c1e;
-    border-radius: 20rpx;
-    border: 1rpx solid rgba(255,255,255,0.04);
-    padding: 30rpx;
-    margin-bottom: 30rpx;
+    background: var(--bg-card-gradient);
+    border-radius: 22rpx;
+    border: 1rpx solid var(--border-subtle);
+    padding: 28rpx;
+    margin-bottom: 24rpx;
 }
 .store-top {
     display: flex;
@@ -276,37 +242,38 @@ export default {
     height: 64rpx;
     border-radius: 50%;
     margin-right: 16rpx;
-    border: 2rpx solid #d4a72c;
+    border: 2rpx solid var(--gold);
 }
-.store-name { flex: 1; font-size: 28rpx; color: #fff; font-weight: bold; }
+.store-name { flex: 1; font-size: 28rpx; color: var(--text-primary); font-weight: 600; }
 .store-contact {
-    background: linear-gradient(135deg, #f7dc8a, #d4a72c);
-    color: #000;
+    background: var(--gold-gradient);
+    color: #171717;
     font-size: 22rpx;
-    font-weight: bold;
+    font-weight: 700;
     padding: 12rpx 26rpx;
     border-radius: 30rpx;
 }
 .store-msg {
-    background: #141416;
-    border-radius: 12rpx;
-    padding: 24rpx;
+    background: var(--bg-sunken);
+    border-radius: 14rpx;
+    padding: 22rpx;
 }
 .store-msg text {
     font-size: 24rpx;
-    color: #999;
-    line-height: 1.6;
+    color: var(--text-muted);
+    line-height: 1.7;
     display: block;
 }
 
 .logout-btn {
-    background: #1c1c1e;
-    border: 1rpx solid rgba(196,30,58,0.4);
-    color: #c41e3a;
+    background: var(--bg-card);
+    border: 1rpx solid rgba(196, 30, 58, 0.35);
+    color: #f0616f;
     font-size: 30rpx;
+    font-weight: 600;
     text-align: center;
     padding: 26rpx 0;
-    border-radius: 16rpx;
+    border-radius: 20rpx;
     margin-bottom: 20rpx;
 }
 
@@ -314,10 +281,7 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8rpx;
-    padding: 20rpx 0;
+    padding: 12rpx 0 8rpx;
 }
-.footer-icon { font-size: 24rpx; }
-.footer-text { font-size: 24rpx; color: #666; }
-.footer-support { font-size: 22rpx; color: #555; }
+.footer-text { font-size: 22rpx; color: var(--text-faint); }
 </style>

@@ -2,5 +2,6 @@
   "navigationBarTitleText": "会员充值",
   "navigationBarBackgroundColor": "#000000",
   "navigationBarTextStyle": "white",
+  "backgroundColor": "#0b0b0c",
   "usingComponents": {}
 }

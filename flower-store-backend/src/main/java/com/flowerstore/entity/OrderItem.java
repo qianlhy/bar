@@ -28,6 +28,9 @@ public class OrderItem implements Serializable {
     
     /** 商品图片 */
     private String productImage;
+
+    /** 下单时选择的规格 */
+    private String specText;
     
     /** 商品价格 */
     private BigDecimal price;

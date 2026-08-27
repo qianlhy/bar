@@ -11,75 +11,61 @@
         </view>
 
         <!-- 订单列表 -->
-        <scroll-view :scroll-y="true" class="order-scroll" :enable-back-to-top="true" @scrolltolower="loadMoreOrders">
+        <scroll-view :scroll-y="true" class="order-scroll" :enable-back-to-top="true">
             <!-- 加载中 -->
             <view class="loading-container" v-if="isLoading">
-                <view class="loading">
-                    <image class="loading-icon" src="/static/images/icons/loading.png" mode="aspectFit"></image>
-                    <text>加载中...</text>
-                </view>
+                <view class="loading-dot"></view>
+                <text class="loading-text">加载中...</text>
             </view>
 
             <!-- 空状态 -->
-            <view class="empty-container" v-if="!isLoading && isEmpty">
-                <image class="empty-icon" src="/static/images/icons/empty.png" mode="aspectFit"></image>
-                <text>暂无订单</text>
+            <view class="empty-state" v-if="!isLoading && isEmpty">
+                <text class="empty-state-icon">暂无</text>
+                <text class="empty-state-text">暂无订单</text>
+                <text class="empty-state-tip">去点一杯，开启今晚的局</text>
             </view>
 
             <!-- 订单项 -->
             <view class="order-item" v-for="(item, index) in orderList" :key="index">
                 <view class="order-header" @tap="goToOrderDetail" :data-id="item.id">
-                    <view class="order-number">订单号：{{ item.id }}</view>
-                    <view :class="'order-status ' + (item.statusText === '已取消' ? 'cancelled' : '')">{{ item.statusText }}</view>
+                    <view class="order-number">订单号 {{ item.orderNo || item.id }}</view>
+                    <view :class="'order-status ' + statusClass(item.statusText)">{{ item.statusText }}</view>
                 </view>
 
                 <view class="order-goods" @tap="goToOrderDetail" :data-id="item.id">
                     <view class="goods-item" v-for="(goods, index1) in item.items" :key="index1">
-                        <image class="goods-image" :src="goods.productImage" mode="aspectFill"></image>
+                        <image class="goods-image" :src="goods.productImage || '/static/allIn.jpg'" mode="aspectFill"></image>
 
                         <view class="goods-info">
                             <view class="goods-name text-ellipsis">{{ goods.productName }}</view>
-                            <view class="goods-price">¥{{ goods.price }} x {{ goods.count }}</view>
+                            <view class="goods-price">¥{{ money(goods.price) }} × {{ goods.count }}</view>
                         </view>
                     </view>
                 </view>
 
                 <view class="order-footer">
                     <view class="order-total">
-                        <text>共{{ item.items.length }}件商品</text>
-                        <text>合计：¥{{ item.actualPayment }}</text>
+                        <text class="total-count">共 {{ item.items.length }} 件</text>
+                        <view class="total-amount">
+                            <text class="total-label">合计</text>
+                            <text class="total-price">¥{{ money(item.actualPayment) }}</text>
+                        </view>
                     </view>
 
                     <view class="order-actions">
-                        <!-- 待付款 -->
                         <block v-if="item.statusText === '待付款'">
                             <view class="action-btn outline" @tap="cancelOrder" :data-id="item.id">取消订单</view>
                             <view class="action-btn primary" @tap="goToPay" :data-id="item.id" :data-amount="item.actualPayment">去支付</view>
                         </block>
 
-                        <!-- 待发货 -->
-                        <block v-else-if="item.statusText === '待发货'">
-                            <view class="action-btn outline" @tap="checkLogistics">查看物流</view>
-                        </block>
-
-                        <!-- 待收货 -->
-                        <block v-else-if="item.statusText === '待收货'">
-                            <view class="action-btn outline" @tap="checkLogistics">查看物流</view>
-                            <view class="action-btn primary" @tap="confirmReceipt" :data-id="item.id">确认收货</view>
-                        </block>
-
-                        <!-- 已完成 -->
-                        <block v-else-if="item.statusText === '已完成'">
-                            <view class="action-btn outline" @tap="checkLogistics">查看物流</view>
-                        </block>
-
-                        <!-- 已取消 -->
-                        <block v-else-if="item.statusText === '已取消'">
+                        <block v-else>
                             <view class="action-btn outline" @tap="goToOrderDetail" :data-id="item.id">订单详情</view>
                         </block>
                     </view>
                 </view>
             </view>
+
+            <view class="scroll-bottom-space"></view>
         </scroll-view>
     </view>
 </template>
@@ -103,11 +89,11 @@ export default {
                 },
                 {
                     id: 2,
-                    name: '待发货'
+                    name: '待出品'
                 },
                 {
                     id: 3,
-                    name: '待收货'
+                    name: '出品中'
                 },
                 {
                     id: 4,
@@ -150,7 +136,9 @@ export default {
         if (options.status) {
             const statusMap = {
                 待付款: 1,
+                待出品: 2,
                 待发货: 2,
+                出品中: 3,
                 待收货: 3,
                 已完成: 4,
                 已取消: 5
@@ -198,12 +186,22 @@ export default {
         formatStatus: function (status) {
             const map = {
                 1: '待付款',
-                2: '待发货',
-                3: '待收货',
+                2: '待出品',
+                3: '出品中',
                 4: '已完成',
                 5: '已取消'
             };
             return map[status] || '';
+        },
+
+        statusClass: function (statusText) {
+            if (statusText === '已取消') return 'cancelled';
+            if (statusText === '已完成') return 'done';
+            return '';
+        },
+
+        money: function (val) {
+            return Number(val || 0).toFixed(2);
         },
 
         // 加载订单列表
@@ -331,51 +329,41 @@ export default {
             });
         },
 
-        // 查看物流
-        checkLogistics: function () {
-            uni.showToast({
-                title: '物流查询功能开发中',
-                icon: 'none'
-            });
-        },
-
-        loadMoreOrders() {
-            console.log('占位：函数 loadMoreOrders 未声明');
+        // 查看物流（店内点单无物流）
+        checkLogistics: function () {}
         }
-    }
 };
 </script>
 <style>
-/* pages/order/list.wxss */
 .order-list-container {
     display: flex;
     flex-direction: column;
     height: 100vh;
-    background-color: #f5f5f5;
+    background: var(--bg-page);
 }
 
 /* 标签栏样式 */
 .tabs {
     display: flex;
-    background-color: #fff;
-    border-bottom: 1rpx solid #eee;
     position: sticky;
     top: 0;
     z-index: 10;
+    background: rgba(16, 16, 18, 0.98);
+    border-bottom: 1rpx solid var(--border-subtle);
 }
 
 .tab-item {
     flex: 1;
     text-align: center;
-    padding: 20rpx 0;
-    font-size: 28rpx;
+    padding: 26rpx 0;
+    font-size: 27rpx;
     position: relative;
-    color: #666;
+    color: var(--text-muted);
 }
 
 .tab-item.active {
-    color: var(--primary-color, #ff6b81);
-    font-weight: bold;
+    color: var(--gold);
+    font-weight: 600;
 }
 
 .tab-line {
@@ -383,57 +371,66 @@ export default {
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
-    width: 40rpx;
-    height: 4rpx;
-    background-color: var(--primary-color, #ff6b81);
-    border-radius: 2rpx;
+    width: 44rpx;
+    height: 5rpx;
+    background: linear-gradient(90deg, var(--gold-light), var(--gold-dark));
+    border-radius: 3rpx;
 }
 
 /* 订单列表样式 */
 .order-scroll {
     flex: 1;
     height: 0;
+    padding: 24rpx;
+    box-sizing: border-box;
+}
+
+.scroll-bottom-space {
+    height: calc(40rpx + env(safe-area-inset-bottom));
 }
 
 /* 订单项样式 */
 .order-item {
-    margin-bottom: 20rpx;
-    background-color: #fff;
-    border-radius: 12rpx;
+    margin-bottom: 24rpx;
     overflow: hidden;
-    box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
+    border: 1rpx solid var(--border-subtle);
+    border-radius: 22rpx;
+    background: var(--bg-card-gradient);
+    box-shadow: 0 10rpx 30rpx rgba(0, 0, 0, 0.24);
 }
 
 .order-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20rpx 30rpx;
-    border-bottom: 1rpx solid #f5f5f5;
+    padding: 24rpx 28rpx;
+    border-bottom: 1rpx solid var(--border-subtle);
 }
 
 .order-number {
-    font-size: 26rpx;
-    color: #666;
+    font-size: 24rpx;
+    color: var(--text-faint);
 }
 
 .order-status {
-    font-size: 26rpx;
-    color: var(--primary-color, #ff6b81);
-    font-weight: bold;
+    font-size: 25rpx;
+    color: var(--gold);
+    font-weight: 600;
 }
 
-.order-status.cancelled {
-    color: #999;
+.order-status.cancelled,
+.order-status.done {
+    color: var(--text-muted);
 }
 
 .order-goods {
-    padding: 20rpx 30rpx;
+    padding: 24rpx 28rpx;
 }
 
 .goods-item {
     display: flex;
-    margin-bottom: 20rpx;
+    align-items: center;
+    margin-bottom: 22rpx;
 }
 
 .goods-item:last-child {
@@ -443,19 +440,21 @@ export default {
 .goods-image {
     width: 120rpx;
     height: 120rpx;
-    border-radius: 8rpx;
-    background-color: #f9f9f9;
+    border-radius: 14rpx;
+    background-color: var(--bg-sunken);
+    flex-shrink: 0;
 }
 
 .goods-info {
     flex: 1;
-    margin-left: 20rpx;
+    min-width: 0;
+    margin-left: 22rpx;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
 }
 
 .goods-name {
+    color: var(--text-primary);
     font-size: 28rpx;
     line-height: 1.4;
 }
@@ -467,21 +466,38 @@ export default {
 }
 
 .goods-price {
-    font-size: 26rpx;
-    color: #666;
+    margin-top: 12rpx;
+    color: var(--text-muted);
+    font-size: 25rpx;
 }
 
 .order-footer {
-    padding: 20rpx 30rpx;
-    border-top: 1rpx solid #f5f5f5;
+    padding: 22rpx 28rpx;
+    border-top: 1rpx solid var(--border-subtle);
 }
 
 .order-total {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 20rpx;
-    font-size: 26rpx;
-    color: #666;
+    align-items: baseline;
+    margin-bottom: 22rpx;
+}
+
+.total-count {
+    color: var(--text-faint);
+    font-size: 24rpx;
+}
+
+.total-label {
+    color: var(--text-muted);
+    font-size: 24rpx;
+    margin-right: 10rpx;
+}
+
+.total-price {
+    color: var(--gold);
+    font-size: 34rpx;
+    font-weight: 700;
 }
 
 .order-actions {
@@ -490,60 +506,51 @@ export default {
 }
 
 .action-btn {
-    padding: 10rpx 30rpx;
+    padding: 12rpx 34rpx;
     font-size: 26rpx;
-    border-radius: 30rpx;
+    border-radius: 32rpx;
     margin-left: 20rpx;
 }
 
 .action-btn.outline {
-    color: #666;
-    border: 1rpx solid #ddd;
-    background-color: #fff;
+    color: var(--text-regular);
+    border: 1rpx solid var(--border-subtle);
+    background-color: var(--bg-elevated);
 }
 
 .action-btn.primary {
-    color: #fff;
-    background-color: var(--primary-color, #ff6b81);
-    border: 1rpx solid var(--primary-color, #ff6b81);
+    color: #171717;
+    font-weight: 600;
+    background: var(--gold-gradient);
+    box-shadow: 0 8rpx 20rpx rgba(232, 197, 71, 0.2);
 }
 
 /* 加载中样式 */
 .loading-container {
-    padding: 30rpx;
-    display: flex;
-    justify-content: center;
-}
-
-.loading {
+    padding: 60rpx 0;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-.loading-icon {
-    width: 60rpx;
-    height: 60rpx;
-    margin-bottom: 10rpx;
+.loading-dot {
+    width: 48rpx;
+    height: 48rpx;
+    border: 4rpx solid rgba(232, 197, 71, 0.2);
+    border-top-color: var(--gold);
+    border-radius: 50%;
+    animation: spin 0.9s linear infinite;
 }
 
-.loading text {
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.loading-text {
+    margin-top: 18rpx;
+    color: var(--text-faint);
     font-size: 24rpx;
-    color: #999;
-}
-
-/* 空状态样式 */
-.empty-container {
-    padding: 100rpx 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    color: #999;
-}
-
-.empty-icon {
-    width: 200rpx;
-    height: 200rpx;
-    margin-bottom: 20rpx;
 }
 </style>

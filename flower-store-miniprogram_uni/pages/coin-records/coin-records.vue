@@ -64,5 +64,5 @@ export default {
 .record-name { font-size: 28rpx; color: #fff; }
 .record-time { font-size: 22rpx; color: #888; margin-top: 8rpx; }
 .record-coin { font-size: 30rpx; color: #e8c547; font-weight: bold; }
-.empty { text-align: center; color: #666; padding: 80rpx 0; font-size: 26rpx; }
+.empty { text-align: center; color: var(--text-muted); padding: 80rpx 0; font-size: 26rpx; }
 </style>

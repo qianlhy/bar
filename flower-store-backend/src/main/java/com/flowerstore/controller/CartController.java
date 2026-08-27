@@ -47,7 +47,8 @@ public class CartController {
             Long userId = jwtUtils.getUserIdFromToken(token);
             Long productId = Long.valueOf(params.get("productId").toString());
             Integer count = Integer.valueOf(params.get("count").toString());
-            cartService.add(userId, productId, count);
+            String specText = params.get("specText") == null ? "" : params.get("specText").toString();
+            cartService.add(userId, productId, count, specText);
             return Result.success("添加成功");
         } catch (Exception e) {
             return Result.error(e.getMessage());
@@ -59,10 +60,12 @@ public class CartController {
      */
     @PutMapping("/{id}")
     public Result<String> updateCount(
+            @RequestHeader("Authorization") String token,
             @PathVariable Long id,
             @RequestParam Integer count) {
         try {
-            cartService.updateCount(id, count);
+            Long userId = jwtUtils.getUserIdFromToken(token);
+            cartService.updateCount(userId, id, count);
             return Result.success("更新成功");
         } catch (Exception e) {
             return Result.error(e.getMessage());
@@ -73,9 +76,12 @@ public class CartController {
      * 删除购物车商品
      */
     @DeleteMapping("/{id}")
-    public Result<String> delete(@PathVariable Long id) {
+    public Result<String> delete(
+            @RequestHeader("Authorization") String token,
+            @PathVariable Long id) {
         try {
-            cartService.delete(id);
+            Long userId = jwtUtils.getUserIdFromToken(token);
+            cartService.delete(userId, id);
             return Result.success("删除成功");
         } catch (Exception e) {
             return Result.error(e.getMessage());

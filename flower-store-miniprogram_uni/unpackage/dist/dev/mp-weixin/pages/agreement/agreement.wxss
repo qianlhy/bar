@@ -1,0 +1,54 @@
+
+.agreement-page {
+    min-height: 100vh;
+    box-sizing: border-box;
+    padding: 32rpx 24rpx calc(52rpx + env(safe-area-inset-bottom));
+    background: radial-gradient(circle at 100% 0, rgba(232, 197, 71, 0.09), transparent 34%), var(--bg-page);
+}
+.hero,
+.content {
+    padding: 34rpx 30rpx;
+    border: 1rpx solid var(--border-gold);
+    border-radius: 24rpx;
+    background: var(--bg-card-gradient);
+}
+.hero {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20rpx;
+}
+.kicker {
+    color: var(--gold);
+    font-size: 20rpx;
+    letter-spacing: 4rpx;
+}
+.title {
+    margin: 12rpx 0 10rpx;
+    color: var(--text-primary);
+    font-size: 42rpx;
+    font-weight: 700;
+}
+.date {
+    color: var(--text-muted);
+    font-size: 23rpx;
+}
+.section-title,
+.paragraph {
+    display: block;
+}
+.section-title {
+    margin: 24rpx 0 10rpx;
+    color: var(--gold-light);
+    font-size: 28rpx;
+    font-weight: 600;
+}
+.section-title:first-child {
+    margin-top: 0;
+}
+.paragraph {
+    color: var(--text-regular);
+    font-size: 26rpx;
+    line-height: 1.9;
+    text-align: justify;
+}
+

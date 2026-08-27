@@ -24,7 +24,7 @@
                     <text class="podium-score">{{ topThree[1].masterScore }}</text>
                 </view>
                 <view class="podium-item first" v-if="topThree[0]">
-                    <text class="crown">👑</text>
+                    <text class="crown">TOP</text>
                     <image class="podium-avatar" :src="topThree[0].avatar || '/static/images/default-avatar.png'" mode="aspectFill"></image>
                     <view class="podium-rank rank1">1</view>
                     <text class="podium-name">{{ topThree[0].nickname }}</text>
@@ -160,7 +160,13 @@ export default {
     position: relative;
 }
 .podium-item.first { margin-bottom: 30rpx; }
-.crown { font-size: 40rpx; margin-bottom: 6rpx; }
+.crown {
+    font-size: 20rpx;
+    font-weight: 700;
+    letter-spacing: 3rpx;
+    color: var(--gold);
+    margin-bottom: 8rpx;
+}
 .podium-avatar {
     width: 110rpx;
     height: 110rpx;
@@ -227,5 +233,5 @@ export default {
 .col-name { flex: 1; font-size: 26rpx; color: #fff; padding-left: 10rpx; }
 .col-score { width: 120rpx; text-align: center; font-size: 26rpx; color: #e8c547; font-weight: bold; }
 .row-avatar { width: 56rpx; height: 56rpx; border-radius: 50%; background: #333; }
-.empty { text-align: center; padding: 80rpx 0; color: #666; font-size: 26rpx; }
+.empty { text-align: center; padding: 80rpx 0; color: var(--text-muted); font-size: 26rpx; }
 </style>

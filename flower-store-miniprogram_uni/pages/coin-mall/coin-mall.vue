@@ -161,5 +161,5 @@ export default {
     border-radius: 30rpx;
 }
 .exchange-btn.disabled { background: #444; color: #888; }
-.empty { text-align: center; padding: 100rpx 0; color: #666; font-size: 26rpx; }
+.empty { text-align: center; padding: 100rpx 0; color: var(--text-muted); font-size: 26rpx; }
 </style>

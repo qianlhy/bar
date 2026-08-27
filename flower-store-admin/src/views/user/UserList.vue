@@ -20,6 +20,11 @@
         <el-table-column prop="coins" label="All In币" width="90" />
         <el-table-column prop="masterScore" label="大师分" width="90" />
         <el-table-column prop="couponCount" label="优惠券" width="90" />
+        <el-table-column prop="points" label="积分" width="90">
+          <template #default="{ row }">
+            <span style="color:#e8c547;font-weight:bold">{{ row.points || 0 }}</span>
+          </template>
+        </el-table-column>
         <el-table-column prop="status" label="状态" width="90">
           <template #default="{ row }">
             <el-tag :type="row.status === 1 ? 'success' : 'danger'">

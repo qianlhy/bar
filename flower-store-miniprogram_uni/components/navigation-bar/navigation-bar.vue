@@ -178,7 +178,7 @@ export default {
         },
 
         home() {
-            console.log('占位：函数 home 未声明');
+            uni.switchTab({ url: '/pages/index/index' });
         }
     },
     created: function () {},

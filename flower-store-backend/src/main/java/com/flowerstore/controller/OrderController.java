@@ -112,8 +112,13 @@ public class OrderController {
             
             @SuppressWarnings("unchecked")
             List<Map<String, Object>> items = (List<Map<String, Object>>) params.get("items");
+
+            Integer usePoints = null;
+            if (params.get("usePoints") != null) {
+                usePoints = Integer.valueOf(params.get("usePoints").toString());
+            }
             
-            Order newOrder = orderService.createOrder(order, items);
+            Order newOrder = orderService.createOrder(order, items, usePoints);
             
             // 发送新订单通知
             Map<String, Object> notificationData = new HashMap<>();

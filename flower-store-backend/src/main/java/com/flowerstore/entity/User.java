@@ -51,6 +51,9 @@ public class User implements Serializable {
 
     /** 优惠券数量 */
     private Integer couponCount;
+
+    /** 可用积分（每日0点清零） */
+    private Integer points;
     
     /** 创建时间 */
     @TableField(fill = FieldFill.INSERT)

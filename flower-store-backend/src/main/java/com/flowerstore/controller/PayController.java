@@ -36,17 +36,22 @@ public class PayController {
     private JwtUtils jwtUtils;
 
     /**
-     * 商品订单发起微信支付，返回小程序调起支付所需参数
+     * 商品订单支付：payMethod = wechat | coins | mixed
      */
     @PostMapping("/order/{orderId}")
     public Result<JSONObject> payOrder(@RequestHeader("Authorization") String token,
-                                       @PathVariable Long orderId) {
+                                       @PathVariable Long orderId,
+                                       @RequestBody(required = false) Map<String, Object> body) {
         try {
             Long userId = jwtUtils.getUserIdFromToken(token);
             if (userId == null) {
                 return Result.error(401, "登录已过期，请重新登录");
             }
-            return Result.success(payService.payOrder(userId, orderId));
+            String payMethod = "wechat";
+            if (body != null && body.get("payMethod") != null) {
+                payMethod = body.get("payMethod").toString();
+            }
+            return Result.success(payService.payOrder(userId, orderId, payMethod));
         } catch (Exception e) {
             log.error("[Pay] 商品订单下单失败 orderId={}", orderId, e);
             return Result.error(e.getMessage());
