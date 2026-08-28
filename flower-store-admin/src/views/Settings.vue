@@ -14,6 +14,15 @@
         <el-form-item label="门店电话">
           <el-input v-model="storeForm.store_phone" placeholder="请输入门店联系电话" />
         </el-form-item>
+        <el-form-item label="营业时间">
+          <el-input v-model="storeForm.business_hours" placeholder="如：19:30-1:30" />
+        </el-form-item>
+        <el-form-item label="门店纬度">
+          <el-input v-model="storeForm.store_latitude" placeholder="导航用，如 32.0618" />
+        </el-form-item>
+        <el-form-item label="门店经度">
+          <el-input v-model="storeForm.store_longitude" placeholder="导航用，如 118.6286" />
+        </el-form-item>
         <el-form-item label="WiFi名称">
           <el-input v-model="storeForm.wifi_name" placeholder="请输入WiFi名称" />
         </el-form-item>
@@ -22,6 +31,23 @@
         </el-form-item>
         <el-form-item label="充值说明">
           <el-input v-model="storeForm.recharge_tip" placeholder="会员充值页文案" />
+        </el-form-item>
+        <el-form-item label="店内环境图">
+          <el-upload
+            class="gallery-uploader"
+            :action="uploadAction"
+            :headers="uploadHeaders"
+            :on-success="handleGallerySuccess"
+            :before-upload="beforeGalleryUpload"
+            :file-list="galleryFileList"
+            list-type="picture-card"
+            :on-remove="handleGalleryRemove"
+          >
+            <el-icon class="gallery-uploader-icon"><Plus /></el-icon>
+          </el-upload>
+          <div style="color: #999; font-size: 12px; margin-top: 5px">
+            上传店内装修展示图，小程序「店内环境」页展示，建议横图 16:9
+          </div>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="saveStoreConfig" :loading="storeLoading">保存配置</el-button>
@@ -124,20 +150,34 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { ElMessage } from 'element-plus'
+import { Plus } from '@element-plus/icons-vue'
 import { getAllConfig, saveConfig } from '@/api/config'
+import { useUserStore } from '@/stores/user'
+
+const userStore = useUserStore()
+const uploadAction = ref('/api/file/upload')
+const uploadHeaders = computed(() => ({
+  Authorization: userStore.token ? `Bearer ${userStore.token}` : ''
+}))
 
 const loading = ref(false)
 const storeLoading = ref(false)
+const galleryFileList = ref([])
 
 const storeForm = ref({
   store_name: '',
   store_address: '',
   store_phone: '',
+  business_hours: '19:30-1:30',
+  store_latitude: '32.0618',
+  store_longitude: '118.6286',
   wifi_name: '',
   wifi_password: '',
-  recharge_tip: ''
+  recharge_tip: '',
+  checkin_points: '500',
+  store_gallery: ''
 })
 
 const pointsEnabled = ref(true)
@@ -150,6 +190,12 @@ const loadStoreConfig = async () => {
       if (data[k] !== undefined) storeForm.value[k] = data[k]
     })
     pointsEnabled.value = data.points_enabled !== '0'
+    if (data.store_gallery) {
+      const urls = data.store_gallery.split(',').map((s) => s.trim()).filter(Boolean)
+      galleryFileList.value = urls.map((url, index) => ({ name: `img-${index}`, url }))
+    } else {
+      galleryFileList.value = []
+    }
   } catch (error) {
     console.error(error)
   }
@@ -168,6 +214,7 @@ const savePointsConfig = async (val) => {
 const saveStoreConfig = async () => {
   try {
     storeLoading.value = true
+    storeForm.value.store_gallery = galleryFileList.value.map((item) => item.url).join(',')
     await saveConfig(storeForm.value)
     ElMessage.success('配置保存成功')
   } catch (error) {
@@ -175,6 +222,36 @@ const saveStoreConfig = async () => {
   } finally {
     storeLoading.value = false
   }
+}
+
+const beforeGalleryUpload = (file) => {
+  const ok = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'].includes(file.type)
+  if (!ok) {
+    ElMessage.error('只能上传 JPG/PNG/WEBP/GIF 格式的图片!')
+    return false
+  }
+  if (file.size > 10 * 1024 * 1024) {
+    ElMessage.error('图片大小不能超过 10MB!')
+    return false
+  }
+  return true
+}
+
+const handleGallerySuccess = (response) => {
+  if (response && response.code === 200) {
+    const url = typeof response.data === 'string' ? response.data : (response.data && response.data.url)
+    if (url) {
+      galleryFileList.value.push({ name: `img-${Date.now()}`, url })
+      ElMessage.success('上传成功')
+    }
+  } else {
+    ElMessage.error((response && response.message) || '上传失败')
+  }
+}
+
+const handleGalleryRemove = (file) => {
+  const index = galleryFileList.value.findIndex((item) => item.url === file.url)
+  if (index > -1) galleryFileList.value.splice(index, 1)
 }
 
 onMounted(() => {
@@ -225,6 +302,10 @@ const saveOrderConfig = () => {
 <style scoped>
 .el-card {
   max-width: 800px;
+}
+.gallery-uploader :deep(.el-upload--picture-card) {
+  width: 100px;
+  height: 100px;
 }
 </style>
 

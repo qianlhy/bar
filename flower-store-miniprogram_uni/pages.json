@@ -146,6 +146,36 @@
 				"backgroundColor": "#0b0b0c",
 				"usingComponents": {}
 			}
+		},
+		{
+			"path": "pages/coin-mall/coin-mall",
+			"style": {
+				"navigationBarTitleText": "All In 币商城",
+				"navigationBarBackgroundColor": "#000000",
+				"navigationBarTextStyle": "white",
+				"backgroundColor": "#08080a",
+				"usingComponents": {}
+			}
+		},
+		{
+			"path": "pages/coin-records/coin-records",
+			"style": {
+				"navigationBarTitleText": "兑换记录",
+				"navigationBarBackgroundColor": "#000000",
+				"navigationBarTextStyle": "white",
+				"backgroundColor": "#08080a",
+				"usingComponents": {}
+			}
+		},
+		{
+			"path": "pages/store-gallery/store-gallery",
+			"style": {
+				"navigationBarTitleText": "店内环境",
+				"navigationBarBackgroundColor": "#000000",
+				"navigationBarTextStyle": "white",
+				"backgroundColor": "#060606",
+				"usingComponents": {}
+			}
 		}
 	],
 	"tabBar": {

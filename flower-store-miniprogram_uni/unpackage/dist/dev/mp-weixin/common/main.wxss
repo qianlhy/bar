@@ -1,116 +1,338 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+/* 梭哈酒馆 · 黑红扑克主题 */
+.font-art {
+    font-family: 'DouyinSans', 'PingFang SC', 'Helvetica Neue', sans-serif;
+    font-weight: 700;
+}
+.poker-bg {
+    position: relative;
+    background-color: #060606;
+    background-image:
+        radial-gradient(ellipse 70% 45% at 15% 5%, rgba(160, 28, 45, 0.14), transparent 50%),
+        radial-gradient(ellipse 50% 35% at 90% 12%, rgba(160, 28, 45, 0.08), transparent 45%),
+        radial-gradient(ellipse 60% 30% at 50% 100%, rgba(30, 30, 30, 0.9), transparent 60%),
+        linear-gradient(175deg, #0c0c0c 0%, #060606 50%, #0a0808 100%);
+}
+.poker-bg::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.035;
+    background-image:
+        repeating-linear-gradient(0deg, transparent, transparent 3rpx, rgba(255, 255, 255, 0.02) 3rpx, rgba(255, 255, 255, 0.02) 4rpx),
+        repeating-linear-gradient(90deg, transparent, transparent 3rpx, rgba(255, 255, 255, 0.015) 3rpx, rgba(255, 255, 255, 0.015) 4rpx);
+}
+.poker-bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+        radial-gradient(circle at 8% 25%, rgba(255, 255, 255, 0.02) 0%, transparent 8%),
+        radial-gradient(circle at 92% 70%, rgba(160, 28, 45, 0.04) 0%, transparent 12%);
+}
+.mesh-card {
+    position: relative;
+    border-radius: 20rpx;
+    border: 1rpx solid rgba(255, 255, 255, 0.08);
+    background:
+        linear-gradient(135deg, rgba(160, 28, 45, 0.06), transparent 40%),
+        linear-gradient(160deg, #1a1a1c, #101012 72%);
+    box-shadow: 0 12rpx 32rpx rgba(0, 0, 0, 0.45);
+}
+.mesh-card-red {
+    border-color: rgba(160, 28, 45, 0.2);
+    background: linear-gradient(160deg, #1e1416, #121012 70%);
+}
+.neon-pink { color: #c45a6a;
+}
+.neon-red { color: #a01c30;
+}
+.neon-gold { color: #c9a86a;
+}
+.btn-neon {
+    background: linear-gradient(135deg, #a01c30 0%, #6b1220 100%);
+    color: #f5ecee;
+    font-weight: 700;
+    box-shadow: 0 6rpx 20rpx rgba(100, 20, 30, 0.35);
+}
+.btn-gold {
+    background: linear-gradient(135deg, #e0d4b8, #b8944a 55%, #8a6a30 100%);
+    color: #1a1a1a;
+    font-weight: 800;
+    box-shadow: 0 6rpx 18rpx rgba(0, 0, 0, 0.3);
+}
+.btn-ghost-red {
+    background: transparent;
+    border: 1rpx solid rgba(160, 28, 45, 0.45);
+    color: #d08088;
+}
+
+/* 酒水装饰 - 酒杯 */
+.deco-wine {
+    position: absolute;
+    width: 60rpx;
+    height: 80rpx;
+    opacity: 0.25;
+    pointer-events: none;
+}
+.deco-wine::before {
+    content: '';
+    position: absolute;
+    width: 3rpx;
+    height: 28rpx;
+    background: #ccc;
+    top: 0;
+    left: 50%;
+    -webkit-transform: translateX(-50%) rotate(15deg);
+            transform: translateX(-50%) rotate(15deg);
+    -webkit-transform-origin: bottom center;
+            transform-origin: bottom center;
+}
+.deco-wine::after {
+    content: '';
+    position: absolute;
+    bottom: 8rpx;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+            transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 18rpx solid transparent;
+    border-right: 18rpx solid transparent;
+    border-top: 36rpx solid rgba(160, 28, 45, 0.6);
+}
+
+/* 扑克牌装饰 */
+.deco-cards {
+    position: absolute;
+    width: 80rpx;
+    height: 100rpx;
+    pointer-events: none;
+    opacity: 0.2;
+}
+.deco-cards::before,
+.deco-cards::after {
+    content: '';
+    position: absolute;
+    width: 44rpx;
+    height: 60rpx;
+    border: 2rpx solid #ddd;
+    border-radius: 6rpx;
+    background: rgba(20, 20, 20, 0.8);
+}
+.deco-cards::before { left: 0; top: 10rpx; -webkit-transform: rotate(-14deg); transform: rotate(-14deg);
+}
+.deco-cards::after { right: 0; top: 4rpx; -webkit-transform: rotate(12deg); transform: rotate(12deg); border-color: #c45a6a;
+}
+.icon-box {
+    width: 88rpx;
+    height: 88rpx;
+    border-radius: 16rpx;
+    background: linear-gradient(160deg, #222224, #141416);
+    border: 1rpx solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: inset 0 1rpx 0 rgba(255, 255, 255, 0.05);
+}
+.line-icon {
+    width: 44rpx;
+    height: 44rpx;
+    position: relative;
+}
+.icon-user::before {
+    content: '';
+    position: absolute;
+    width: 18rpx;
+    height: 18rpx;
+    border: 3rpx solid #ccc;
+    border-radius: 50%;
+    top: 2rpx;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+            transform: translateX(-50%);
+    box-sizing: border-box;
+}
+.icon-user::after {
+    content: '';
+    position: absolute;
+    width: 30rpx;
+    height: 16rpx;
+    border: 3rpx solid #ccc;
+    border-bottom: none;
+    border-radius: 16rpx 16rpx 0 0;
+    bottom: 2rpx;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+            transform: translateX(-50%);
+    box-sizing: border-box;
+}
+.icon-order::before {
+    content: '';
+    position: absolute;
+    width: 28rpx;
+    height: 34rpx;
+    border: 3rpx solid #ccc;
+    border-radius: 4rpx;
+    top: 4rpx;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+            transform: translateX(-50%);
+    box-sizing: border-box;
+}
+.icon-order::after {
+    content: '';
+    position: absolute;
+    width: 16rpx;
+    height: 3rpx;
+    background: #ccc;
+    top: 16rpx;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+            transform: translateX(-50%);
+    box-shadow: 0 8rpx 0 #ccc;
+}
+.icon-coin::before {
+    content: '';
+    position: absolute;
+    width: 22rpx;
+    height: 30rpx;
+    border: 3rpx solid #ccc;
+    border-radius: 4rpx;
+    top: 8rpx;
+    left: 6rpx;
+    -webkit-transform: rotate(-12deg);
+            transform: rotate(-12deg);
+    box-sizing: border-box;
+}
+.icon-coin::after {
+    content: '';
+    position: absolute;
+    width: 22rpx;
+    height: 30rpx;
+    border: 3rpx solid #c45a6a;
+    border-radius: 4rpx;
+    top: 6rpx;
+    right: 6rpx;
+    -webkit-transform: rotate(10deg);
+            transform: rotate(10deg);
+    box-sizing: border-box;
+}
+.icon-recharge::before {
+    content: '';
+    position: absolute;
+    width: 32rpx;
+    height: 24rpx;
+    border: 3rpx solid #ccc;
+    border-radius: 6rpx;
+    top: 10rpx;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+            transform: translateX(-50%);
+    box-sizing: border-box;
+}
+.icon-recharge::after {
+    content: '';
+    position: absolute;
+    width: 20rpx;
+    height: 3rpx;
+    background: #ccc;
+    top: 18rpx;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+            transform: translateX(-50%);
+}
+.icon-rank::before {
+    content: '';
+    position: absolute;
+    width: 8rpx;
+    height: 14rpx;
+    background: #ccc;
+    bottom: 6rpx;
+    left: 8rpx;
+    border-radius: 2rpx 2rpx 0 0;
+    box-shadow: 14rpx -8rpx 0 #ccc, 28rpx -14rpx 0 #c45a6a;
+}
+.icon-qrcode {
+    width: 36rpx;
+    height: 36rpx;
+    position: relative;
+    border: 3rpx solid #bbb;
+    border-radius: 4rpx;
+    box-sizing: border-box;
+}
+.icon-qrcode::before {
+    content: '';
+    position: absolute;
+    width: 10rpx;
+    height: 10rpx;
+    top: 4rpx;
+    left: 4rpx;
+    background: #bbb;
+    box-shadow: 14rpx 0 0 #bbb, 0 14rpx 0 #bbb, 14rpx 14rpx 0 #bbb;
+}
+.icon-cocktail::before {
+    content: '';
+    position: absolute;
+    width: 3rpx;
+    height: 14rpx;
+    background: #ccc;
+    top: 2rpx;
+    left: 50%;
+    -webkit-transform: translateX(-50%) rotate(20deg);
+            transform: translateX(-50%) rotate(20deg);
+    -webkit-transform-origin: bottom center;
+            transform-origin: bottom center;
+}
+.icon-cocktail::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-left: 14rpx solid transparent;
+    border-right: 14rpx solid transparent;
+    border-top: 22rpx solid #ccc;
+    bottom: 4rpx;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+            transform: translateX(-50%);
+}
+.icon-wifi::before {
+    content: '';
+    position: absolute;
+    width: 28rpx;
+    height: 14rpx;
+    border: 3rpx solid #ccc;
+    border-bottom: none;
+    border-radius: 28rpx 28rpx 0 0;
+    bottom: 14rpx;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+            transform: translateX(-50%);
+    box-sizing: border-box;
+}
+.icon-wifi::after {
+    content: '';
+    position: absolute;
+    width: 6rpx;
+    height: 6rpx;
+    background: #ccc;
+    border-radius: 50%;
+    bottom: 8rpx;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+            transform: translateX(-50%);
+}
+.disclaimer-text {
+    display: block;
+    text-align: center;
+    font-size: 22rpx;
+    color: #666;
+    line-height: 1.7;
+    padding: 16rpx 40rpx 8rpx;
+    letter-spacing: 1rpx;
+}
 
 /**app.wxss - 梭哈酒馆 设计系统**/
 page {
@@ -120,8 +342,16 @@ page {
     --gold-dark: #c99a3a;
     --gold-gradient: linear-gradient(135deg, #f7dc8a 0%, #d4a72c 100%);
 
+    /* 黑红主色调 */
+    --neon-pink: #c45a6a;
+    --neon-pink-light: #d08088;
+    --neon-red: #a01c30;
+    --neon-cyan: #888;
+    --poker-red: #a01c30;
+    --accent-magenta: #8f2030;
+
     /* 背景层级 */
-    --bg-page: #0b0b0c;
+    --bg-page: #08080a;
     --bg-card: #1c1c1e;
     --bg-card-gradient: linear-gradient(145deg, #202022, #18181a);
     --bg-elevated: #2a2a2d;
@@ -153,13 +383,14 @@ page {
     --bg-dark: #0b0b0c;
     --accent-gold: #e8c547;
 
-    font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, 'PingFang SC', 'Microsoft YaHei', Arial, sans-serif;
+    font-family: 'DouyinSans', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, 'PingFang SC', 'Microsoft YaHei', Arial, sans-serif;
     font-size: 14px;
     line-height: 1.5;
     color: var(--text-primary);
     background-color: var(--bg-page);
     box-sizing: border-box;
 }
+
 /* 常用颜色类 */
 .text-primary {
     color: var(--gold);
@@ -173,12 +404,14 @@ page {
 .bg-secondary {
     background-color: var(--secondary-color);
 }
+
 /* 页面容器 */
 .page-dark {
     min-height: 100vh;
     background-color: var(--bg-page);
     box-sizing: border-box;
 }
+
 /* 区块标题：左侧金色竖条 */
 .section-head {
     position: relative;
@@ -198,6 +431,7 @@ page {
     border-radius: 4rpx;
     background: linear-gradient(180deg, var(--gold-light), var(--gold-dark));
 }
+
 /* 金色图标徽章：统一替代彩色 emoji */
 .g-icon {
     display: flex;
@@ -224,6 +458,7 @@ page {
     height: 56rpx;
     font-size: 26rpx;
 }
+
 /* 购物袋图标（CSS 绘制，避免 emoji） */
 .g-bag {
     position: relative;
@@ -247,6 +482,7 @@ page {
     border-bottom: none;
     border-radius: 9rpx 9rpx 0 0;
 }
+
 /* 点按反馈 */
 .g-tap {
     transition: opacity 0.16s ease, -webkit-transform 0.16s ease;
@@ -258,6 +494,7 @@ page {
             transform: scale(0.97);
     opacity: 0.82;
 }
+
 /* 数字统一等宽，价格不跳动 */
 .g-num {
     font-variant-numeric: tabular-nums;
@@ -265,6 +502,7 @@ page {
             font-feature-settings: 'tnum';
     letter-spacing: 0;
 }
+
 /* 空状态 */
 .empty-state {
     display: flex;
@@ -293,6 +531,7 @@ page {
     color: var(--text-faint);
     font-size: 23rpx;
 }
+
 /* 常用布局类 */
 .container {
     padding: 20rpx;
@@ -320,6 +559,7 @@ page {
     justify-content: space-around;
     align-items: center;
 }
+
 /* 常用间距类 */
 .mt-10 {
     margin-top: 10rpx;
@@ -333,6 +573,7 @@ page {
 .mb-20 {
     margin-bottom: 20rpx;
 }
+
 /* 常用文本类 */
 .text-bold {
     font-weight: bold;
@@ -357,6 +598,7 @@ page {
 .text-xl {
     font-size: 18px;
 }
+
 /* 价格样式 */
 .price {
     color: var(--gold);
@@ -368,6 +610,7 @@ page {
     font-size: 12px;
     margin-left: 10rpx;
 }
+
 /* 按钮样式 */
 .btn {
     display: flex;
@@ -404,6 +647,7 @@ page {
 .btn-block {
     width: 100%;
 }
+
 /* 卡片样式 */
 .card {
     box-sizing: border-box;
@@ -429,12 +673,14 @@ page {
     padding-top: 22rpx;
     border-top: 1rpx solid var(--border-subtle);
 }
+
 /* 分割线 */
 .divider {
     height: 1rpx;
     background-color: var(--border-subtle);
     margin: 20rpx 0;
 }
+
 /* 标签样式 */
 .tag {
     display: inline-block;
@@ -453,6 +699,7 @@ page {
     border: 1rpx solid rgba(196, 30, 58, 0.35);
     color: #f08c9b;
 }
+
 /* 网格布局 */
 .grid {
     display: flex;

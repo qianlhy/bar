@@ -108,10 +108,22 @@ export default {
 
         // 初始化模拟数据
         this.globalData.initMockData();
+
+        // 艺术字体（抖音美好体，失败则用系统字体）
+        // #ifdef MP-WEIXIN
+        uni.loadFontFace({
+            family: 'DouyinSans',
+            source: 'url("https://lf3-static.bytednsdoc.com/obj/eden-cn/lpquldlp/ies_douyin_open/DouyinSansBold.ttf")',
+            global: true,
+            fail: () => {}
+        });
+        // #endif
     }
 };
 </script>
 <style>
+@import './static/theme/poker-theme.wxss';
+
 /**app.wxss - 梭哈酒馆 设计系统**/
 page {
     /* 品牌金 */
@@ -120,8 +132,16 @@ page {
     --gold-dark: #c99a3a;
     --gold-gradient: linear-gradient(135deg, #f7dc8a 0%, #d4a72c 100%);
 
+    /* 黑红主色调 */
+    --neon-pink: #c45a6a;
+    --neon-pink-light: #d08088;
+    --neon-red: #a01c30;
+    --neon-cyan: #888;
+    --poker-red: #a01c30;
+    --accent-magenta: #8f2030;
+
     /* 背景层级 */
-    --bg-page: #0b0b0c;
+    --bg-page: #08080a;
     --bg-card: #1c1c1e;
     --bg-card-gradient: linear-gradient(145deg, #202022, #18181a);
     --bg-elevated: #2a2a2d;
@@ -153,7 +173,7 @@ page {
     --bg-dark: #0b0b0c;
     --accent-gold: #e8c547;
 
-    font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, 'PingFang SC', 'Microsoft YaHei', Arial, sans-serif;
+    font-family: 'DouyinSans', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, 'PingFang SC', 'Microsoft YaHei', Arial, sans-serif;
     font-size: 14px;
     line-height: 1.5;
     color: var(--text-primary);

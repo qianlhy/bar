@@ -14,6 +14,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +32,10 @@ public class PointsService {
     public static final int TYPE_CONSUME = 2;
     public static final int TYPE_REFUND = 3;
     public static final int TYPE_DAILY_RESET = 4;
+    /** 每日签到 */
+    public static final int TYPE_CHECKIN = 5;
+
+    private static final int DEFAULT_CHECKIN_POINTS = 500;
 
     @Autowired
     private UserMapper userMapper;
@@ -248,6 +255,89 @@ public class PointsService {
             count++;
         }
         return count;
+    }
+
+    public int getCheckinPoints() {
+        Map<String, String> config = systemConfigService.getAll();
+        try {
+            return Integer.parseInt(config.getOrDefault("checkin_points", String.valueOf(DEFAULT_CHECKIN_POINTS)));
+        } catch (Exception e) {
+            return DEFAULT_CHECKIN_POINTS;
+        }
+    }
+
+    /**
+     * 今日是否已签到
+     */
+    public boolean hasCheckedInToday(Long userId) {
+        LocalDateTime start = LocalDate.now().atStartOfDay();
+        LocalDateTime end = LocalDate.now().atTime(LocalTime.MAX);
+        Long count = pointsLogMapper.selectCount(new LambdaQueryWrapper<PointsLog>()
+                .eq(PointsLog::getUserId, userId)
+                .eq(PointsLog::getType, TYPE_CHECKIN)
+                .ge(PointsLog::getCreateTime, start)
+                .le(PointsLog::getCreateTime, end));
+        return count != null && count > 0;
+    }
+
+    public Map<String, Object> checkinStatus(Long userId) {
+        Map<String, Object> result = new HashMap<>();
+        int reward = getCheckinPoints();
+        boolean checked = hasCheckedInToday(userId);
+        User user = userMapper.selectById(userId);
+        result.put("checkedIn", checked);
+        result.put("rewardPoints", reward);
+        result.put("points", user == null || user.getPoints() == null ? 0 : user.getPoints());
+        return result;
+    }
+
+    /**
+     * 每日签到：送固定积分，同一自然日仅一次
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public Map<String, Object> checkin(Long userId) {
+        if (!isPointsEnabled()) {
+            throw new RuntimeException("积分功能暂未开放");
+        }
+        if (hasCheckedInToday(userId)) {
+            throw new RuntimeException("今日已签到，明天再来");
+        }
+        int reward = getCheckinPoints();
+        User user = userMapper.selectById(userId);
+        if (user == null) {
+            throw new RuntimeException("用户不存在");
+        }
+        int before = user.getPoints() == null ? 0 : user.getPoints();
+        int after = before + reward;
+        user.setPoints(after);
+        userMapper.updateById(user);
+
+        PointsLog log = new PointsLog();
+        log.setUserId(userId);
+        log.setChangePoints(reward);
+        log.setBeforePoints(before);
+        log.setAfterPoints(after);
+        log.setType(TYPE_CHECKIN);
+        log.setRemark("每日签到 +" + reward + "积分");
+        pointsLogMapper.insert(log);
+
+        // 防并发双签：再查一次当天签到次数
+        LocalDateTime start = LocalDate.now().atStartOfDay();
+        LocalDateTime end = LocalDate.now().atTime(LocalTime.MAX);
+        Long count = pointsLogMapper.selectCount(new LambdaQueryWrapper<PointsLog>()
+                .eq(PointsLog::getUserId, userId)
+                .eq(PointsLog::getType, TYPE_CHECKIN)
+                .ge(PointsLog::getCreateTime, start)
+                .le(PointsLog::getCreateTime, end));
+        if (count != null && count > 1) {
+            throw new RuntimeException("今日已签到，明天再来");
+        }
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("rewardPoints", reward);
+        result.put("points", after);
+        result.put("checkedIn", true);
+        return result;
     }
 
     public Page<PointsLog> getLogPage(Integer current, Integer size, Long userId) {

@@ -234,8 +234,8 @@ exports.default = void 0;
 //
 
 // pages/search/search.js
-var productApi = __webpack_require__(/*! ../../api/product */ 64);
-var cartApi = __webpack_require__(/*! ../../api/cart */ 66);
+var productApi = __webpack_require__(/*! ../../api/product */ 65);
+var cartApi = __webpack_require__(/*! ../../api/cart */ 67);
 var _default = {
   data: function data() {
     return {

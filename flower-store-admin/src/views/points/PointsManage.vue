@@ -148,7 +148,7 @@ const lockedByMe = ref(false)
 const lockHint = ref('')
 
 const typeText = (type) => {
-  const map = { 1: '手动录入', 2: '消费抵扣', 3: '取消退回', 4: '每日清零' }
+  const map = { 1: '手动录入', 2: '消费抵扣', 3: '取消退回', 4: '每日清零', 5: '每日签到' }
   return map[type] || '未知'
 }
 

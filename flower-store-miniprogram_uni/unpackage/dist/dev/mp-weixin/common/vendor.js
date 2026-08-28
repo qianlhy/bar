@@ -10590,7 +10590,50 @@ module.exports = {
 };
 
 /***/ }),
-/* 54 */,
+/* 54 */
+/*!********************************************************************************************************************************!*\
+  !*** C:/Users/Administrator/Desktop/2026年1月7日/卡歌/酒吧小程序/flower-store-backend-sb_uni/flower-store-miniprogram_uni/api/points.js ***!
+  \********************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var _require = __webpack_require__(/*! ../utils/request */ 52),
+  request = _require.request,
+  get = _require.get,
+  post = _require.post;
+
+/**
+ * 积分抵扣预览
+ * @param {number} amount 订单金额
+ * @param {number} points 希望使用的积分（可选）
+ */
+function previewPoints(amount, points) {
+  var params = {
+    amount: amount
+  };
+  if (points != null) {
+    params.points = points;
+  }
+  return request({
+    url: '/points/preview',
+    method: 'GET',
+    data: params,
+    silent: true
+  });
+}
+function getCheckinStatus() {
+  return get('/points/checkin/status');
+}
+function checkin() {
+  return post('/points/checkin');
+}
+module.exports = {
+  previewPoints: previewPoints,
+  getCheckinStatus: getCheckinStatus,
+  checkin: checkin
+};
+
+/***/ }),
 /* 55 */,
 /* 56 */,
 /* 57 */,
@@ -10598,7 +10641,8 @@ module.exports = {
 /* 59 */,
 /* 60 */,
 /* 61 */,
-/* 62 */
+/* 62 */,
+/* 63 */
 /*!************************************************************************************************************************************!*\
   !*** C:/Users/Administrator/Desktop/2026年1月7日/卡歌/酒吧小程序/flower-store-backend-sb_uni/flower-store-miniprogram_uni/utils/eventBus.js ***!
   \************************************************************************************************************************************/
@@ -10645,7 +10689,7 @@ var eventBus = {
 module.exports = eventBus;
 
 /***/ }),
-/* 63 */
+/* 64 */
 /*!**********************************************************************************************************************************!*\
   !*** C:/Users/Administrator/Desktop/2026年1月7日/卡歌/酒吧小程序/flower-store-backend-sb_uni/flower-store-miniprogram_uni/api/category.js ***!
   \**********************************************************************************************************************************/
@@ -10666,7 +10710,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 64 */
+/* 65 */
 /*!*********************************************************************************************************************************!*\
   !*** C:/Users/Administrator/Desktop/2026年1月7日/卡歌/酒吧小程序/flower-store-backend-sb_uni/flower-store-miniprogram_uni/api/product.js ***!
   \*********************************************************************************************************************************/
@@ -10738,7 +10782,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 65 */
+/* 66 */
 /*!**********************************************************************************************************************************************!*\
   !*** C:/Users/Administrator/Desktop/2026年1月7日/卡歌/酒吧小程序/flower-store-backend-sb_uni/flower-store-miniprogram_uni/utils/adult-verification.js ***!
   \**********************************************************************************************************************************************/
@@ -10778,7 +10822,7 @@ module.exports = {
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 66 */
+/* 67 */
 /*!******************************************************************************************************************************!*\
   !*** C:/Users/Administrator/Desktop/2026年1月7日/卡歌/酒吧小程序/flower-store-backend-sb_uni/flower-store-miniprogram_uni/api/cart.js ***!
   \******************************************************************************************************************************/
@@ -10838,7 +10882,6 @@ module.exports = {
 };
 
 /***/ }),
-/* 67 */,
 /* 68 */,
 /* 69 */,
 /* 70 */,
@@ -10846,7 +10889,8 @@ module.exports = {
 /* 72 */,
 /* 73 */,
 /* 74 */,
-/* 75 */
+/* 75 */,
+/* 76 */
 /*!******************************************************************************************************************************!*\
   !*** C:/Users/Administrator/Desktop/2026年1月7日/卡歌/酒吧小程序/flower-store-backend-sb_uni/flower-store-miniprogram_uni/api/rank.js ***!
   \******************************************************************************************************************************/
@@ -10870,7 +10914,6 @@ module.exports = {
 };
 
 /***/ }),
-/* 76 */,
 /* 77 */,
 /* 78 */,
 /* 79 */,
@@ -10902,7 +10945,8 @@ module.exports = {
 /* 105 */,
 /* 106 */,
 /* 107 */,
-/* 108 */
+/* 108 */,
+/* 109 */
 /*!*******************************************************************************************************************************!*\
   !*** C:/Users/Administrator/Desktop/2026年1月7日/卡歌/酒吧小程序/flower-store-backend-sb_uni/flower-store-miniprogram_uni/api/order.js ***!
   \*******************************************************************************************************************************/
@@ -10972,7 +11016,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 109 */
+/* 110 */
 /*!*********************************************************************************************************************************!*\
   !*** C:/Users/Administrator/Desktop/2026年1月7日/卡歌/酒吧小程序/flower-store-backend-sb_uni/flower-store-miniprogram_uni/api/address.js ***!
   \*********************************************************************************************************************************/
@@ -11033,41 +11077,6 @@ module.exports = {
   addAddress: addAddress,
   updateAddress: updateAddress,
   deleteAddress: deleteAddress
-};
-
-/***/ }),
-/* 110 */
-/*!********************************************************************************************************************************!*\
-  !*** C:/Users/Administrator/Desktop/2026年1月7日/卡歌/酒吧小程序/flower-store-backend-sb_uni/flower-store-miniprogram_uni/api/points.js ***!
-  \********************************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-var _require = __webpack_require__(/*! ../utils/request */ 52),
-  request = _require.request;
-
-/**
- * 积分抵扣预览
- * @param {number} amount 订单金额
- * @param {number} points 希望使用的积分（可选）
- */
-function previewPoints(amount, points) {
-  var params = {
-    amount: amount
-  };
-  if (points != null) {
-    params.points = points;
-  }
-  return request({
-    url: '/points/preview',
-    method: 'GET',
-    data: params,
-    // 积分是可选权益，接口异常时确认订单页应继续正常支付
-    silent: true
-  });
-}
-module.exports = {
-  previewPoints: previewPoints
 };
 
 /***/ }),
@@ -11384,6 +11393,55 @@ module.exports = {
   getRechargePackages: getRechargePackages,
   createRecharge: createRecharge,
   getMyRecharge: getMyRecharge
+};
+
+/***/ }),
+/* 187 */,
+/* 188 */,
+/* 189 */,
+/* 190 */,
+/* 191 */,
+/* 192 */,
+/* 193 */,
+/* 194 */,
+/* 195 */
+/*!******************************************************************************************************************************!*\
+  !*** C:/Users/Administrator/Desktop/2026年1月7日/卡歌/酒吧小程序/flower-store-backend-sb_uni/flower-store-miniprogram_uni/api/coin.js ***!
+  \******************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var _require = __webpack_require__(/*! ../utils/request */ 52),
+  get = _require.get,
+  post = _require.post;
+
+/**
+ * 获取All In币商品列表
+ */
+function getCoinProducts() {
+  return get('/coin/products');
+}
+
+/**
+ * All In币兑换商品
+ * @param {Number} productId All In币商品ID
+ */
+function exchange(productId) {
+  return post('/coin/exchange', {
+    productId: productId
+  });
+}
+
+/**
+ * 获取All In币兑换记录
+ */
+function getExchangeRecords() {
+  return get('/coin/records');
+}
+module.exports = {
+  getCoinProducts: getCoinProducts,
+  exchange: exchange,
+  getExchangeRecords: getExchangeRecords
 };
 
 /***/ })

@@ -196,6 +196,15 @@ var _default = {
 
     // 初始化模拟数据
     this.globalData.initMockData();
+
+    // 艺术字体（抖音美好体，失败则用系统字体）
+
+    uni.loadFontFace({
+      family: 'DouyinSans',
+      source: 'url("https://lf3-static.bytednsdoc.com/obj/eden-cn/lpquldlp/ies_douyin_open/DouyinSansBold.ttf")',
+      global: true,
+      fail: function fail() {}
+    });
   }
 };
 exports.default = _default;

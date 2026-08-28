@@ -1,14 +1,14 @@
 <template>
-    <view class="coin-page">
-        <view class="coin-header">
+    <view class="coin-page poker-bg">
+        <view class="coin-header mesh-card-gold">
             <view class="coin-balance">
-                <text class="balance-label">我的 All In 币</text>
-                <text class="balance-value">{{ coins }}</text>
+                <text class="balance-label font-art">我的 All In 币</text>
+                <text class="balance-value font-art">{{ coins }}</text>
             </view>
-            <view class="coin-records" @tap="goRecords">兑换记录 ›</view>
+            <view class="coin-records font-art" @tap="goRecords">兑换记录 ›</view>
         </view>
 
-        <view class="coin-tip">All In 币可用于兑换酒水、小食及专属周边</view>
+        <view class="coin-tip font-art">All In 币可用于兑换酒水、小食及专属周边</view>
 
         <scroll-view scroll-y class="coin-scroll">
             <view class="goods-grid">
@@ -105,18 +105,19 @@ export default {
 </script>
 
 <style>
-.coin-page { min-height: 100vh; background: #0a0a0a; }
+.coin-page { min-height: 100vh; }
 .coin-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 40rpx 30rpx;
-    background: linear-gradient(135deg, #3a2c10 0%, #1a1a1a 100%);
+    background: linear-gradient(160deg, #1e1e20, #141416);
+    border-bottom: 1rpx solid rgba(255, 255, 255, 0.08);
 }
 .coin-balance { display: flex; flex-direction: column; }
-.balance-label { font-size: 24rpx; color: #c9a35a; }
-.balance-value { font-size: 64rpx; color: #e8c547; font-weight: 900; margin-top: 6rpx; }
-.coin-records { font-size: 24rpx; color: #ccc; }
+.balance-label { font-size: 24rpx; color: #999; }
+.balance-value { font-size: 72rpx; font-weight: 900; margin-top: 6rpx; color: #d4bc82; }
+.coin-records { font-size: 24rpx; color: #aaa; }
 .coin-tip { font-size: 22rpx; color: #777; padding: 20rpx 30rpx; }
 .coin-scroll { height: calc(100vh - 220rpx); }
 .goods-grid {
@@ -127,10 +128,12 @@ export default {
 }
 .goods-item {
     width: calc(50% - 10rpx);
-    background: #1c1c1e;
+    background: linear-gradient(160deg, #1f1a22, #141218);
     border-radius: 16rpx;
     overflow: hidden;
     margin-bottom: 20rpx;
+    border: 1rpx solid rgba(255, 255, 255, 0.06);
+    box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.35);
 }
 .goods-img { width: 100%; height: 280rpx; background: #222; }
 .goods-info { padding: 16rpx 20rpx 20rpx; }
@@ -150,16 +153,17 @@ export default {
     justify-content: space-between;
     margin-top: 10rpx;
 }
-.goods-coin { font-size: 36rpx; color: #e8c547; font-weight: bold; }
+.goods-coin { font-size: 36rpx; color: #f7dc8a; font-weight: bold; }
 .coin-unit { font-size: 22rpx; color: #c9a35a; margin-left: 4rpx; }
 .exchange-btn {
-    background: #e8c547;
-    color: #000;
+    background: linear-gradient(135deg, #b85c7a, #8f3d52);
+    color: #f5f0f2;
     font-size: 24rpx;
     font-weight: bold;
     padding: 10rpx 28rpx;
     border-radius: 30rpx;
+    box-shadow: 0 4rpx 12rpx rgba(255, 45, 106, 0.35);
 }
-.exchange-btn.disabled { background: #444; color: #888; }
-.empty { text-align: center; padding: 100rpx 0; color: var(--text-muted); font-size: 26rpx; }
+.exchange-btn.disabled { background: #444; color: #888; box-shadow: none; }
+.empty { text-align: center; padding: 100rpx 0; color: #666; font-size: 26rpx; }
 </style>

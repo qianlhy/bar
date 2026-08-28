@@ -25,7 +25,7 @@ public class PointsLog implements Serializable {
 
     private Integer afterPoints;
 
-    /** 类型：1-手动录入 2-消费抵扣 3-取消退回 4-每日清零 */
+    /** 类型：1-手动录入 2-消费抵扣 3-取消退回 4-每日清零 5-每日签到 */
     private Integer type;
 
     private String remark;

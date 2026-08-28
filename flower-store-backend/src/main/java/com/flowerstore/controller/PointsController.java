@@ -52,6 +52,38 @@ public class PointsController {
     }
 
     /**
+     * 小程序：签到状态
+     */
+    @GetMapping("/checkin/status")
+    public Result<Map<String, Object>> checkinStatus(@RequestHeader("Authorization") String token) {
+        try {
+            Long userId = jwtUtils.getUserIdFromToken(token);
+            if (userId == null) {
+                return Result.error(401, "登录已过期，请重新登录");
+            }
+            return Result.success(pointsService.checkinStatus(userId));
+        } catch (Exception e) {
+            return Result.error(e.getMessage());
+        }
+    }
+
+    /**
+     * 小程序：每日签到
+     */
+    @PostMapping("/checkin")
+    public Result<Map<String, Object>> checkin(@RequestHeader("Authorization") String token) {
+        try {
+            Long userId = jwtUtils.getUserIdFromToken(token);
+            if (userId == null) {
+                return Result.error(401, "登录已过期，请重新登录");
+            }
+            return Result.success(pointsService.checkin(userId));
+        } catch (Exception e) {
+            return Result.error(e.getMessage());
+        }
+    }
+
+    /**
      * 管理端：手动录入积分
      */
     @PostMapping("/admin/add")

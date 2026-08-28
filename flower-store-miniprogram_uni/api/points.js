@@ -1,4 +1,4 @@
-const { request } = require('../utils/request');
+const { request, get, post } = require('../utils/request');
 
 /**
  * 积分抵扣预览
@@ -14,11 +14,20 @@ function previewPoints(amount, points) {
         url: '/points/preview',
         method: 'GET',
         data: params,
-        // 积分是可选权益，接口异常时确认订单页应继续正常支付
         silent: true
     });
 }
 
+function getCheckinStatus() {
+    return get('/points/checkin/status');
+}
+
+function checkin() {
+    return post('/points/checkin');
+}
+
 module.exports = {
-    previewPoints
+    previewPoints,
+    getCheckinStatus,
+    checkin
 };

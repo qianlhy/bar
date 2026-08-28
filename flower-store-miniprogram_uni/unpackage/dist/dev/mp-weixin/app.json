@@ -15,7 +15,10 @@
     "pages/collection/collection",
     "pages/search/search",
     "pages/agreement/agreement",
-    "pages/recharge/recharge"
+    "pages/recharge/recharge",
+    "pages/coin-mall/coin-mall",
+    "pages/coin-records/coin-records",
+    "pages/store-gallery/store-gallery"
   ],
   "subPackages": [],
   "window": {
