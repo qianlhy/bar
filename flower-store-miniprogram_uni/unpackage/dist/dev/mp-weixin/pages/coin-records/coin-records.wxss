@@ -1,0 +1,27 @@
+
+.records-page {
+    min-height: 100vh;
+    background: #0a0a0a;
+}
+.records-scroll { height: 100vh;
+}
+.record-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20rpx 30rpx;
+    padding: 28rpx 24rpx;
+    background: #1c1c1e;
+    border-radius: 16rpx;
+}
+.record-left { display: flex; flex-direction: column;
+}
+.record-name { font-size: 28rpx; color: #fff;
+}
+.record-time { font-size: 22rpx; color: #888; margin-top: 8rpx;
+}
+.record-coin { font-size: 30rpx; color: #e8c547; font-weight: bold;
+}
+.empty { text-align: center; color: var(--text-muted); padding: 80rpx 0; font-size: 26rpx;
+}
+

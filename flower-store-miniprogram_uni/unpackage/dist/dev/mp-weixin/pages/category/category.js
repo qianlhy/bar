@@ -101,7 +101,7 @@ var components
 try {
   components = {
     specModal: function () {
-      return __webpack_require__.e(/*! import() | components/spec-modal/spec-modal */ "components/spec-modal/spec-modal").then(__webpack_require__.bind(null, /*! @/components/spec-modal/spec-modal.vue */ 206))
+      return __webpack_require__.e(/*! import() | components/spec-modal/spec-modal */ "components/spec-modal/spec-modal").then(__webpack_require__.bind(null, /*! @/components/spec-modal/spec-modal.vue */ 214))
     },
   }
 } catch (e) {
@@ -297,7 +297,7 @@ var _require = __webpack_require__(/*! ../../utils/adult-verification */ 66),
   ensureAdultDrinking = _require.ensureAdultDrinking;
 var specModal = function specModal() {
   __webpack_require__.e(/*! require.ensure | components/spec-modal/spec-modal */ "components/spec-modal/spec-modal").then((function () {
-    return resolve(__webpack_require__(/*! @/components/spec-modal/spec-modal */ 206));
+    return resolve(__webpack_require__(/*! @/components/spec-modal/spec-modal */ 214));
   }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 var _default = {

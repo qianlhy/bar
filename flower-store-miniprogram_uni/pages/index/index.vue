@@ -33,18 +33,18 @@
                         <text class="card-deco right">♥K</text>
                     </view>
                 </view>
-                <text class="brand-en font-art">ALL IN TAVERN</text>
-                <view class="hours-pill">
+                <text class="brand-en font-art neon-gold">ALL IN TAVERN</text>
+                <view class="hours-pill hours-clash">
                     <text class="hours-label">营业时间</text>
                     <text class="hours-value font-art">{{ businessHours }}</text>
                 </view>
             </view>
 
             <!-- 会员数据条 -->
-            <view class="member-strip mesh-card">
+            <view class="member-strip mesh-card clash-strip">
                 <view class="strip-item g-tap" @tap="showMemberCode">
-                    <view class="icon-box strip-icon-box"><view class="icon-qrcode"></view></view>
-                    <text class="strip-label font-art">会员码</text>
+                    <view class="icon-box strip-icon-box icon-clash-pink"><view class="icon-qrcode"></view></view>
+                    <text class="strip-label font-art neon-pink">会员码</text>
                 </view>
                 <view class="strip-divider"></view>
                 <view class="strip-item">
@@ -60,20 +60,23 @@
 
             <!-- 双主入口 -->
             <view class="dual-hero">
-                <view class="hero-btn order-btn g-tap mesh-card" @tap="goOrder">
+                <view class="hero-btn order-btn g-tap clash-card" @tap="goOrder">
+                    <view class="card-wash card-wash-pink-bl"></view>
                     <text class="hero-btn-cn font-art">立即点单</text>
                     <text class="hero-btn-en">ORDER</text>
                     <view class="hero-deco"><view class="line-icon icon-cocktail"></view></view>
                 </view>
-                <view class="hero-btn mall-btn g-tap mesh-card" @tap="goCoinMall">
-                    <text class="hero-btn-cn font-art">币商城</text>
+                <view class="hero-btn mall-btn g-tap clash-card" @tap="goCoinMall">
+                    <view class="card-wash card-wash-gold-tr"></view>
+                    <text class="hero-btn-cn font-art neon-gold">币商城</text>
                     <text class="hero-btn-en">POINT</text>
                     <view class="hero-deco"><view class="line-icon icon-coin"></view></view>
                 </view>
             </view>
 
             <!-- 充值横幅 -->
-            <view class="recharge-banner g-tap" @tap="goRecharge">
+            <view class="recharge-banner splash-red-bar g-tap mesh-card" @tap="goRecharge">
+                <view class="card-wash card-wash-pink-r"></view>
                 <text class="banner-watermark">MEMBER</text>
                 <view class="banner-body">
                     <view class="banner-copy">
@@ -86,25 +89,28 @@
 
             <!-- 签到 / WiFi -->
             <view class="util-row">
-                <view :class="'util-card g-tap mesh-card ' + (checkedIn ? 'done' : '')" @tap="doCheckin">
-                    <view class="util-icon-wrap"><text class="util-char">签</text></view>
+                <view :class="'util-card g-tap clash-card ' + (checkedIn ? 'done' : '')" @tap="doCheckin">
+                    <view class="card-wash card-wash-pink-b"></view>
+                    <view class="util-icon-wrap"><text class="util-char util-star-pink">✦</text></view>
                     <text class="util-title font-art">{{ checkedIn ? '今日已签' : '每日签到' }}</text>
                     <text class="util-sub">{{ checkedIn ? ('积分 ' + (userInfo.points || 0)) : ('+' + checkinReward + ' 积分') }}</text>
                 </view>
-                <view class="util-card g-tap mesh-card" @tap="showWifi">
+                <view class="util-card g-tap clash-card" @tap="showWifi">
+                    <view class="card-wash card-wash-cyan-t"></view>
                     <view class="util-icon-wrap"><view class="line-icon icon-wifi"></view></view>
                     <text class="util-title font-art">查看 WiFi</text>
                     <text class="util-sub">店内专属网络</text>
                 </view>
-                <view class="util-card g-tap mesh-card" @tap="showMemberCode">
-                    <view class="util-icon-wrap"><view class="icon-qrcode"></view></view>
+                <view class="util-card g-tap clash-card" @tap="showMemberCode">
+                    <view class="card-wash card-wash-gold-t"></view>
+                    <view class="util-icon-wrap"><text class="util-char util-star-gold">★</text></view>
                     <text class="util-title font-art">会员特权</text>
                     <text class="util-sub">出示会员码</text>
                 </view>
             </view>
 
             <!-- 门店地址 -->
-            <view class="store-card mesh-card">
+            <view class="store-card mesh-card store-glow-cyan">
                 <view class="store-card-head">
                     <text class="store-card-title font-art">门店地址</text>
                     <view class="store-nav-link g-tap" @tap="openNavigation">
@@ -124,8 +130,8 @@
                             <text class="sec-text font-art">店内环境</text>
                         </view>
                         <view class="store-secondary-divider"></view>
-                        <view class="store-secondary-item g-tap" @tap="callStore">
-                            <text class="sec-icon">☎</text>
+                        <view class="store-secondary-item g-tap store-clash-cyan" @tap="callStore">
+                            <text class="sec-icon cyan">☎</text>
                             <text class="sec-text font-art">拨打电话</text>
                         </view>
                     </view>
@@ -448,8 +454,6 @@ export default {
     position: relative;
     z-index: 1;
 }
-
-/* 扑克漂浮装饰 */
 .poker-float {
     position: absolute;
     z-index: 0;
@@ -509,7 +513,7 @@ export default {
     letter-spacing: 32rpx;
     padding-left: 32rpx;
     line-height: 1;
-    background: linear-gradient(180deg, rgba(240, 240, 240, 0.95) 0%, rgba(196, 90, 106, 0.85) 55%, rgba(160, 28, 45, 0.7) 100%);
+    background: linear-gradient(180deg, #f0ece6 0%, #c0707c 50%, #9a2a3c 100%);
     -webkit-background-clip: text;
     color: transparent;
     position: relative;
@@ -531,7 +535,7 @@ export default {
     margin: 0 auto;
     border-radius: 50%;
     padding: 4rpx;
-    background: linear-gradient(135deg, #a01c30, #333, #a01c30);
+    background: linear-gradient(135deg, #9a2a3c, #3a3838, #9a2a3c);
     box-shadow: 0 0 40rpx rgba(160, 28, 45, 0.25), 0 16rpx 40rpx rgba(0, 0, 0, 0.5);
     position: relative;
 }
@@ -552,17 +556,17 @@ export default {
     z-index: 0;
     font-family: serif;
 }
-.card-deco.left { left: -16rpx; color: #ddd; }
-.card-deco.right { right: -16rpx; color: #a01c30; }
+.card-deco.left { left: -16rpx; color: #d0ccc6; }
+.card-deco.right { right: -16rpx; color: #9a2a3c; }
 .brand-en {
     display: block;
     font-size: 24rpx;
-    color: #999;
     letter-spacing: 10rpx;
     margin-top: 16rpx;
     position: relative;
     z-index: 2;
 }
+.brand-en.neon-gold { color: #f0d878; text-shadow: 0 0 16rpx rgba(232, 197, 71, 0.35); }
 .hours-pill {
     margin-top: 20rpx;
     display: inline-flex;
@@ -576,6 +580,8 @@ export default {
 }
 .hours-label { font-size: 22rpx; color: #888; margin-right: 12rpx; }
 .hours-value { font-size: 26rpx; color: #ccc; }
+.hours-clash .hours-label { color: rgba(77, 232, 255, 0.65); }
+.hours-clash .hours-value { color: #4de8ff !important; text-shadow: 0 0 12rpx rgba(77, 232, 255, 0.35); }
 
 /* 会员数据条 */
 .member-strip {
@@ -592,37 +598,92 @@ export default {
     text-align: center;
 }
 .strip-icon-box { width: 64rpx; height: 64rpx; margin-bottom: 8rpx; }
+.strip-divider { width: 1rpx; height: 60rpx; background: rgba(255, 255, 255, 0.1); }
 .strip-icon-box .icon-qrcode { width: 28rpx; height: 28rpx; }
 .strip-num { font-size: 40rpx; font-weight: 800; line-height: 1.2; }
-.strip-label { font-size: 22rpx; color: #999; margin-top: 6rpx; }
-.strip-divider { width: 1rpx; height: 60rpx; background: rgba(255, 255, 255, 0.1); }
+.strip-label { font-size: 22rpx; margin-top: 6rpx; color: #8a8682; }
+.strip-label.neon-pink { color: #ff6b9d; }
+.strip-num.neon-gold { color: #f0d878; text-shadow: 0 0 14rpx rgba(232, 197, 71, 0.4); }
+.strip-num.neon-cyan { color: #4de8ff; text-shadow: 0 0 14rpx rgba(77, 232, 255, 0.35); }
 
-/* 双主入口 */
+/* 双主入口 · 内角柔光撞色（对标参考图） */
 .dual-hero {
     margin: 0 28rpx 20rpx;
     display: flex;
     gap: 16rpx;
 }
-.hero-btn {
+.clash-card {
+    position: relative;
     flex: 1;
+    min-width: 0;
+    border-radius: 20rpx;
+    background: linear-gradient(165deg, #1e1c1c 0%, #161414 55%, #121010 100%);
+    border: 1rpx solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 10rpx 28rpx rgba(0, 0, 0, 0.38);
+    overflow: hidden;
+}
+.card-wash {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    z-index: 0;
+}
+/* 点单：粉红，左上→右下斜向渐变 */
+.card-wash-pink-bl {
+    background:
+        linear-gradient(150deg, rgba(255, 45, 106, 0.20) 0%, rgba(255, 45, 106, 0.05) 40%, transparent 66%);
+}
+/* 币商城：整卡金色浸染，顶部最亮（保持不动） */
+.mall-btn.clash-card {
+    background: linear-gradient(162deg, #2a2416 0%, #201b12 45%, #16120c 100%);
+    border-color: rgba(232, 197, 71, 0.22);
+}
+.card-wash-gold-tr {
+    left: -5%;
+    right: -5%;
+    top: -30%;
+    bottom: auto;
+    height: 105%;
+    border-radius: 0;
+    background: radial-gradient(ellipse 78% 62% at 66% 12%, rgba(232, 197, 71, 0.34) 0%, rgba(232, 197, 71, 0.12) 42%, transparent 72%);
+}
+/* 充值：左上→右下粉光斜向渐变 */
+.card-wash-pink-r {
+    background:
+        linear-gradient(150deg, rgba(255, 45, 106, 0.14) 0%, rgba(255, 45, 106, 0.03) 42%, transparent 62%);
+}
+/* 签到：左上→右下粉光 */
+.card-wash-pink-b {
+    background:
+        linear-gradient(150deg, rgba(255, 45, 106, 0.16) 0%, rgba(255, 45, 106, 0.04) 40%, transparent 60%);
+}
+/* WiFi：左上→右下青光 */
+.card-wash-cyan-t {
+    background:
+        linear-gradient(150deg, rgba(77, 232, 255, 0.17) 0%, rgba(77, 232, 255, 0.04) 40%, transparent 60%);
+}
+/* 特权：左上→右下金光 */
+.card-wash-gold-t {
+    background:
+        linear-gradient(150deg, rgba(232, 197, 71, 0.16) 0%, rgba(232, 197, 71, 0.04) 40%, transparent 60%);
+}
+.hero-btn {
     min-height: 200rpx;
     padding: 28rpx 20rpx;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    position: relative;
-    overflow: hidden;
 }
-.hero-btn.order-btn,
-.hero-btn.mall-btn {
-    border-color: rgba(255, 255, 255, 0.08);
-    background: linear-gradient(160deg, #222224, #18181a);
-}
-.mall-btn .hero-btn-cn { color: #e8e8e8; }
-.hero-btn-cn { font-size: 34rpx; color: #eee; display: block; }
+.hero-btn-cn,
+.hero-btn-en,
+.hero-deco { position: relative; z-index: 1; }
+.hero-deco { position: absolute; z-index: 1; }
+.hero-btn-cn { font-size: 34rpx; color: #e6e2dc; display: block; }
+.mall-btn .hero-btn-cn { color: #f0d878; text-shadow: 0 0 12rpx rgba(232, 197, 71, 0.4); }
 .hero-btn-en {
     font-size: 22rpx;
-    color: rgba(255, 255, 255, 0.4);
+    color: rgba(230, 226, 220, 0.42);
     letter-spacing: 4rpx;
     margin-top: 8rpx;
     display: block;
@@ -631,7 +692,7 @@ export default {
     position: absolute;
     right: 20rpx;
     bottom: 20rpx;
-    opacity: 0.7;
+    opacity: 0.65;
 }
 .hero-deco .line-icon { width: 52rpx; height: 52rpx; }
 
@@ -640,8 +701,6 @@ export default {
     border-radius: 20rpx;
     overflow: hidden;
     position: relative;
-    border: 1rpx solid rgba(255, 255, 255, 0.08);
-    background: linear-gradient(160deg, #242426, #18181a 70%);
 }
 .banner-watermark {
     position: absolute;
@@ -650,7 +709,7 @@ export default {
     transform: translateY(-50%);
     font-size: 100rpx;
     font-weight: 900;
-    color: rgba(255, 255, 255, 0.04);
+    color: rgba(230, 226, 220, 0.035);
     letter-spacing: 8rpx;
     pointer-events: none;
 }
@@ -658,12 +717,12 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 32rpx 28rpx;
+    padding: 32rpx 28rpx 32rpx 36rpx;
     position: relative;
     z-index: 1;
 }
-.banner-title { font-size: 32rpx; color: #fff; display: block; }
-.banner-sub { font-size: 22rpx; color: #999; margin-top: 8rpx; display: block; }
+.banner-title { font-size: 32rpx; color: #e6e2dc; display: block; }
+.banner-sub { font-size: 22rpx; color: #8a8682; margin-top: 8rpx; display: block; }
 .banner-btn {
     padding: 16rpx 32rpx;
     border-radius: 40rpx;
@@ -683,6 +742,11 @@ export default {
     text-align: center;
     min-width: 0;
 }
+.util-card .util-icon-wrap,
+.util-card .util-title,
+.util-card .util-sub { position: relative; z-index: 1; }
+.util-row .clash-card .icon-wifi::before { border-color: #4de8ff !important; }
+.util-row .clash-card .icon-wifi::after { background: #4de8ff !important; }
 .util-card.done { opacity: 0.65; }
 .util-icon-wrap {
     width: 56rpx;
@@ -693,6 +757,12 @@ export default {
     justify-content: center;
 }
 .util-char { font-size: 28rpx; color: #ccc; font-weight: 600; }
+.util-star-pink { color: #ff6b9d; text-shadow: 0 0 12rpx rgba(255, 45, 106, 0.6); }
+.util-star-gold { color: #f0d878; text-shadow: 0 0 12rpx rgba(232, 197, 71, 0.55); }
+.util-clash-cyan .line-icon::before,
+.util-clash-cyan .line-icon::after { border-color: #4de8ff !important; background: #4de8ff !important; }
+.util-clash-cyan .icon-wifi::before { border-color: #4de8ff !important; }
+.util-clash-cyan .icon-wifi::after { background: #4de8ff !important; }
 .util-icon-wrap .line-icon { width: 36rpx; height: 36rpx; }
 .util-icon-wrap .icon-qrcode { width: 30rpx; height: 30rpx; }
 .util-title { font-size: 24rpx; color: #ddd; display: block; }
@@ -703,6 +773,13 @@ export default {
     margin: 0 28rpx 24rpx;
     padding: 28rpx 24rpx;
 }
+.store-glow-cyan {
+    border: 1rpx solid rgba(255, 255, 255, 0.08) !important;
+    box-shadow: 0 14rpx 36rpx rgba(0, 0, 0, 0.42) !important;
+    background:
+        linear-gradient(150deg, rgba(77, 232, 255, 0.10) 0%, rgba(77, 232, 255, 0.03) 40%, transparent 60%),
+        linear-gradient(165deg, #1e1c1c 0%, #161414 55%, #121010 100%) !important;
+}
 .store-card-head {
     display: flex;
     align-items: center;
@@ -710,8 +787,8 @@ export default {
     margin-bottom: 16rpx;
 }
 .store-card-title { font-size: 28rpx; color: #fff; }
-.store-nav-text { font-size: 24rpx; }
-.store-nav-arrow { color: #aaa; font-size: 28rpx; }
+.store-nav-text { font-size: 24rpx; color: #4de8ff; text-shadow: 0 0 10rpx rgba(77, 232, 255, 0.35); }
+.store-nav-arrow { color: #4de8ff; font-size: 28rpx; }
 .store-card-address { display: block; font-size: 24rpx; color: #b0b0b4; line-height: 1.55; }
 .store-card-phone { display: block; margin-top: 12rpx; font-size: 24rpx; color: #888; }
 .store-card-actions {
@@ -763,9 +840,21 @@ export default {
     color: #a01c30;
     line-height: 1;
 }
-.store-secondary-item:last-child .sec-icon {
-    font-size: 26rpx;
-    color: #bbb;
+.store-secondary-item.store-clash-cyan {
+    border: 1rpx solid rgba(77, 232, 255, 0.38);
+    border-radius: 14rpx;
+    margin: 6rpx 8rpx 6rpx 4rpx;
+    box-shadow: 0 0 18rpx rgba(77, 232, 255, 0.22);
+}
+.store-secondary-item.store-clash-cyan:active {
+    background: rgba(77, 232, 255, 0.08);
+}
+.sec-icon.cyan {
+    color: #4de8ff;
+    text-shadow: 0 0 10rpx rgba(77, 232, 255, 0.45);
+}
+.store-secondary-item:last-child .sec-text {
+    color: #4de8ff;
 }
 .sec-text {
     font-size: 26rpx;

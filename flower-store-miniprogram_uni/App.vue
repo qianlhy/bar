@@ -132,26 +132,33 @@ page {
     --gold-dark: #c99a3a;
     --gold-gradient: linear-gradient(135deg, #f7dc8a 0%, #d4a72c 100%);
 
-    /* 黑红主色调 */
-    --neon-pink: #c45a6a;
-    --neon-pink-light: #d08088;
-    --neon-red: #a01c30;
-    --neon-cyan: #888;
-    --poker-red: #a01c30;
-    --accent-magenta: #8f2030;
+    /* 黑红主色调（暖调，非纯黑白） */
+    --ink-black: #121010;
+    --charcoal: #1c1a1a;
+    --stone-light: #d8d4ce;
+    --stone-mid: #b8b4ae;
+    --chalk: #e6e2dc;
+    --wine-red: #9a2a3c;
+    --wine-deep: #6e1a28;
+    --neon-pink: #b84a5c;
+    --neon-pink-light: #c0707c;
+    --neon-red: #9a2a3c;
+    --neon-cyan: #a8a4a0;
+    --poker-red: #9a2a3c;
+    --accent-magenta: #8a2434;
 
     /* 背景层级 */
-    --bg-page: #08080a;
-    --bg-card: #1c1c1e;
-    --bg-card-gradient: linear-gradient(145deg, #202022, #18181a);
-    --bg-elevated: #2a2a2d;
-    --bg-sunken: #141416;
+    --bg-page: #100e0e;
+    --bg-card: #1e1c1c;
+    --bg-card-gradient: linear-gradient(155deg, #222020, #161414);
+    --bg-elevated: #2a2828;
+    --bg-sunken: #141212;
 
     /* 文字层级 */
-    --text-primary: #f5f5f5;
-    --text-regular: #d0d0d2;
-    --text-muted: #8a8a8e;
-    --text-faint: #6b6b70;
+    --text-primary: #e6e2dc;
+    --text-regular: #c8c4be;
+    --text-muted: #8a8682;
+    --text-faint: #6a6662;
     --text-secondary: #8a8a8e;
 
     /* 描边 */
