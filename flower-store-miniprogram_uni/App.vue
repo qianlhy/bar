@@ -1,4 +1,5 @@
 <script>
+import { loadAppFonts } from './utils/fonts.js';
 // app.js
 export default {
     data() {
@@ -109,15 +110,8 @@ export default {
         // 初始化模拟数据
         this.globalData.initMockData();
 
-        // 艺术字体（抖音美好体，失败则用系统字体）
-        // #ifdef MP-WEIXIN
-        uni.loadFontFace({
-            family: 'DouyinSans',
-            source: 'url("https://lf3-static.bytednsdoc.com/obj/eden-cn/lpquldlp/ies_douyin_open/DouyinSansBold.ttf")',
-            global: true,
-            fail: () => {}
-        });
-        // #endif
+        // 本地字体（static/fonts，无需配置 downloadFile 域名）
+        loadAppFonts();
     }
 };
 </script>

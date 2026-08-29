@@ -8,7 +8,7 @@
         <text class="poker-float club">♣</text>
         <text class="poker-float diamond">♦</text>
 
-        <scroll-view scroll-y class="home-scroll">
+        <scroll-view scroll-y class="home-scroll" :key="'font-' + fontEpoch">
             <view class="top-bar">
                 <view class="top-greet g-tap font-art" @tap="showStorePicker">
                     <text class="top-greet-text">{{ storeName }}</text>
@@ -33,10 +33,10 @@
                         <text class="card-deco right">♥K</text>
                     </view>
                 </view>
-                <text class="brand-en font-art neon-gold">ALL IN TAVERN</text>
+                <text class="brand-en font-display neon-gold">ALL IN TAVERN</text>
                 <view class="hours-pill hours-clash">
                     <text class="hours-label">营业时间</text>
-                    <text class="hours-value font-art">{{ businessHours }}</text>
+                    <text class="hours-value font-num">{{ businessHours }}</text>
                 </view>
             </view>
 
@@ -48,12 +48,12 @@
                 </view>
                 <view class="strip-divider"></view>
                 <view class="strip-item">
-                    <text class="strip-num font-art neon-gold">{{ userInfo.points || 0 }}</text>
+                    <text class="strip-num font-num neon-gold">{{ userInfo.points || 0 }}</text>
                     <text class="strip-label">我的积分</text>
                 </view>
                 <view class="strip-divider"></view>
                 <view class="strip-item">
-                    <text class="strip-num font-art neon-cyan">{{ userInfo.coins || 0 }}</text>
+                    <text class="strip-num font-num neon-cyan">{{ userInfo.coins || 0 }}</text>
                     <text class="strip-label">All In 币</text>
                 </view>
             </view>
@@ -63,13 +63,13 @@
                 <view class="hero-btn order-btn g-tap clash-card" @tap="goOrder">
                     <view class="card-wash card-wash-pink-bl"></view>
                     <text class="hero-btn-cn font-art">立即点单</text>
-                    <text class="hero-btn-en">ORDER</text>
+                    <text class="hero-btn-en font-display">ORDER</text>
                     <view class="hero-deco"><view class="line-icon icon-cocktail"></view></view>
                 </view>
                 <view class="hero-btn mall-btn g-tap clash-card" @tap="goCoinMall">
                     <view class="card-wash card-wash-gold-tr"></view>
                     <text class="hero-btn-cn font-art neon-gold">币商城</text>
-                    <text class="hero-btn-en">POINT</text>
+                    <text class="hero-btn-en font-display">POINT</text>
                     <view class="hero-deco"><view class="line-icon icon-coin"></view></view>
                 </view>
             </view>
@@ -179,6 +179,7 @@
 </template>
 
 <script>
+import { loadAppFonts } from '../../utils/fonts.js';
 const userApi = require('../../api/user');
 const configApi = require('../../api/config');
 const pointsApi = require('../../api/points');
@@ -186,6 +187,8 @@ const { BASE_URL } = require('../../utils/request');
 export default {
     data() {
         return {
+            fontsReady: false,
+            fontEpoch: 0,
             statusBarHeight: 20,
             userInfo: { balance: 20, coins: 0, points: 0 },
             showPrivacy: false,
@@ -220,6 +223,10 @@ export default {
         this.checkPrivacyAuthorization();
         this.loadUserInfo();
         this.loadConfig();
+        loadAppFonts(() => {
+            this.fontsReady = true;
+            this.fontEpoch += 1;
+        });
     },
     onShow() {
         this.loadUserInfo();
@@ -256,11 +263,12 @@ export default {
                 if (cfg.store_gallery) {
                     const raw = cfg.store_gallery.trim();
                     if (raw.startsWith('[')) {
-                        try { this.storeGalleryCount = JSON.parse(raw).filter(Boolean).length; } catch (e) { this.storeGalleryCount = 0; }
+                        try { this.storeGalleryCount = JSON.parse(raw).filter(Boolean).length; } catch (e) { this.storeGalleryCount = 1; }
                     } else {
                         this.storeGalleryCount = raw.split(',').filter((s) => s.trim()).length;
                     }
                 }
+                if (!this.storeGalleryCount) this.storeGalleryCount = 1;
             }).catch(() => {});
         },
         goStoreGallery() {
@@ -560,11 +568,15 @@ export default {
 .card-deco.right { right: -16rpx; color: #9a2a3c; }
 .brand-en {
     display: block;
-    font-size: 24rpx;
-    letter-spacing: 10rpx;
+    font-size: 32rpx;
+    letter-spacing: 8rpx;
     margin-top: 16rpx;
     position: relative;
     z-index: 2;
+}
+.brand-en.font-display {
+    font-family: 'Anton', sans-serif !important;
+    font-weight: 400 !important;
 }
 .brand-en.neon-gold { color: #f0d878; text-shadow: 0 0 16rpx rgba(232, 197, 71, 0.35); }
 .hours-pill {
@@ -579,7 +591,21 @@ export default {
     z-index: 2;
 }
 .hours-label { font-size: 22rpx; color: #888; margin-right: 12rpx; }
-.hours-value { font-size: 26rpx; color: #ccc; }
+.hours-value.font-num {
+    font-family: 'BebasNeue', sans-serif !important;
+    font-weight: 400 !important;
+    font-size: 34rpx;
+}
+.strip-num.font-num {
+    font-family: 'BebasNeue', sans-serif !important;
+    font-weight: 400 !important;
+}
+.hero-btn-en.font-display {
+    font-family: 'Anton', sans-serif !important;
+    font-weight: 400 !important;
+    font-size: 28rpx;
+    letter-spacing: 8rpx;
+}
 .hours-clash .hours-label { color: rgba(77, 232, 255, 0.65); }
 .hours-clash .hours-value { color: #4de8ff !important; text-shadow: 0 0 12rpx rgba(77, 232, 255, 0.35); }
 
@@ -600,7 +626,7 @@ export default {
 .strip-icon-box { width: 64rpx; height: 64rpx; margin-bottom: 8rpx; }
 .strip-divider { width: 1rpx; height: 60rpx; background: rgba(255, 255, 255, 0.1); }
 .strip-icon-box .icon-qrcode { width: 28rpx; height: 28rpx; }
-.strip-num { font-size: 40rpx; font-weight: 800; line-height: 1.2; }
+.strip-num { font-size: 44rpx; font-weight: 400; line-height: 1.1; }
 .strip-label { font-size: 22rpx; margin-top: 6rpx; color: #8a8682; }
 .strip-label.neon-pink { color: #ff6b9d; }
 .strip-num.neon-gold { color: #f0d878; text-shadow: 0 0 14rpx rgba(232, 197, 71, 0.4); }
@@ -682,9 +708,9 @@ export default {
 .hero-btn-cn { font-size: 34rpx; color: #e6e2dc; display: block; }
 .mall-btn .hero-btn-cn { color: #f0d878; text-shadow: 0 0 12rpx rgba(232, 197, 71, 0.4); }
 .hero-btn-en {
-    font-size: 22rpx;
-    color: rgba(230, 226, 220, 0.42);
-    letter-spacing: 4rpx;
+    font-size: 26rpx;
+    color: rgba(230, 226, 220, 0.55);
+    letter-spacing: 6rpx;
     margin-top: 8rpx;
     display: block;
 }

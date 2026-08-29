@@ -9570,9 +9570,112 @@ internalMixin(Vue);
 /* 27 */,
 /* 28 */,
 /* 29 */,
-/* 30 */,
+/* 30 */
+/*!*********************************************************************************************************************************!*\
+  !*** C:/Users/Administrator/Desktop/2026年1月7日/卡歌/酒吧小程序/flower-store-backend-sb_uni/flower-store-miniprogram_uni/utils/fonts.js ***!
+  \*********************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(uni) {
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ 4);
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.loadAppFonts = loadAppFonts;
+var _toConsumableArray2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/toConsumableArray */ 18));
+/**
+ * 微信小程序字体：从 bar.twst.work 下载 → loadFontFace
+ */
+var FONT_BASE = 'https://bar.twst.work/api/fonts';
+var FONT_LIST = [{
+  family: 'Anton',
+  file: 'Anton-Regular.ttf',
+  weight: 'normal',
+  timeout: 30000
+}, {
+  family: 'BebasNeue',
+  file: 'BebasNeue-Regular.ttf',
+  weight: 'normal',
+  timeout: 30000
+}, {
+  family: 'DouyinSans',
+  file: 'DouyinSansBold.ttf',
+  weight: 'bold',
+  timeout: 120000
+}];
+var loadedFonts = new Set();
+var loading = null;
+function downloadFont(url, timeout) {
+  return new Promise(function (resolve, reject) {
+    uni.downloadFile({
+      url: url,
+      timeout: timeout || 60000,
+      success: function success(res) {
+        if (res.statusCode === 200 && res.tempFilePath) {
+          resolve(res.tempFilePath);
+        } else {
+          reject(new Error('download status ' + res.statusCode));
+        }
+      },
+      fail: reject
+    });
+  });
+}
+function loadOneFont(family, tempPath, weight) {
+  return new Promise(function (resolve) {
+    uni.loadFontFace({
+      global: true,
+      family: family,
+      source: 'url("' + tempPath + '")',
+      scopes: ['webview', 'native'],
+      desc: {
+        style: 'normal',
+        weight: weight || 'normal'
+      },
+      success: function success() {
+        loadedFonts.add(family);
+        console.log('[font] ok ' + family);
+        resolve(family);
+      },
+      fail: function fail(e) {
+        console.warn('[font] load fail ' + family, e);
+        resolve(null);
+      }
+    });
+  });
+}
+function loadAppFonts(onEach) {
+  var pending = FONT_LIST.filter(function (f) {
+    return !loadedFonts.has(f.family);
+  });
+  if (!pending.length) return Promise.resolve((0, _toConsumableArray2.default)(loadedFonts));
+  if (loading) return loading;
+  loading = Promise.all(pending.map(function (f) {
+    var url = FONT_BASE + '/' + f.file;
+    return downloadFont(url, f.timeout).then(function (path) {
+      return loadOneFont(f.family, path, f.weight);
+    }).then(function (family) {
+      // 每个字体各自加载完就立刻通知，不等最慢的
+      if (family && typeof onEach === 'function') onEach(family);
+      return family;
+    }).catch(function (err) {
+      console.warn('[font] download fail ' + f.family + ' ' + url, err);
+      return null;
+    });
+  })).finally(function () {
+    loading = null;
+  });
+  return loading;
+}
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
+
+/***/ }),
 /* 31 */,
-/* 32 */
+/* 32 */,
+/* 33 */
 /*!**********************************************************************************************************!*\
   !*** ./node_modules/@dcloudio/vue-cli-plugin-uni/packages/vue-loader/lib/runtime/componentNormalizer.js ***!
   \**********************************************************************************************************/
@@ -9703,7 +9806,7 @@ function normalizeComponent (
 
 
 /***/ }),
-/* 33 */
+/* 34 */
 /*!*************************************************************************************************************************************************!*\
   !*** C:/Users/Administrator/Desktop/2026年1月7日/卡歌/酒吧小程序/flower-store-backend-sb_uni/flower-store-miniprogram_uni/uni_modules/zp-mixins/index.js ***!
   \*************************************************************************************************************************************************/
@@ -9719,15 +9822,15 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/defineProperty */ 11));
-var _pageLifetimes = __webpack_require__(/*! ./lifecycle/pageLifetimes */ 34);
-var _clone = __webpack_require__(/*! ./methods/clone */ 35);
-var _dataset = __webpack_require__(/*! ./methods/dataset */ 36);
-var _escape = __webpack_require__(/*! ./methods/escape */ 37);
-var _event = __webpack_require__(/*! ./methods/event */ 38);
-var _getTabBar = __webpack_require__(/*! ./methods/getTabBar */ 39);
-var _relation = __webpack_require__(/*! ./methods/relation */ 40);
-var _selectComponent = __webpack_require__(/*! ./methods/selectComponent */ 41);
-var _setData = __webpack_require__(/*! ./methods/setData */ 42);
+var _pageLifetimes = __webpack_require__(/*! ./lifecycle/pageLifetimes */ 35);
+var _clone = __webpack_require__(/*! ./methods/clone */ 36);
+var _dataset = __webpack_require__(/*! ./methods/dataset */ 37);
+var _escape = __webpack_require__(/*! ./methods/escape */ 38);
+var _event = __webpack_require__(/*! ./methods/event */ 39);
+var _getTabBar = __webpack_require__(/*! ./methods/getTabBar */ 40);
+var _relation = __webpack_require__(/*! ./methods/relation */ 41);
+var _selectComponent = __webpack_require__(/*! ./methods/selectComponent */ 42);
+var _setData = __webpack_require__(/*! ./methods/setData */ 43);
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { (0, _defineProperty2.default)(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
 var _default = {
@@ -9751,7 +9854,7 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 34 */
+/* 35 */
 /*!*******************************************************************************************************************************************************************!*\
   !*** C:/Users/Administrator/Desktop/2026年1月7日/卡歌/酒吧小程序/flower-store-backend-sb_uni/flower-store-miniprogram_uni/uni_modules/zp-mixins/lifecycle/pageLifetimes.js ***!
   \*******************************************************************************************************************************************************************/
@@ -9798,7 +9901,7 @@ var pageLifetimes = {
 exports.pageLifetimes = pageLifetimes;
 
 /***/ }),
-/* 35 */
+/* 36 */
 /*!*********************************************************************************************************************************************************!*\
   !*** C:/Users/Administrator/Desktop/2026年1月7日/卡歌/酒吧小程序/flower-store-backend-sb_uni/flower-store-miniprogram_uni/uni_modules/zp-mixins/methods/clone.js ***!
   \*********************************************************************************************************************************************************/
@@ -9824,7 +9927,7 @@ function clone(target) {
 }
 
 /***/ }),
-/* 36 */
+/* 37 */
 /*!***********************************************************************************************************************************************************!*\
   !*** C:/Users/Administrator/Desktop/2026年1月7日/卡歌/酒吧小程序/flower-store-backend-sb_uni/flower-store-miniprogram_uni/uni_modules/zp-mixins/methods/dataset.js ***!
   \***********************************************************************************************************************************************************/
@@ -9862,7 +9965,7 @@ function handleDataset(event) {
 }
 
 /***/ }),
-/* 37 */
+/* 38 */
 /*!**********************************************************************************************************************************************************!*\
   !*** C:/Users/Administrator/Desktop/2026年1月7日/卡歌/酒吧小程序/flower-store-backend-sb_uni/flower-store-miniprogram_uni/uni_modules/zp-mixins/methods/escape.js ***!
   \**********************************************************************************************************************************************************/
@@ -9914,7 +10017,7 @@ function html2Escape(sHtml) {
 }
 
 /***/ }),
-/* 38 */
+/* 39 */
 /*!*********************************************************************************************************************************************************!*\
   !*** C:/Users/Administrator/Desktop/2026年1月7日/卡歌/酒吧小程序/flower-store-backend-sb_uni/flower-store-miniprogram_uni/uni_modules/zp-mixins/methods/event.js ***!
   \*********************************************************************************************************************************************************/
@@ -9940,7 +10043,7 @@ function parseEventDynamicCode(e, exp) {
 }
 
 /***/ }),
-/* 39 */
+/* 40 */
 /*!*************************************************************************************************************************************************************!*\
   !*** C:/Users/Administrator/Desktop/2026年1月7日/卡歌/酒吧小程序/flower-store-backend-sb_uni/flower-store-miniprogram_uni/uni_modules/zp-mixins/methods/getTabBar.js ***!
   \*************************************************************************************************************************************************************/
@@ -9975,7 +10078,7 @@ function getTabBar() {
 }
 
 /***/ }),
-/* 40 */
+/* 41 */
 /*!************************************************************************************************************************************************************!*\
   !*** C:/Users/Administrator/Desktop/2026年1月7日/卡歌/酒吧小程序/flower-store-backend-sb_uni/flower-store-miniprogram_uni/uni_modules/zp-mixins/methods/relation.js ***!
   \************************************************************************************************************************************************************/
@@ -10001,7 +10104,7 @@ function getRelationNodes(name) {
 }
 
 /***/ }),
-/* 41 */
+/* 42 */
 /*!*******************************************************************************************************************************************************************!*\
   !*** C:/Users/Administrator/Desktop/2026年1月7日/卡歌/酒吧小程序/flower-store-backend-sb_uni/flower-store-miniprogram_uni/uni_modules/zp-mixins/methods/selectComponent.js ***!
   \*******************************************************************************************************************************************************************/
@@ -10219,7 +10322,7 @@ function selectAllComponents(args) {
 }
 
 /***/ }),
-/* 42 */
+/* 43 */
 /*!***********************************************************************************************************************************************************!*\
   !*** C:/Users/Administrator/Desktop/2026年1月7日/卡歌/酒吧小程序/flower-store-backend-sb_uni/flower-store-miniprogram_uni/uni_modules/zp-mixins/methods/setData.js ***!
   \***********************************************************************************************************************************************************/
@@ -10234,8 +10337,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.setData = setData;
-var _set2 = _interopRequireDefault(__webpack_require__(/*! ../utils/_set */ 43));
-var _debounce = _interopRequireDefault(__webpack_require__(/*! ../utils/debounce */ 44));
+var _set2 = _interopRequireDefault(__webpack_require__(/*! ../utils/_set */ 44));
+var _debounce = _interopRequireDefault(__webpack_require__(/*! ../utils/debounce */ 45));
 /**
  * 老setData polyfill
  * 用于转换后的uniapp的项目能直接使用this.setData()函数
@@ -10325,7 +10428,7 @@ function setData(obj) {
 }
 
 /***/ }),
-/* 43 */
+/* 44 */
 /*!******************************************************************************************************************************************************!*\
   !*** C:/Users/Administrator/Desktop/2026年1月7日/卡歌/酒吧小程序/flower-store-backend-sb_uni/flower-store-miniprogram_uni/uni_modules/zp-mixins/utils/_set.js ***!
   \******************************************************************************************************************************************************/
@@ -10369,7 +10472,7 @@ var _default = _set;
 exports.default = _default;
 
 /***/ }),
-/* 44 */
+/* 45 */
 /*!**********************************************************************************************************************************************************!*\
   !*** C:/Users/Administrator/Desktop/2026年1月7日/卡歌/酒吧小程序/flower-store-backend-sb_uni/flower-store-miniprogram_uni/uni_modules/zp-mixins/utils/debounce.js ***!
   \**********************************************************************************************************************************************************/
@@ -10402,20 +10505,20 @@ var _default = debounce;
 exports.default = _default;
 
 /***/ }),
-/* 45 */,
 /* 46 */,
 /* 47 */,
 /* 48 */,
 /* 49 */,
 /* 50 */,
-/* 51 */
+/* 51 */,
+/* 52 */
 /*!******************************************************************************************************************************!*\
   !*** C:/Users/Administrator/Desktop/2026年1月7日/卡歌/酒吧小程序/flower-store-backend-sb_uni/flower-store-miniprogram_uni/api/user.js ***!
   \******************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _require = __webpack_require__(/*! ../utils/request */ 52),
+var _require = __webpack_require__(/*! ../utils/request */ 53),
   get = _require.get,
   put = _require.put;
 
@@ -10438,7 +10541,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 52 */
+/* 53 */
 /*!***********************************************************************************************************************************!*\
   !*** C:/Users/Administrator/Desktop/2026年1月7日/卡歌/酒吧小程序/flower-store-backend-sb_uni/flower-store-miniprogram_uni/utils/request.js ***!
   \***********************************************************************************************************************************/
@@ -10569,14 +10672,14 @@ module.exports = {
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 53 */
+/* 54 */
 /*!********************************************************************************************************************************!*\
   !*** C:/Users/Administrator/Desktop/2026年1月7日/卡歌/酒吧小程序/flower-store-backend-sb_uni/flower-store-miniprogram_uni/api/config.js ***!
   \********************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _require = __webpack_require__(/*! ../utils/request */ 52),
+var _require = __webpack_require__(/*! ../utils/request */ 53),
   get = _require.get;
 
 /**
@@ -10590,14 +10693,14 @@ module.exports = {
 };
 
 /***/ }),
-/* 54 */
+/* 55 */
 /*!********************************************************************************************************************************!*\
   !*** C:/Users/Administrator/Desktop/2026年1月7日/卡歌/酒吧小程序/flower-store-backend-sb_uni/flower-store-miniprogram_uni/api/points.js ***!
   \********************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _require = __webpack_require__(/*! ../utils/request */ 52),
+var _require = __webpack_require__(/*! ../utils/request */ 53),
   request = _require.request,
   get = _require.get,
   post = _require.post;
@@ -10634,7 +10737,6 @@ module.exports = {
 };
 
 /***/ }),
-/* 55 */,
 /* 56 */,
 /* 57 */,
 /* 58 */,
@@ -10642,7 +10744,8 @@ module.exports = {
 /* 60 */,
 /* 61 */,
 /* 62 */,
-/* 63 */
+/* 63 */,
+/* 64 */
 /*!************************************************************************************************************************************!*\
   !*** C:/Users/Administrator/Desktop/2026年1月7日/卡歌/酒吧小程序/flower-store-backend-sb_uni/flower-store-miniprogram_uni/utils/eventBus.js ***!
   \************************************************************************************************************************************/
@@ -10689,14 +10792,14 @@ var eventBus = {
 module.exports = eventBus;
 
 /***/ }),
-/* 64 */
+/* 65 */
 /*!**********************************************************************************************************************************!*\
   !*** C:/Users/Administrator/Desktop/2026年1月7日/卡歌/酒吧小程序/flower-store-backend-sb_uni/flower-store-miniprogram_uni/api/category.js ***!
   \**********************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _require = __webpack_require__(/*! ../utils/request */ 52),
+var _require = __webpack_require__(/*! ../utils/request */ 53),
   get = _require.get;
 
 /**
@@ -10710,14 +10813,14 @@ module.exports = {
 };
 
 /***/ }),
-/* 65 */
+/* 66 */
 /*!*********************************************************************************************************************************!*\
   !*** C:/Users/Administrator/Desktop/2026年1月7日/卡歌/酒吧小程序/flower-store-backend-sb_uni/flower-store-miniprogram_uni/api/product.js ***!
   \*********************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _require = __webpack_require__(/*! ../utils/request */ 52),
+var _require = __webpack_require__(/*! ../utils/request */ 53),
   get = _require.get;
 
 /**
@@ -10782,7 +10885,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 66 */
+/* 67 */
 /*!**********************************************************************************************************************************************!*\
   !*** C:/Users/Administrator/Desktop/2026年1月7日/卡歌/酒吧小程序/flower-store-backend-sb_uni/flower-store-miniprogram_uni/utils/adult-verification.js ***!
   \**********************************************************************************************************************************************/
@@ -10822,14 +10925,14 @@ module.exports = {
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 67 */
+/* 68 */
 /*!******************************************************************************************************************************!*\
   !*** C:/Users/Administrator/Desktop/2026年1月7日/卡歌/酒吧小程序/flower-store-backend-sb_uni/flower-store-miniprogram_uni/api/cart.js ***!
   \******************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _require = __webpack_require__(/*! ../utils/request */ 52),
+var _require = __webpack_require__(/*! ../utils/request */ 53),
   get = _require.get,
   post = _require.post,
   put = _require.put,
@@ -10882,7 +10985,6 @@ module.exports = {
 };
 
 /***/ }),
-/* 68 */,
 /* 69 */,
 /* 70 */,
 /* 71 */,
@@ -10890,14 +10992,15 @@ module.exports = {
 /* 73 */,
 /* 74 */,
 /* 75 */,
-/* 76 */
+/* 76 */,
+/* 77 */
 /*!******************************************************************************************************************************!*\
   !*** C:/Users/Administrator/Desktop/2026年1月7日/卡歌/酒吧小程序/flower-store-backend-sb_uni/flower-store-miniprogram_uni/api/rank.js ***!
   \******************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _require = __webpack_require__(/*! ../utils/request */ 52),
+var _require = __webpack_require__(/*! ../utils/request */ 53),
   get = _require.get;
 
 /**
@@ -10914,7 +11017,6 @@ module.exports = {
 };
 
 /***/ }),
-/* 77 */,
 /* 78 */,
 /* 79 */,
 /* 80 */,
@@ -10946,14 +11048,15 @@ module.exports = {
 /* 106 */,
 /* 107 */,
 /* 108 */,
-/* 109 */
+/* 109 */,
+/* 110 */
 /*!*******************************************************************************************************************************!*\
   !*** C:/Users/Administrator/Desktop/2026年1月7日/卡歌/酒吧小程序/flower-store-backend-sb_uni/flower-store-miniprogram_uni/api/order.js ***!
   \*******************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _require = __webpack_require__(/*! ../utils/request */ 52),
+var _require = __webpack_require__(/*! ../utils/request */ 53),
   get = _require.get,
   post = _require.post,
   put = _require.put;
@@ -11016,14 +11119,14 @@ module.exports = {
 };
 
 /***/ }),
-/* 110 */
+/* 111 */
 /*!*********************************************************************************************************************************!*\
   !*** C:/Users/Administrator/Desktop/2026年1月7日/卡歌/酒吧小程序/flower-store-backend-sb_uni/flower-store-miniprogram_uni/api/address.js ***!
   \*********************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _require = __webpack_require__(/*! ../utils/request */ 52),
+var _require = __webpack_require__(/*! ../utils/request */ 53),
   get = _require.get,
   post = _require.post,
   put = _require.put,
@@ -11080,7 +11183,6 @@ module.exports = {
 };
 
 /***/ }),
-/* 111 */,
 /* 112 */,
 /* 113 */,
 /* 114 */,
@@ -11088,14 +11190,15 @@ module.exports = {
 /* 116 */,
 /* 117 */,
 /* 118 */,
-/* 119 */
+/* 119 */,
+/* 120 */
 /*!*****************************************************************************************************************************!*\
   !*** C:/Users/Administrator/Desktop/2026年1月7日/卡歌/酒吧小程序/flower-store-backend-sb_uni/flower-store-miniprogram_uni/api/pay.js ***!
   \*****************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(uni) {var _require = __webpack_require__(/*! ../utils/request */ 52),
+/* WEBPACK VAR INJECTION */(function(uni) {var _require = __webpack_require__(/*! ../utils/request */ 53),
   get = _require.get,
   post = _require.post;
 
@@ -11154,7 +11257,6 @@ module.exports = {
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
 
 /***/ }),
-/* 120 */,
 /* 121 */,
 /* 122 */,
 /* 123 */,
@@ -11178,14 +11280,15 @@ module.exports = {
 /* 141 */,
 /* 142 */,
 /* 143 */,
-/* 144 */
+/* 144 */,
+/* 145 */
 /*!******************************************************************************************************************************!*\
   !*** C:/Users/Administrator/Desktop/2026年1月7日/卡歌/酒吧小程序/flower-store-backend-sb_uni/flower-store-miniprogram_uni/api/auth.js ***!
   \******************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _require = __webpack_require__(/*! ../utils/request */ 52),
+var _require = __webpack_require__(/*! ../utils/request */ 53),
   post = _require.post;
 
 /**
@@ -11262,7 +11365,6 @@ module.exports = {
 };
 
 /***/ }),
-/* 145 */,
 /* 146 */,
 /* 147 */,
 /* 148 */,
@@ -11278,14 +11380,15 @@ module.exports = {
 /* 158 */,
 /* 159 */,
 /* 160 */,
-/* 161 */
+/* 161 */,
+/* 162 */
 /*!**********************************************************************************************************************************!*\
   !*** C:/Users/Administrator/Desktop/2026年1月7日/卡歌/酒吧小程序/flower-store-backend-sb_uni/flower-store-miniprogram_uni/api/favorite.js ***!
   \**********************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _require = __webpack_require__(/*! ../utils/request */ 52),
+var _require = __webpack_require__(/*! ../utils/request */ 53),
   get = _require.get,
   post = _require.post,
   del = _require.del;
@@ -11331,7 +11434,6 @@ module.exports = {
 };
 
 /***/ }),
-/* 162 */,
 /* 163 */,
 /* 164 */,
 /* 165 */,
@@ -11355,14 +11457,15 @@ module.exports = {
 /* 183 */,
 /* 184 */,
 /* 185 */,
-/* 186 */
+/* 186 */,
+/* 187 */
 /*!**********************************************************************************************************************************!*\
   !*** C:/Users/Administrator/Desktop/2026年1月7日/卡歌/酒吧小程序/flower-store-backend-sb_uni/flower-store-miniprogram_uni/api/recharge.js ***!
   \**********************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _require = __webpack_require__(/*! ../utils/request */ 52),
+var _require = __webpack_require__(/*! ../utils/request */ 53),
   get = _require.get,
   post = _require.post;
 
@@ -11396,7 +11499,6 @@ module.exports = {
 };
 
 /***/ }),
-/* 187 */,
 /* 188 */,
 /* 189 */,
 /* 190 */,
@@ -11404,14 +11506,15 @@ module.exports = {
 /* 192 */,
 /* 193 */,
 /* 194 */,
-/* 195 */
+/* 195 */,
+/* 196 */
 /*!******************************************************************************************************************************!*\
   !*** C:/Users/Administrator/Desktop/2026年1月7日/卡歌/酒吧小程序/flower-store-backend-sb_uni/flower-store-miniprogram_uni/api/coin.js ***!
   \******************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _require = __webpack_require__(/*! ../utils/request */ 52),
+var _require = __webpack_require__(/*! ../utils/request */ 53),
   get = _require.get,
   post = _require.post;
 

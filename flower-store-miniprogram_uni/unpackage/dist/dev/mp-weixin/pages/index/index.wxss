@@ -128,11 +128,15 @@
 }
 .brand-en {
     display: block;
-    font-size: 24rpx;
-    letter-spacing: 10rpx;
+    font-size: 32rpx;
+    letter-spacing: 8rpx;
     margin-top: 16rpx;
     position: relative;
     z-index: 2;
+}
+.brand-en.font-display {
+    font-family: 'Anton', sans-serif !important;
+    font-weight: 400 !important;
 }
 .brand-en.neon-gold { color: #f0d878; text-shadow: 0 0 16rpx rgba(232, 197, 71, 0.35);
 }
@@ -149,7 +153,20 @@
 }
 .hours-label { font-size: 22rpx; color: #888; margin-right: 12rpx;
 }
-.hours-value { font-size: 26rpx; color: #ccc;
+.hours-value.font-num {
+    font-family: 'BebasNeue', sans-serif !important;
+    font-weight: 400 !important;
+    font-size: 34rpx;
+}
+.strip-num.font-num {
+    font-family: 'BebasNeue', sans-serif !important;
+    font-weight: 400 !important;
+}
+.hero-btn-en.font-display {
+    font-family: 'Anton', sans-serif !important;
+    font-weight: 400 !important;
+    font-size: 28rpx;
+    letter-spacing: 8rpx;
 }
 .hours-clash .hours-label { color: rgba(77, 232, 255, 0.65);
 }
@@ -175,7 +192,7 @@
 }
 .strip-icon-box .icon-qrcode { width: 28rpx; height: 28rpx;
 }
-.strip-num { font-size: 40rpx; font-weight: 800; line-height: 1.2;
+.strip-num { font-size: 44rpx; font-weight: 400; line-height: 1.1;
 }
 .strip-label { font-size: 22rpx; margin-top: 6rpx; color: #8a8682;
 }
@@ -265,9 +282,9 @@
 .mall-btn .hero-btn-cn { color: #f0d878; text-shadow: 0 0 12rpx rgba(232, 197, 71, 0.4);
 }
 .hero-btn-en {
-    font-size: 22rpx;
-    color: rgba(230, 226, 220, 0.42);
-    letter-spacing: 4rpx;
+    font-size: 26rpx;
+    color: rgba(230, 226, 220, 0.55);
+    letter-spacing: 6rpx;
     margin-top: 8rpx;
     display: block;
 }

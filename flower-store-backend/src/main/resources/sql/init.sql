@@ -481,7 +481,8 @@ INSERT INTO `t_config` VALUES
 (6,'recharge_tip','享受更多专属优惠福利','充值说明'),
 (7,'points_enabled','1','积分抵扣开关：1-开启 0-关闭'),
 (8,'points_rate','100','积分兑换比例：多少积分抵1元'),
-(9,'points_max_ratio','0.5','单笔订单积分最多可抵总金额的比例');
+(9,'points_max_ratio','0.5','单笔订单积分最多可抵总金额的比例'),
+(10,'store_gallery','https://bar.twst.work/api/uploads/store/store-env-01.jpg','店内环境展示图，多张用英文逗号分隔');
 UNLOCK TABLES;
 
 --

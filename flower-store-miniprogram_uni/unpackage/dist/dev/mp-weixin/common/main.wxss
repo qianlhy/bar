@@ -1,7 +1,42 @@
 /* 梭哈酒馆 · 黑红质感主题（对标竞品颗粒纹理） */
+
+/* 网络字体（bar.twst.work 已在 downloadFile 白名单），声明式自动生效 */
+@font-face {
+    font-family: 'Anton';
+    src: url('https://bar.twst.work/api/fonts/Anton-Regular.ttf');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'BebasNeue';
+    src: url('https://bar.twst.work/api/fonts/BebasNeue-Regular.ttf');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'DouyinSans';
+    src: url('https://bar.twst.work/api/fonts/DouyinSansBold.ttf');
+    font-weight: normal;
+    font-style: normal;
+}
 .font-art {
     font-family: 'DouyinSans', 'PingFang SC', 'Helvetica Neue', sans-serif;
     font-weight: 700;
+}
+
+/* 潮流海报体（超粗压缩，仅英文/数字生效） */
+.font-display {
+    font-family: 'Anton', 'DouyinSans', 'Helvetica Neue', sans-serif !important;
+    font-weight: 400;
+    letter-spacing: 4rpx;
+    text-transform: uppercase;
+}
+
+/* 高瘦压缩体（数字/时间） */
+.font-num {
+    font-family: 'BebasNeue', 'Anton', 'DouyinSans', sans-serif !important;
+    font-weight: 400;
+    letter-spacing: 2rpx;
 }
 
 /* ---- 色彩令牌（非纯黑白）---- */

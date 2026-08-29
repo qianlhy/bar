@@ -25,12 +25,14 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .addResourceLocations(location);
         registry.addResourceHandler("/api/uploads/**")
                 .addResourceLocations(location);
+        registry.addResourceHandler("/fonts/**")
+                .addResourceLocations("classpath:/static/fonts/");
     }
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(adminRoleInterceptor)
                 .addPathPatterns("/**")
-                .excludePathPatterns("/uploads/**", "/api/uploads/**");
+                .excludePathPatterns("/uploads/**", "/api/uploads/**", "/fonts/**");
     }
 }
