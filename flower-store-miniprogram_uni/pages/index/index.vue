@@ -515,11 +515,11 @@ export default {
 }
 .art-suoha {
     display: block;
-    font-size: 148rpx;
+    font-size: 172rpx;
     font-weight: 900;
     font-style: italic;
-    letter-spacing: 32rpx;
-    padding-left: 32rpx;
+    letter-spacing: 52rpx;
+    padding-left: 52rpx;
     line-height: 1;
     background: linear-gradient(180deg, #f0ece6 0%, #c0707c 50%, #9a2a3c 100%);
     -webkit-background-clip: text;
@@ -528,7 +528,7 @@ export default {
     z-index: 1;
     transform: skewX(-3deg);
     margin-bottom: -60rpx;
-    opacity: 0.92;
+    opacity: 0.72;
 }
 .logo-stage {
     position: relative;
